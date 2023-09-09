@@ -65,7 +65,7 @@ Give a ⭐️ if this project helped you!
 
 # 📝License
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/LICENSE)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/LICENCE)
 
 # 🙌🏻 Feedback
 
