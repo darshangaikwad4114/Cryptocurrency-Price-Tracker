@@ -15,7 +15,7 @@
 ## 🤷🏼‍♂️ About This Project
 
 (Click on the image below for live demo) <br></br>
-[![Screen Shot](/public/screenshot.png)](https://darshan-cryptocurrency-price-tracker.netlify.app/)
+[![Screen Shot](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/public/image.png)](https://darshan-cryptocurrency-price-tracker.netlify.app/)
 
 ##
 
