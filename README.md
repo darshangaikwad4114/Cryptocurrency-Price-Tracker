@@ -14,7 +14,14 @@
 
 ## 🤷🏼‍♂️ About This Project
 
-(Click on the image below for live demo) <br></br>
+📈 Check crypto prices on the go! <br>
+💰 Find market cap data in a snap. <br>
+🕒 Track price changes with percentages. <br>
+🔍 Search for any cryptocurrency you desire. <br>
+🚀 Stay informed about crypto trends. <br>
+💡 Easy, quick, and user-friendly! 
+
+(Click on the image below for a live demo) <br></br>
 [![Screen Shot](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/public/image.png)](https://darshan-cryptocurrency-price-tracker.netlify.app/)
 
 ##
