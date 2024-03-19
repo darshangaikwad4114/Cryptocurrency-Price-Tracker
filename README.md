@@ -1,11 +1,5 @@
 <div align="center">
 
-![Forks](https://img.shields.io/github/forks/darshangaikwad4114/Cryptocurrency-Price-Tracker?logo=GITHUB&style=for-the-badge)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-blue.svg?style=for-the-badge)](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker)
-[![Stargazers](https://img.shields.io/github/stars/darshangaikwad4114/Cryptocurrency-Price-Tracker?logo=github&style=for-the-badge)](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/stargazers)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/darshan-gaikwad/)
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/darshan_4114_)
-
 # Cryptocurrency Price Tracker✨
 
 ## ✨ [Live Preview](https://darshan-cryptocurrency-price-tracker.netlify.app/)
@@ -19,10 +13,11 @@
 🕒 Track price changes with percentages. <br>
 🔍 Search for any cryptocurrency you desire. <br>
 🚀 Stay informed about crypto trends. <br>
-💡 Easy, quick, and user-friendly! 
+💡 Easy, quick, and user-friendly!
 
-(Click on the image below for a live demo) <br></br>
-[![Screen Shot](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/public/image.png)](https://darshan-cryptocurrency-price-tracker.netlify.app/)
+<div align='center'>
+<img src='./src/home.png'/>
+</div>
 
 ##
 
