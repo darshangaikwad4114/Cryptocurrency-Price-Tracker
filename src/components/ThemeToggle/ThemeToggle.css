@@ -1,0 +1,74 @@
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle.light {
+  background-color: #333;
+  color: #fff;
+}
+
+.theme-toggle.dark {
+  background-color: #fff;
+  color: #333;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-color);
+}
+
+/* Compact version for header */
+.theme-toggle--compact {
+  position: static;
+  width: 36px;
+  height: 36px;
+  margin-left: 15px;
+}
+
+.theme-toggle--compact:hover {
+  transform: translateY(-2px);
+}
+
+.theme-toggle--compact svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .theme-toggle {
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .theme-toggle--compact {
+    position: static;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .theme-toggle--compact {
+    margin-left: 8px;
+  }
+}

@@ -1,45 +1,326 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
+:root {
+  /* Base colors */
+  --primary-color: #2c75ff;
+  --primary-color-hover: #1e5fc9;
+  --success-color: #05bc05;
+  --error-color: #ff1212;
+  
+  /* Light theme */
+  --light-bg: #f5f5f7;
+  --light-text: #1a1a1c;
+  --light-card-bg: #ffffff;
+  --light-border: rgba(0, 0, 0, 0.12);
+  
+  /* Dark theme */
+  --dark-bg: #121214;
+  --dark-text: #ffffff;
+  --dark-card-bg: #1e1e24;
+  --dark-border: rgba(255, 255, 255, 0.12);
+  
+  /* Shared */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --transition-speed: 0.3s;
+  --border-radius: 8px;
+}
+
+/* Apply theme variables */
+.light {
+  --bg-color: var(--light-bg);
+  --text-color: var(--light-text);
+  --card-bg: var(--light-card-bg);
+  --border-color: var(--light-border);
+  --shadow: var(--shadow-light);
+}
+
+.dark {
+  --bg-color: var(--dark-bg);
+  --text-color: var(--dark-text);
+  --card-bg: var(--dark-card-bg);
+  --border-color: var(--dark-border);
+  --shadow: var(--shadow-dark);
+}
+
+/* Base styles */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Montserrat", sans-serif;
-  background-color: #1a1a1c;
-  color: #fff;
 }
 
-.coin-app {
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+  transition: background-color var(--transition-speed) ease, 
+              color var(--transition-speed) ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 64px;
-  color: #fff;
+  position: relative;
 }
 
+.app-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+/* Search styles */
 .coin-search {
-  margin-bottom: 64px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  margin: 40px 0;
+  width: 100%;
 }
 
 .coin-text {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 700;
   text-align: center;
 }
 
+.search-input-container {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+}
+
 .coin-input {
-  padding-left: 16px;
-  width: 300px;
-  height: 50px;
-  border-radius: 4px;
+  width: 100%;
+  padding: 16px 20px;
   border: none;
-  background-image: linear-gradient(135deg, #f05f57 10%, #360940 100%);
-  color: #e2e2e2;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  transition: all var(--transition-speed) ease;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: var(--shadow);
+}
+
+.coin-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 .coin-input::placeholder {
-  color: #e2e2e2;
+  opacity: 0.7;
+}
+
+.clear-search {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-search:hover {
+  opacity: 1;
+}
+
+/* Loading state */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+  width: 100%;
+}
+
+.loader {
+  border: 4px solid var(--border-color);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.skeleton-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Error message */
+.error-message {
+  text-align: center;
+  margin: 40px 0;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 18, 18, 0.1);
+  color: var(--text-color);
+}
+
+.error-message button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.error-message button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* Coin container */
+.coin-container {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.coin-header {
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.coin-header .coin-row {
+  background-color: var(--card-bg);
+  padding: 16px;
+  border-bottom: none;
+}
+
+.no-coins {
+  text-align: center;
+  padding: 40px 0;
+  font-style: italic;
+  background-color: var(--card-bg);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  font-size: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 992px) {
+  .coin-row {
+    padding: 12px;
+  }
+  
+  .coin {
+    min-width: 180px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .coin-row {
+    flex-direction: column;
+    height: auto;
+    padding: 16px;
+  }
+  
+  .coin {
+    min-width: 100%;
+    margin-bottom: 16px;
+    justify-content: flex-start;
+  }
+  
+  .coin-data {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+  }
+  
+  .coin-price, .coin-volume, .coin-percent, .coin-marketcap {
+    width: 48%;
+    margin-bottom: 8px;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .coin-header {
+    display: none;
+  }
+  
+  .coin-data {
+    flex-direction: column;
+  }
+  
+  .coin-price, .coin-volume, .coin-percent, .coin-marketcap {
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .coin-price::before {
+    content: 'Price: ';
+    font-weight: 600;
+  }
+  
+  .coin-volume::before {
+    content: 'Volume: ';
+    font-weight: 600;
+  }
+  
+  .coin-percent::before {
+    content: '24h Change: ';
+    font-weight: 600;
+  }
+  
+  .coin-marketcap::before {
+    content: 'Market Cap: ';
+    font-weight: 600;
+  }
 }
