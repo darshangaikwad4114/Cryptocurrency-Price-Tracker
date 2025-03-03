@@ -4,6 +4,7 @@ import Coin from './components/Coin/Coin';
 import CoinSkeleton from './components/Coin/CoinSkeleton';
 import './App.css';
 import logo from './assets/logo.svg';
+import ListHeader from './components/ListHeader/ListHeader';
 
 function App() {
   const [coins, setCoins] = useState([]);
@@ -438,6 +439,14 @@ function App() {
           Showing {filteredCoins.length} of {coins.length} cryptocurrencies
         </p>
       </div>
+      
+      {/* Pass sorting function to ListHeader for interactive column headers */}
+      {viewMode === 'list' && !loading && filteredCoins.length > 0 && 
+        <ListHeader 
+          onSort={setSortBy} 
+          sortBy={sortBy} 
+        />
+      }
       
       <div className={`coins-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
         {loading ? (

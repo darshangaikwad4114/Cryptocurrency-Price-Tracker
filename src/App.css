@@ -3,12 +3,16 @@
 :root {
   --primary-color: #0a192f;
   --secondary-color: #172a46;
-  --accent-color: #61dafb;
+  --accent-color: #64ffda;
+  --accent-hover: #7fffe0;
   --text-primary: #e6f1ff;
   --text-secondary: #8892b0;
   --success-color: #4caf50;
+  --success-light: rgba(76, 175, 80, 0.1);
   --danger-color: #f44336;
-  --transition: all 0.3s ease-in-out;
+  --danger-light: rgba(244, 67, 54, 0.1);
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --primary-color-hover: #1e5fc9;
   --error-color: #ff1212;
   
@@ -371,6 +375,14 @@ code {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  backdrop-filter: blur(10px);
+  background: rgba(10, 25, 47, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1.2rem 0;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 .logo-container {
@@ -414,11 +426,23 @@ h1 {
   cursor: pointer;
   transition: var(--transition);
   border-radius: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-button:hover, .nav-button.active {
   color: var(--accent-color);
   background-color: rgba(97, 218, 251, 0.1);
+}
+
+.nav-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: var(--accent-color);
 }
 
 .main-content {
@@ -429,6 +453,7 @@ h1 {
 .search-container {
   margin-bottom: 2rem;
   width: 100%;
+  position: relative;
 }
 
 .search-input {
@@ -440,11 +465,21 @@ h1 {
   background-color: var(--secondary-color);
   color: var(--text-primary);
   transition: var(--transition);
+  background: linear-gradient(145deg, #152238, #1a2e4f);
+  border-radius: 12px;
+  padding: 0 40px 0 45px;
+  height: 48px;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-input::placeholder {
@@ -464,6 +499,10 @@ h1 {
   color: var(--text-secondary);
   font-size: 0.875rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 4rem;
+  padding: 2rem 0 1.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 /* Market page styles */
@@ -571,7 +610,7 @@ h1 {
 
 .about-container p {
   margin-bottom: 1rem;
-  color: var(--text-secondary);
+  color: var (--text-secondary);
 }
 
 .feature-list, .tech-list {
@@ -631,11 +670,25 @@ h1 {
   font-size: 0.9rem;
   transition: all 0.2s ease;
   min-width: 120px;
+  background: linear-gradient(to right, var(--secondary-color), #1c324d);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-filters-btn.has-filters {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 500;
+  background: linear-gradient(to right, var(--accent-color), #64d6ff);
+  color: #0a192f;
+  font-weight: 600;
 }
 
 .toggle-filters-btn:hover {
   background-color: var(--accent-color);
   color: var(--primary-color);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 .filters-panel {
@@ -980,11 +1033,17 @@ h1 {
   color: var(--text-primary);
   font-size: 0.95rem;
   width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  height: 42px;
 }
 
 .price-input:focus {
   outline: none;
   border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-color);
+  box-shadow: 0 0 0 1px rgba(100, 255, 218, 0.2);
 }
 
 .range-separator {
@@ -1198,6 +1257,7 @@ h1 {
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   padding: 2px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .view-option-btn {
@@ -1219,8 +1279,9 @@ h1 {
 }
 
 .view-option-btn.active {
-  background-color: rgba(97, 218, 251, 0.2);
+  background-color: rgba(100, 255, 218, 0.15);
   color: var(--accent-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* No results improved styling */
@@ -1234,12 +1295,19 @@ h1 {
   width: 100%;
   background-color: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
+  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: var(--card-shadow);
 }
 
 .no-coins-message svg {
   fill: var(--text-secondary);
   opacity: 0.5;
   margin-bottom: 1rem;
+  fill: var(--accent-color);
+  opacity: 0.5;
+  filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.3));
 }
 
 .no-coins-message p {
@@ -1704,6 +1772,14 @@ h1 {
   align-items: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--accent-color);
+  padding: 16px 20px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  margin-bottom: 16px;
 }
 
 @media (max-width: 968px) {
@@ -2019,6 +2095,8 @@ h1 {
   flex-direction: column;
   overflow-y: auto;
   border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(to right, #172a46, #1e3355);
+  border-left: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 .side-filters-panel.active {
@@ -2230,4 +2308,134 @@ h1 {
     width: 100%;
     justify-content: space-between;
   }
+}
+
+/* Enhanced Card Styles */
+.coin-card {
+  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.coin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  border-color: rgba(100, 255, 218, 0.1);
+}
+
+.coin-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-color), #64d6ff);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.coin-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* Improved List View Styles */
+.coin-list-item {
+  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
+  border-radius: 12px;
+  transition: var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.coin-list-item:hover {
+  background: linear-gradient(145deg, #1c324d, #223a59);
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(100, 255, 218, 0.1);
+}
+
+/* Enhanced Action Buttons */
+.toggle-filters-btn {
+  background: linear-gradient(to right, var(--secondary-color), #1c324d);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-filters-btn.has-filters {
+  background: linear-gradient(to right, var(--accent-color), #64d6ff);
+  color: #0a192f;
+  font-weight: 600;
+}
+
+.toggle-filters-btn:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.view-options {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.view-option-btn.active {
+  background: rgba(100, 255, 218, 0.15);
+  color: var(--accent-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Prices and Percentages */
+.price-change-value.positive,
+.coin-percent-list.positive {
+  color: var(--accent-color);
+  background-color: rgba(100, 255, 218, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.price-change-value.negative,
+.coin-percent-list.negative {
+  color: var(--danger-color);
+  background-color: var(--danger-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Loading animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+.coin-skeleton {
+  background: linear-gradient(90deg, #172a46 25%, #1e3355 50%, #172a46 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 16px;
+}
+
+/* Hover effects on list items */
+.coin-info-list {
+  transition: transform 0.2s ease;
+}
+
+.coin-list-item:hover .coin-info-list {
+  transform: translateX(5px);
 }

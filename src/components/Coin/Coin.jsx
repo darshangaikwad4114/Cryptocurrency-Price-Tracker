@@ -11,7 +11,7 @@ const Coin = ({
   priceChange, 
   marketCap,
   rank,
-  viewMode = 'grid' // Add viewMode prop with default value
+  viewMode = 'grid' 
 }) => {
   const priceChangeClass = priceChange < 0 ? 'negative' : 'positive';
   const formattedMarketCap = marketCap?.toLocaleString() || 'N/A';
@@ -40,7 +40,7 @@ const Coin = ({
     );
   }
 
-  // Default grid view
+  // Default grid view code remains unchanged
   return (
     <div className="coin-card">
       <div className="coin-card-header">
