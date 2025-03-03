@@ -1,46 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Coin.css";
 import { formatCurrency, formatCompactNumber } from "../../utils/formatters";
 
 const Coin = ({
   id,
   name,
-  price,
-  symbol,
-  marketcap,
-  volume,
   image,
+  symbol,
+  price,
+  volume,
   priceChange,
+  marketCap,
+  rank
 }) => {
-  // Handle undefined priceChange value
-  const formattedPriceChange = priceChange !== undefined && !isNaN(priceChange) 
-    ? Math.abs(priceChange).toFixed(2) 
-    : "N/A";
-  
-  // Determine price change status
-  const priceChangeStatus = priceChange < 0 ? "negative" : priceChange > 0 ? "positive" : "neutral";
-  
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
+
   return (
-    <div className="coin-row" data-testid={`coin-row-${id}`}>
-      <div className="coin">
-        <img src={image} alt={`${name} logo`} loading="lazy" width="36" height="36" />
-        <h2 className="coin-name">{name}</h2>
-        <p className="coin-symbol">{symbol}</p>
+    <div className={`coin-card ${expanded ? 'expanded' : ''}`} onClick={toggleExpanded}>
+      <div className="coin-basic-info">
+        <div className="coin-rank">#{rank}</div>
+        <img src={image} alt={name} className="coin-image" />
+        <div className="coin-name-container">
+          <h3 className="coin-name">{name}</h3>
+          <span className="coin-symbol">{symbol.toUpperCase()}</span>
+        </div>
+        <div className="coin-price-container">
+          <p className="coin-price">${price.toLocaleString()}</p>
+          <p className={`coin-percent ${priceChange < 0 ? 'red' : 'green'}`}>
+            {priceChange < 0 ? (
+              <span className="arrow down">&#9660;</span>
+            ) : (
+              <span className="arrow up">&#9650;</span>
+            )}
+            {Math.abs(priceChange).toFixed(2)}%
+          </p>
+        </div>
       </div>
-      <div className="coin-data">
-        <p className="coin-price">{formatCurrency(price)}</p>
-        <p className="coin-volume">{formatCompactNumber(volume)}</p>
-        <p className={`coin-percent ${priceChangeStatus}`} aria-label={`Price change: ${priceChangeStatus}`}>
-          {priceChangeStatus !== "neutral" && (
-            <span className="change-icon" aria-hidden="true">
-              {priceChangeStatus === "negative" ? "↓" : "↑"}
-            </span>
-          )}
-          {formattedPriceChange === "N/A" ? formattedPriceChange : `${formattedPriceChange}%`}
-        </p>
-        <p className="coin-marketcap">
-          {formatCompactNumber(marketcap)}
-        </p>
+      
+      <div className="coin-details">
+        <div className="coin-detail-item">
+          <span className="detail-label">Market Cap</span>
+          <span className="detail-value">${marketCap.toLocaleString()}</span>
+        </div>
+        <div className="coin-detail-item">
+          <span className="detail-label">24h Volume</span>
+          <span className="detail-value">${volume.toLocaleString()}</span>
+        </div>
+        <div className="coin-detail-item">
+          <span className="detail-label">Price Change (24h)</span>
+          <span className={`detail-value ${priceChange < 0 ? 'red' : 'green'}`}>
+            {priceChange.toFixed(2)}%
+          </span>
+        </div>
+      </div>
+      
+      <div className="coin-expand-hint">
+        {expanded ? 'Click to collapse' : 'Click for more details'}
       </div>
     </div>
   );

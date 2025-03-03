@@ -2,10 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--card-bg);
-  height: 80px;
+  background-color: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100px;
+  position: relative;
+  overflow: hidden;
 }
 
 .coin-skeleton .coin {
@@ -59,6 +63,74 @@
 
 .skeleton-line.marketcap {
   width: 150px;
+}
+
+.skeleton-basic-info {
+  display: grid;
+  grid-template-columns: auto 40px 1fr 1fr;
+  align-items: center;
+  grid-gap: 1rem;
+}
+
+.skeleton-rank,
+.skeleton-image,
+.skeleton-name,
+.skeleton-symbol,
+.skeleton-price,
+.skeleton-percent {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-rank {
+  width: 30px;
+  height: 20px;
+}
+
+.skeleton-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeleton-name {
+  height: 16px;
+  width: 80%;
+  margin-bottom: 8px;
+}
+
+.skeleton-symbol {
+  height: 12px;
+  width: 40%;
+}
+
+.skeleton-price {
+  height: 20px;
+  width: 70%;
+  margin-left: auto;
+  margin-bottom: 8px;
+}
+
+.skeleton-percent {
+  height: 14px;
+  width: 40%;
+  margin-left: auto;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @media screen and (max-width: 768px) {

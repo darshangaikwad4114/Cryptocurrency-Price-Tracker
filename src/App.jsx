@@ -1,156 +1,220 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./App.css";
-import Coin from "./components/Coin/Coin";
-import Header from "./components/Header/Header";
-import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
-import { useTheme } from "./context/ThemeContext";
-import CoinSkeleton from "./components/Coin/CoinSkeleton";
-import useDebounce from "./hooks/useDebounce";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Coin from './components/Coin/Coin';
+import CoinSkeleton from './components/Coin/CoinSkeleton';
+import './App.css';
+import logo from './assets/logo.svg';
 
 function App() {
   const [coins, setCoins] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Use a try/catch to handle the case when ThemeProvider is not available
-  let theme = "dark"; // Default theme
-  try {
-    const themeContext = useTheme();
-    if (themeContext && themeContext.theme) {
-      theme = themeContext.theme;
-    }
-  } catch (e) {
-    console.warn("ThemeContext not available, using default theme");
-  }
-  
-  // Debounce search term to avoid excessive filtering
-  const debouncedSearch = useDebounce(search, 300);
+  const [activePage, setActivePage] = useState('home');
 
   useEffect(() => {
     const fetchCoins = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const response = await axios.get(
-          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false"
+          'https://api.coingecko.com/api/v3/coins/markets',
+          {
+            params: {
+              vs_currency: 'usd',
+              order: 'market_cap_desc',
+              per_page: 100,
+              page: 1,
+              sparkline: false,
+            },
+          }
         );
         setCoins(response.data);
-        setError(null);
-      } catch (err) {
-        setError("Failed to fetch data. Please try again later.");
-        console.error("Error fetching data:", err);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCoins();
-
-    // Set up polling every 60 seconds to get fresh data
-    const interval = setInterval(fetchCoins, 60000);
+    const interval = setInterval(fetchCoins, 60000); // Update every minute
+    
     return () => clearInterval(interval);
   }, []);
 
-  const handleChange = (e) => {
+  const handleSearch = (e) => {
     setSearch(e.target.value);
   };
 
-  // Filter coins based on search term
   const filteredCoins = coins.filter((coin) =>
-    coin.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-    coin.symbol.toLowerCase().includes(debouncedSearch.toLowerCase())
+    coin.name.toLowerCase().includes(search.toLowerCase()) ||
+    coin.symbol.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <div className={`app ${theme}`}>
-      <div className="app-container">
-        <Header />
-        <div className="coin-search">
-          <h1 className="coin-text">Search a cryptocurrency</h1>
-          <div className="search-input-container">
-            <input
-              className="coin-input"
-              type="text"
-              onChange={handleChange}
-              placeholder="Search by name or symbol"
-              aria-label="Search for a cryptocurrency"
-              value={search}
-            />
-            {search && (
-              <button 
-                className="clear-search" 
-                onClick={() => setSearch('')}
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            )}
-          </div>
-        </div>
-        
+  const renderHome = () => (
+    <>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search for a cryptocurrency..."
+          className="search-input"
+          onChange={handleSearch}
+        />
+      </div>
+      <div className="coins-container">
         {loading ? (
-          <div className="loader-container" role="alert" aria-busy="true">
-            <div className="loader"></div>
-            <p>Loading cryptocurrency data...</p>
-            <div className="skeleton-container">
-              {[...Array(5)].map((_, index) => (
-                <CoinSkeleton key={index} />
-              ))}
-            </div>
-          </div>
-        ) : error ? (
-          <div className="error-message" role="alert">
-            <p>{error}</p>
-            <button onClick={() => window.location.reload()}>Retry</button>
-          </div>
+          Array(10).fill(0).map((_, index) => <CoinSkeleton key={index} />)
         ) : (
-          <>
-            <div className="coin-container" role="region" aria-label="Cryptocurrency list">
-              <div className="coin-header">
-                <div className="coin-row header">
-                  <div className="coin">
-                    <p>Cryptocurrency</p>
-                  </div>
-                  <div className="coin-data">
-                    <p className="coin-price">Price</p>
-                    <p className="coin-volume">Volume</p>
-                    <p className="coin-percent">24h Change</p>
-                    <p className="coin-marketcap">Market Cap</p>
-                  </div>
-                </div>
-              </div>
-              
-              {filteredCoins.length > 0 ? (
-                filteredCoins.map((coin) => {
-                  return (
-                    <Coin
-                      key={coin.id}
-                      id={coin.id}
-                      name={coin.name}
-                      price={coin.current_price}
-                      symbol={coin.symbol}
-                      marketcap={coin.market_cap}
-                      volume={coin.total_volume}
-                      image={coin.image}
-                      priceChange={coin.price_change_percentage_24h}
-                    />
-                  );
-                })
-              ) : (
-                <div className="no-coins">
-                  <p>No cryptocurrencies found matching "{debouncedSearch}"</p>
-                </div>
-              )}
-            </div>
-          </>
+          filteredCoins.map((coin) => (
+            <Coin
+              key={coin.id}
+              id={coin.id}
+              name={coin.name}
+              image={coin.image}
+              symbol={coin.symbol}
+              price={coin.current_price}
+              volume={coin.total_volume}
+              priceChange={coin.price_change_percentage_24h}
+              marketCap={coin.market_cap}
+              rank={coin.market_cap_rank}
+            />
+          ))
         )}
       </div>
+    </>
+  );
+
+  const renderMarkets = () => (
+    <div className="markets-container">
+      <h2>Market Overview</h2>
+      <div className="market-stats">
+        <div className="stat-card">
+          <h3>Global Market Cap</h3>
+          <p>$2.1T</p>
+        </div>
+        <div className="stat-card">
+          <h3>24h Volume</h3>
+          <p>$78.5B</p>
+        </div>
+        <div className="stat-card">
+          <h3>BTC Dominance</h3>
+          <p>42.1%</p>
+        </div>
+        <div className="stat-card">
+          <h3>Active Cryptocurrencies</h3>
+          <p>10,000+</p>
+        </div>
+      </div>
+      <div className="market-trends">
+        <h3>Top Gainers (24h)</h3>
+        <table className="market-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!loading && filteredCoins
+              .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
+              .slice(0, 5)
+              .map(coin => (
+                <tr key={coin.id}>
+                  <td>
+                    <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
+                    {coin.name}
+                  </td>
+                  <td>${coin.current_price.toLocaleString()}</td>
+                  <td className="positive-change">+{coin.price_change_percentage_24h.toFixed(2)}%</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  const renderAbout = () => (
+    <div className="about-container">
+      <h2>About Cryptocurrency Price Tracker</h2>
+      <p>
+        Cryptocurrency Price Tracker is a modern web application built with React
+        that provides real-time information on cryptocurrency prices, market caps,
+        and price changes.
+      </p>
+      
+      <h3>Features</h3>
+      <ul className="feature-list">
+        <li>Real-time cryptocurrency price tracking</li>
+        <li>Search functionality to find specific coins</li>
+        <li>Detailed information on each cryptocurrency</li>
+        <li>Visual indicators for price movements</li>
+        <li>Responsive design for desktop and mobile devices</li>
+      </ul>
+      
+      <h3>Data Source</h3>
+      <p>
+        All cryptocurrency data is fetched from the CoinGecko API, providing
+        reliable and up-to-date information on thousands of cryptocurrencies.
+      </p>
+      
+      <h3>Technologies Used</h3>
+      <ul className="tech-list">
+        <li>React</li>
+        <li>Axios for API requests</li>
+        <li>CSS3 with animations and transitions</li>
+        <li>CoinGecko API</li>
+      </ul>
+    </div>
+  );
+
+  const renderContent = () => {
+    switch (activePage) {
+      case 'home':
+        return renderHome();
+      case 'markets':
+        return renderMarkets();
+      case 'about':
+        return renderAbout();
+      default:
+        return renderHome();
+    }
+  };
+
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="logo-container">
+          <img src={logo} className="logo" alt="Crypto Tracker Logo" />
+          <h1>Crypto Tracker</h1>
+        </div>
+        <nav className="navigation">
+          <button 
+            className={`nav-button ${activePage === 'home' ? 'active' : ''}`}
+            onClick={() => setActivePage('home')}
+          >
+            Home
+          </button>
+          <button 
+            className={`nav-button ${activePage === 'markets' ? 'active' : ''}`}
+            onClick={() => setActivePage('markets')}
+          >
+            Markets
+          </button>
+          <button 
+            className={`nav-button ${activePage === 'about' ? 'active' : ''}`}
+            onClick={() => setActivePage('about')}
+          >
+            About
+          </button>
+        </nav>
+      </header>
+      <main className="main-content">
+        {renderContent()}
+      </main>
       <footer className="footer">
-        <p>Data provided by CoinGecko API</p>
-        <p>&copy; {new Date().getFullYear()} Crypto Tracker</p>
+        <p>© 2023 Cryptocurrency Price Tracker. Data provided by CoinGecko API.</p>
       </footer>
-      <ThemeToggle />
     </div>
   );
 }

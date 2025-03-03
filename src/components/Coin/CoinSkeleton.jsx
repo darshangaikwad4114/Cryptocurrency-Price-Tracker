@@ -4,16 +4,17 @@ import "./CoinSkeleton.css";
 const CoinSkeleton = () => {
   return (
     <div className="coin-skeleton">
-      <div className="coin">
-        <div className="skeleton-circle"></div>
-        <div className="skeleton-line name"></div>
-        <div className="skeleton-line symbol"></div>
-      </div>
-      <div className="coin-data">
-        <div className="skeleton-line price"></div>
-        <div className="skeleton-line volume"></div>
-        <div className="skeleton-line percent"></div>
-        <div className="skeleton-line marketcap"></div>
+      <div className="skeleton-basic-info">
+        <div className="skeleton-rank"></div>
+        <div className="skeleton-image"></div>
+        <div className="skeleton-name-container">
+          <div className="skeleton-name"></div>
+          <div className="skeleton-symbol"></div>
+        </div>
+        <div className="skeleton-price-container">
+          <div className="skeleton-price"></div>
+          <div className="skeleton-percent"></div>
+        </div>
       </div>
     </div>
   );
