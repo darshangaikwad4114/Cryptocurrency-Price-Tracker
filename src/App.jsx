@@ -514,32 +514,230 @@ function App() {
           <p>10,000+</p>
         </div>
       </div>
-      <div className="market-trends">
-        <h3>Top Gainers (24h)</h3>
-        <table className="market-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!loading && filteredCoins
-              .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
-              .slice(0, 5)
-              .map(coin => (
-                <tr key={coin.id}>
-                  <td>
-                    <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
-                    {coin.name}
-                  </td>
-                  <td>${coin.current_price.toLocaleString()}</td>
-                  <td className="positive-change">+{coin.price_change_percentage_24h.toFixed(2)}%</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+      
+      <div className="market-trends-grid">
+        {/* Top Gainers Card */}
+        <div className="market-trend-card">
+          <div className="trend-card-header gainers">
+            <h3>
+              <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="currentColor" d="M7,15L12,10L17,15H7Z" />
+              </svg>
+              Top Gainers (24h)
+            </h3>
+            <span className="view-all">View All</span>
+          </div>
+          <table className="market-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!loading && filteredCoins
+                .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
+                .slice(0, 5)
+                .map(coin => (
+                  <tr key={coin.id}>
+                    <td>
+                      <div className="coin-name-cell">
+                        <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
+                        <div className="coin-name-symbol">
+                          <span className="table-coin-name">{coin.name}</span>
+                          <span className="table-coin-symbol">{coin.symbol.toUpperCase()}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>${coin.current_price.toLocaleString()}</td>
+                    <td className="positive-change">+{coin.price_change_percentage_24h.toFixed(2)}%</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Top Losers Card */}
+        <div className="market-trend-card">
+          <div className="trend-card-header losers">
+            <h3>
+              <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
+              </svg>
+              Top Losers (24h)
+            </h3>
+            <span className="view-all">View All</span>
+          </div>
+          <table className="market-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!loading && filteredCoins
+                .sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h)
+                .slice(0, 5)
+                .map(coin => (
+                  <tr key={coin.id}>
+                    <td>
+                      <div className="coin-name-cell">
+                        <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
+                        <div className="coin-name-symbol">
+                          <span className="table-coin-name">{coin.name}</span>
+                          <span className="table-coin-symbol">{coin.symbol.toUpperCase()}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>${coin.current_price.toLocaleString()}</td>
+                    <td className="negative-change">{coin.price_change_percentage_24h.toFixed(2)}%</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Highest Volume Card - FIXED: removed extra closing div */}
+        <div className="market-trend-card">
+          <div className="trend-card-header volume">
+            <h3>
+              <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+              </svg>
+              Highest Volume (24h)
+            </h3>
+            <span className="view-all">View All</span>
+          </div>
+          <table className="market-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Volume</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!loading && filteredCoins
+                .sort((a, b) => b.total_volume - a.total_volume)
+                .slice(0, 5)
+                .map(coin => (
+                  <tr key={coin.id}>
+                    <td>
+                      <div className="coin-name-cell">
+                        <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
+                        <div className="coin-name-symbol">
+                          <span className="table-coin-name">{coin.name}</span>
+                          <span className="table-coin-symbol">{coin.symbol.toUpperCase()}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>${coin.current_price.toLocaleString()}</td>
+                    <td className="volume-value">${(coin.total_volume / 1000000).toFixed(1)}M</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Market Cap Leaders Card - FIXED: restructured to match others */}
+        <div className="market-trend-card">
+          <div className="trend-card-header market-cap">
+            <h3>
+              <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="currentColor" d="M6,16.5L3,19.44V11H6M11,14.66L9.43,13.32L8,14.64V7H11M16,13L13,16V3H16M18.81,12.81L17,11H22V16L20.21,14.21L13,21.36L9.53,18.34L5.75,22H3L9.47,15.66L13,18.64" />
+              </svg>
+              Market Cap Leaders
+            </h3>
+            <span className="view-all">View All</span>
+          </div>
+          <table className="market-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Market Cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!loading && filteredCoins
+                .sort((a, b) => b.market_cap - a.market_cap)
+                .slice(0, 5)
+                .map(coin => (
+                  <tr key={coin.id}>
+                    <td>
+                      <div className="coin-name-cell">
+                        <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
+                        <div className="coin-name-symbol">
+                          <span className="table-coin-name">{coin.name}</span>
+                          <span className="table-coin-symbol">{coin.symbol.toUpperCase()}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>${coin.current_price.toLocaleString()}</td>
+                    <td className="marketcap-value">${(coin.market_cap / 1000000000).toFixed(1)}B</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div className="market-metrics-section">
+        <h2>Market Metrics</h2>
+        <div className="market-metrics-cards">
+          <div className="metric-card">
+            <div className="metric-icon fear-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,12.5A1.5,1.5 0 0,0 8.5,14A1.5,1.5 0 0,0 10,12.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,12.5A1.5,1.5 0 0,0 15.5,14A1.5,1.5 0 0,0 17,12.5A1.5,1.5 0 0,0 15.5,11M12,17.5C9.67,17.5 7.69,16.04 6.89,14H17.11C16.31,16.04 14.33,17.5 12,17.5Z" />
+              </svg>
+            </div>
+            <div className="metric-content">
+              <h3>Fear & Greed Index</h3>
+              <div className="metric-value">48 - Neutral</div>
+              <div className="metric-meter">
+                <div className="metric-progress" style={{ width: '48%' }}></div>
+              </div>
+              <div className="metric-labels">
+                <span>Extreme Fear</span>
+                <span>Extreme Greed</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="metric-card">
+            <div className="metric-icon btc-dominance">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M14.24 10.56C13.93 11.8 12 11.17 11.4 11L11.95 8.82C12.57 9 14.56 9.26 14.24 10.56M11.13 12.12L10.53 14.53C11.27 14.72 13.56 15.45 13.9 14.09C14.26 12.67 11.87 12.3 11.13 12.12M21.7 14.42C20.36 19.78 14.94 23.04 9.58 21.7C4.22 20.36 .963 14.94 2.3 9.58C3.64 4.22 9.06 .964 14.42 2.3C19.77 3.64 23.03 9.06 21.7 14.42M14.21 8.05L14.66 6.25L13.56 6L13.12 7.73C12.83 7.66 12.54 7.59 12.24 7.53L12.68 5.76L11.59 5.5L11.14 7.29C10.9 7.23 10.66 7.18 10.44 7.12L10.44 7.12L8.93 6.74L8.63 7.91C8.63 7.91 9.45 8.1 9.43 8.11C9.88 8.22 9.96 8.5 9.94 8.75L9.07 12.96C9.03 13.05 8.89 13.19 8.56 13.12C8.58 13.14 7.75 12.93 7.75 12.93L7.27 14.15L8.69 14.5C8.96 14.57 9.22 14.63 9.49 14.7L9.03 16.5L10.13 16.76L10.57 14.97C10.87 15.05 11.15 15.11 11.43 15.18L10.99 16.96L12.09 17.22L12.54 15.42C14.28 15.73 15.57 15.61 16.13 14C16.57 12.72 16.06 11.95 14.96 11.47C15.72 11.28 16.28 10.78 16.41 9.84C16.58 8.5 15.5 7.8 14.21 8.05Z" />
+              </svg>
+            </div>
+            <div className="metric-content">
+              <h3>Bitcoin Dominance</h3>
+              <div className="metric-value">41.7%</div>
+              <div className="metric-description">Down 0.3% from yesterday</div>
+            </div>
+          </div>
+          
+          <div className="metric-card">
+            <div className="metric-icon trending">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3Z" />
+              </svg>
+            </div>
+            <div className="metric-content">
+              <h3>Trending Searches</h3>
+              <div className="trending-tags">
+                <span className="trend-tag">Bitcoin</span>
+                <span className="trend-tag">Ethereum</span>
+                <span className="trend-tag">Solana</span>
+                <span className="trend-tag">PEPE</span>
+                <span className="trend-tag">AI tokens</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
