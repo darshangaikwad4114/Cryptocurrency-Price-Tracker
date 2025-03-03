@@ -1,68 +1,74 @@
-import React, { useState } from "react";
-import "./Coin.css";
-import { formatCurrency, formatCompactNumber } from "../../utils/formatters";
+import React from 'react';
+import './Coin.css';
 
-const Coin = ({
-  id,
-  name,
-  image,
-  symbol,
-  price,
-  volume,
-  priceChange,
+const Coin = ({ 
+  id, 
+  name, 
+  image, 
+  symbol, 
+  price, 
+  volume, 
+  priceChange, 
   marketCap,
-  rank
+  rank,
+  viewMode = 'grid' // Add viewMode prop with default value
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const priceChangeClass = priceChange < 0 ? 'negative' : 'positive';
+  const formattedMarketCap = marketCap?.toLocaleString() || 'N/A';
+  const formattedPrice = price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 'N/A';
+  const formattedVolume = volume?.toLocaleString() || 'N/A';
+  const formattedPriceChange = priceChange?.toFixed(2) || 'N/A';
 
-  const toggleExpanded = () => {
-    setExpanded(!expanded);
-  };
+  if (viewMode === 'list') {
+    return (
+      <div className="coin-list-item">
+        <div className="coin-rank-list">{rank}</div>
+        <div className="coin-info-list">
+          <img src={image} alt={name} className="coin-image-list" />
+          <div className="coin-name-container">
+            <h2 className="coin-name-list">{name}</h2>
+            <span className="coin-symbol-list">{symbol.toUpperCase()}</span>
+          </div>
+        </div>
+        <div className="coin-price-list">${formattedPrice}</div>
+        <div className={`coin-percent-list ${priceChangeClass}`}>
+          {priceChange > 0 ? '+' : ''}{formattedPriceChange}%
+        </div>
+        <div className="coin-marketcap-list">${formattedMarketCap}</div>
+        <div className="coin-volume-list">${formattedVolume}</div>
+      </div>
+    );
+  }
 
+  // Default grid view
   return (
-    <div className={`coin-card ${expanded ? 'expanded' : ''}`} onClick={toggleExpanded}>
-      <div className="coin-basic-info">
+    <div className="coin-card">
+      <div className="coin-card-header">
         <div className="coin-rank">#{rank}</div>
         <img src={image} alt={name} className="coin-image" />
-        <div className="coin-name-container">
-          <h3 className="coin-name">{name}</h3>
-          <span className="coin-symbol">{symbol.toUpperCase()}</span>
-        </div>
-        <div className="coin-price-container">
-          <p className="coin-price">${price.toLocaleString()}</p>
-          <p className={`coin-percent ${priceChange < 0 ? 'red' : 'green'}`}>
-            {priceChange < 0 ? (
-              <span className="arrow down">&#9660;</span>
-            ) : (
-              <span className="arrow up">&#9650;</span>
-            )}
-            {Math.abs(priceChange).toFixed(2)}%
-          </p>
-        </div>
       </div>
-      
-      <div className="coin-details">
-        <div className="coin-detail-item">
-          <span className="detail-label">Market Cap</span>
-          <span className="detail-value">${marketCap.toLocaleString()}</span>
+      <div className="coin-content">
+        <h2 className="coin-name">{name}</h2>
+        <p className="coin-symbol">{symbol.toUpperCase()}</p>
+      </div>
+      <div className="coin-data">
+        <div className="coin-price-container">
+          <span className="coin-price-label">Price</span>
+          <span className="coin-price-value">${formattedPrice}</span>
         </div>
-        <div className="coin-detail-item">
-          <span className="detail-label">24h Volume</span>
-          <span className="detail-value">${volume.toLocaleString()}</span>
-        </div>
-        <div className="coin-detail-item">
-          <span className="detail-label">Price Change (24h)</span>
-          <span className={`detail-value ${priceChange < 0 ? 'red' : 'green'}`}>
-            {priceChange.toFixed(2)}%
+        <div className="coin-price-change">
+          <span className="price-change-label">24h Change</span>
+          <span className={`price-change-value ${priceChangeClass}`}>
+            {priceChange > 0 ? '+' : ''}{formattedPriceChange}%
           </span>
         </div>
-      </div>
-      
-      <div className="coin-expand-hint">
-        {expanded ? 'Click to collapse' : 'Click for more details'}
+        <div className="coin-market-cap">
+          <span className="market-cap-label">Market Cap</span>
+          <span className="market-cap-value">${formattedMarketCap}</span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default React.memo(Coin);
+export default Coin;
