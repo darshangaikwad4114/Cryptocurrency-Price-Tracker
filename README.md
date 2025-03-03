@@ -134,11 +134,31 @@ cryptocurrency-price-tracker/
 
 ## API
 
-This project uses the [CoinGecko API](https://www.coingecko.com/en/api) to fetch cryptocurrency data. The API is free to use with rate limiting.
+This project uses the [CoinGecko API](https://www.coingecko.com/en/api) to fetch cryptocurrency data. The specific endpoint used is:
+
+```
+https://api.coingecko.com/api/v3/coins/markets
+```
+
+## Build for Production
+
+To build the project for production, run:
+
+```bash
+npm run build
+```
+
+This will create an optimized build in the `dist` directory.
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+- [CoinGecko](https://www.coingecko.com/) for providing the API
+- [React Documentation](https://react.dev/)
+- Bitcoin logo SVG from public sources
 
 ## Author
 
