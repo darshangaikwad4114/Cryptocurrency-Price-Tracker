@@ -9,12 +9,16 @@ function App() {
   const [coins, setCoins] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activePage, setActivePage] = useState('home');
 
   useEffect(() => {
     const fetchCoins = async () => {
       setLoading(true);
+      setError(null);
+      
       try {
+        console.log('Fetching cryptocurrency data...');
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
           {
@@ -25,11 +29,31 @@ function App() {
               page: 1,
               sparkline: false,
             },
+            timeout: 10000, // Add timeout to prevent hanging requests
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            }
           }
         );
-        setCoins(response.data);
+        
+        console.log('Data received:', response.data.length, 'coins');
+        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+          setCoins(response.data);
+          setError(null);
+        } else {
+          console.error('Empty or invalid response data:', response.data);
+          setError('Received empty data from API');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError(`Failed to fetch data: ${error.message || 'Unknown error'}`);
+        
+        // Check if we should use mock data on failure
+        if (coins.length === 0) {
+          console.log('Using fallback mock data');
+          setCoins(getMockData());
+        }
       } finally {
         setLoading(false);
       }
@@ -40,6 +64,35 @@ function App() {
     
     return () => clearInterval(interval);
   }, []);
+
+  // Mock data for fallback
+  const getMockData = () => {
+    return [
+      {
+        id: 'bitcoin',
+        symbol: 'btc',
+        name: 'Bitcoin',
+        image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
+        current_price: 58000,
+        market_cap: 1100000000000,
+        market_cap_rank: 1,
+        total_volume: 38000000000,
+        price_change_percentage_24h: 2.5,
+      },
+      {
+        id: 'ethereum',
+        symbol: 'eth',
+        name: 'Ethereum',
+        image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
+        current_price: 3500,
+        market_cap: 420000000000,
+        market_cap_rank: 2,
+        total_volume: 21000000000,
+        price_change_percentage_24h: 1.8,
+      },
+      // Add a few more mock cryptocurrencies if needed
+    ];
+  };
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -60,10 +113,19 @@ function App() {
           onChange={handleSearch}
         />
       </div>
+      
+      {/* Add error message display */}
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+          <p>Using fallback data or data from last successful fetch.</p>
+        </div>
+      )}
+      
       <div className="coins-container">
         {loading ? (
           Array(10).fill(0).map((_, index) => <CoinSkeleton key={index} />)
-        ) : (
+        ) : filteredCoins.length > 0 ? (
           filteredCoins.map((coin) => (
             <Coin
               key={coin.id}
@@ -78,6 +140,10 @@ function App() {
               rank={coin.market_cap_rank}
             />
           ))
+        ) : (
+          <div className="no-coins-message">
+            <p>No cryptocurrencies found. {error ? 'API request failed.' : 'Try a different search term.'}</p>
+          </div>
         )}
       </div>
     </>
