@@ -1,183 +1,78 @@
-<div align="center">
-
-# Cryptocurrency Price Tracker✨
-
-## ✨ [Live Preview](https://darshan-cryptocurrency-price-tracker.netlify.app/)
-
-</div>
-
-## 🤷🏼‍♂️ About This Project
-
-📈 Check crypto prices on the go! <br>
-💰 Find market cap data in a snap. <br>
-🕒 Track price changes with percentages. <br>
-🔍 Search for any cryptocurrency you desire. <br>
-🚀 Stay informed about crypto trends. <br>
-💡 Easy, quick, and user-friendly!
-
-<div align='center'>
-<img src='./src/home.png'/>
-</div>
-
-##
-
-- To check the market capitalization of a specific cryptocurrency, the user can search for it using the search bar and view its current market cap alongside other relevant data.
-
-- To check whether the price of a specific cryptocurrency has gone up or down, the user can search for it using the search bar and view its current price as well as its price change over various time periods.
-
-- The price change will be indicated by a percentage increase or decrease, allowing the user to quickly determine whether the cryptocurrency has gone up or down in value.
-
-# ⚡Tech Stack
-
-**Front End :** ReactJS
-
-**Development Environment :** Vite
-
-**API :** [Coingecko API](https://www.coingecko.com/en/api)
-
-## 🚀 Getting Started
-
-Clone the project
-
-```bash
-  git clone https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker.git
-```
-
-Go to the project directory
-
-```bash
-  cd Cryptocurrency-Price-Tracker
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the server
-
-```bash
-  npm run start
-```
-
 # Cryptocurrency Price Tracker
 
-![Cryptocurrency Price Tracker](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=white)
-![Axios](https://img.shields.io/badge/Axios-1.7.2-5A29E4?logo=axios&logoColor=white)
+![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.x-5A29E4?logo=axios&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A modern cryptocurrency price tracking application built with React that displays real-time information about various cryptocurrencies, including prices, market caps, and 24-hour price changes.
+A modern, responsive cryptocurrency tracking application that provides real-time data on cryptocurrency prices, market caps, volumes, and price changes. The application features an intuitive user interface with filtering, sorting, and multiple view modes to help users easily track their favorite cryptocurrencies.
 
-## Features
+## 📋 Features
 
-- **Real-time Data**: Fetches and displays up-to-date cryptocurrency data from the CoinGecko API
-- **Search Functionality**: Easily search for specific cryptocurrencies by name or symbol
-- **Responsive Design**: Optimized for both desktop and mobile devices
-- **Interactive UI**: Click on coins to see detailed information
-- **Visual Indicators**: Color-coded price changes and directional arrows
-- **Loading States**: Skeleton screens displayed while data is loading
-- **Markets Page**: Overview of crypto market statistics and top performers
-- **Regular Updates**: Data refreshes automatically every minute
+- **Real-time Data**: Fetches and displays up-to-date cryptocurrency data with automatic refresh every 60 seconds
+- **Multiple View Modes**: Toggle between grid and list layouts for different data visualization preferences
+- **Advanced Filtering**: Filter cryptocurrencies by price range, market cap categories, and custom search parameters
+- **Interactive Sorting**: Sort by market cap, price, volume, or alphabetically in ascending or descending order
+- **Visual Price Indicators**: Color-coded price changes with intuitive up/down indicators
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Market Overview**: Statistics, top gainers/losers, and volume leaders on the Markets page
+- **Loading States**: Smooth skeleton loading states for enhanced user experience
+- **Error Handling**: Robust error handling with fallback data and clear user messaging
 
-## Screenshots
+## 🛠️ Tech Stack
 
-[Add screenshots of your application here]
+- **Frontend Framework**: React.js with functional components and hooks
+- **HTTP Client**: Axios for API requests
+- **Styling**: Custom CSS3 with variables, animations, and responsive design
+- **API**: CoinGecko cryptocurrency data API
+- **Development Environment**: Vite for fast development and optimized builds
+- **State Management**: React's built-in useState and useEffect hooks
 
-## Installation
+## 🚀 Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker.git
-cd Cryptocurrency-Price-Tracker
-```
+Follow these steps to set up the project locally:
 
-2. Install dependencies:
-```bash
-npm install
-```
+1. **Clone the repository**
+  ```sh
+  git clone https://github.com/yourusername/cryptocurrency-price-tracker.git
+  ```
+2. **Navigate to the project directory**
+  ```sh
+  cd cryptocurrency-price-tracker
+  ```
+3. **Install dependencies**
+  ```sh
+  npm install
+  ```
+4. **Start the development server**
+  ```sh
+  npm run dev
+  ```
+5. **Open the application**
+  Open your browser and navigate to `http://localhost:3000` to see the application in action.
 
-3. Start the development server:
-```bash
-npm run dev
-```
 
-4. Open your browser and navigate to `http://localhost:5173`
+## 👥 Contributing
 
-## Technologies Used
+Contributions are welcome! Please follow these steps:
 
-- **React**: Frontend library for building user interfaces
-- **Axios**: HTTP client for API requests
-- **CoinGecko API**: Cryptocurrency data provider
-- **CSS**: Custom styling with animations and transitions
-- **Vite**: Build tool and development server
+1. **Fork the repository**
+2. **Create a feature branch**
+  ```sh
+  git checkout -b feature-name
+  ```
+3. **Commit your changes**
+  ```sh
+  git commit -m 'Add some feature'
+  ```
+4. **Push to the branch**
+  ```sh
+  git push origin feature-name
+  ```
+5. **Open a pull request**
 
-## Project Structure
+## 📞 Contact
 
-```
-cryptocurrency-price-tracker/
-├── src/
-│   ├── assets/
-│   │   └── logo.svg
-│   ├── components/
-│   │   └── Coin/
-│   │       ├── Coin.jsx
-│   │       ├── Coin.css
-│   │       ├── CoinSkeleton.jsx
-│   │       └── CoinSkeleton.css
-│   ├── App.jsx
-│   ├── App.css
-│   └── main.jsx
-├── package.json
-└── README.md
-```
+For any inquiries or feedback, please reach out to [darshangaikwad4114@example.com](mailto:darshangaikwad4114@example.com).
 
-## API
 
-This project uses the [CoinGecko API](https://www.coingecko.com/en/api) to fetch cryptocurrency data. The specific endpoint used is:
-
-```
-https://api.coingecko.com/api/v3/coins/markets
-```
-
-## Build for Production
-
-To build the project for production, run:
-
-```bash
-npm run build
-```
-
-This will create an optimized build in the `dist` directory.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-- [CoinGecko](https://www.coingecko.com/) for providing the API
-- [React Documentation](https://react.dev/)
-- Bitcoin logo SVG from public sources
-
-## Author
-
-Darshan Gaikwad
-
-## Acknowledgments
-
-- [CoinGecko](https://www.coingecko.com/) for providing the cryptocurrency data API
-- [React](https://reactjs.org/) for the awesome frontend library
-- [Vite](https://vitejs.dev/) for the fast build tool and development server
-
-## ✊ Show your support
-
-Give a ⭐️ if this project helped you!
-
-# 📝License
-
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker/blob/main/LICENCE)
-
-# 🙌🏻 Feedback
-
-If you have any feedback, please reach out to us at --> darshangaikwad4114@gmail.com
