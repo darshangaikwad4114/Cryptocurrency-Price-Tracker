@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Main colors - enhanced contrast for accessibility */
+  --primary-color: #0a192f; 
+  --secondary-color: #172a46;
+  --accent-color: #64ffda;
+  --accent-hover: #7fffe0;
+  --text-primary: #e6f1ff;
+  --text-secondary: #8892b0;
+  --success-color: #4caf50;
+  --success-light: rgba(76, 175, 80, 0.1);
+  --danger-color: #f44336;
+  --danger-light: rgba(244, 67, 54, 0.1);
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light theme variables */
+[data-theme='light'] {
+  --primary-color: #f9fafb;
+  --secondary-color: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --accent-color: #0891b2;
+  --accent-hover: #0e7490;
+  --danger-color: #dc2626;
+  --success-color: #16a34a;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+button, 
+input, 
+select {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Remove default button styling */
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Light theme scrollbar */
+[data-theme='light']::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light']::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}

@@ -3,29 +3,74 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // Try to get theme from localStorage, default to 'dark'
-    try {
-      const savedTheme = localStorage.getItem('theme');
-      return savedTheme || 'dark';
-    } catch (e) {
-      console.warn('Could not access localStorage:', e);
-      return 'dark';
+  // Check localStorage first, then system preference, default to dark
+  const getInitialTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme) {
+      return savedTheme;
     }
-  });
-
+    
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+    
+    // Default to dark theme
+    return 'dark';
+  };
+  
+  const [theme, setTheme] = useState(getInitialTheme);
+  
+  // Apply theme to body element and store in localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem('theme', theme);
-    } catch (e) {
-      console.warn('Could not save theme to localStorage:', e);
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    
+    // Apply theme classes to body for CSS selectors
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
     }
   }, [theme]);
-
+  
+  // Toggle theme function
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
-
+  
+  // Listen for system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => {
+      const newTheme = e.matches ? 'dark' : 'light';
+      // Only update if user hasn't manually set a preference
+      if (!localStorage.getItem('theme')) {
+        setTheme(newTheme);
+      }
+    };
+    
+    // Add event listener with fallback for older browsers
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      // Deprecated method for Safari < 14
+      mediaQuery.addListener(handleChange);
+    }
+    
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        // Deprecated method for Safari < 14
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
+  
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
@@ -33,10 +78,4 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
+export const useTheme = () => useContext(ThemeContext);

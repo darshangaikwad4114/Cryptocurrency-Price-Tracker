@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import axios from 'axios';
 import Coin from './components/Coin/Coin';
 import CoinSkeleton from './components/Coin/CoinSkeleton';
+import useDebounce from './hooks/useDebounce';
 import './App.css';
 import logo from './assets/logo.svg';
 import ListHeader from './components/ListHeader/ListHeader';
+
+// Lazy load components for better performance
+const MarketMetrics = lazy(() => import('./components/MarketMetrics/MarketMetrics'));
 
 function App() {
   const [coins, setCoins] = useState([]);
@@ -20,6 +24,14 @@ function App() {
   const [showFilters, setShowFilters] = useState(false);
   const [activeFilterCount, setActiveFilterCount] = useState(0);
   
+  // UI states
+  const [viewMode, setViewMode] = useState('grid');
+  const [sideFilterOpen, setSideFilterOpen] = useState(false);
+  const filterPanelRef = useRef(null);
+  
+  // Debounce search for performance
+  const debouncedSearch = useDebounce(search, 300);
+  
   // Market cap categories
   const marketCapCategories = [
     { name: 'Large Cap (>$10B)', min: 10000000000, max: Infinity },
@@ -27,66 +39,84 @@ function App() {
     { name: 'Small Cap (<$1B)', min: 0, max: 1000000000 },
   ];
 
-  // Add view mode state
-  const [viewMode, setViewMode] = useState('grid');
-  const [sideFilterOpen, setSideFilterOpen] = useState(false);
-  const filterPanelRef = useRef(null);
-
-  useEffect(() => {
-    const fetchCoins = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        console.log('Fetching cryptocurrency data...');
-        const response = await axios.get(
-          'https://api.coingecko.com/api/v3/coins/markets',
-          {
-            params: {
-              vs_currency: 'usd',
-              order: sortBy, // Use the sortBy state
-              per_page: 100,
-              page: 1,
-              sparkline: false,
-            },
-            timeout: 10000, // Add timeout to prevent hanging requests
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            }
+  // Fetch data with error handling and loading state
+  const fetchCoins = useCallback(async () => {
+    if (loading && coins.length > 0) return; // Prevent duplicate fetches when already loading
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log('Fetching cryptocurrency data...');
+      const response = await axios.get(
+        'https://api.coingecko.com/api/v3/coins/markets',
+        {
+          params: {
+            vs_currency: 'usd',
+            order: sortBy,
+            per_page: 100,
+            page: 1,
+            sparkline: false,
+          },
+          timeout: 10000,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           }
-        );
-        
-        console.log('Data received:', response.data.length, 'coins');
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-          setCoins(response.data);
-          setError(null);
-        } else {
-          console.error('Empty or invalid response data:', response.data);
-          setError('Received empty data from API');
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError(`Failed to fetch data: ${error.message || 'Unknown error'}`);
+      );
+      
+      console.log('Data received:', response.data.length, 'coins');
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        setCoins(response.data);
+        setError(null);
         
-        // Check if we should use mock data on failure
-        if (coins.length === 0) {
-          console.log('Using fallback mock data');
+        // Store in localStorage as a cache
+        localStorage.setItem('coinData', JSON.stringify({
+          data: response.data,
+          timestamp: Date.now()
+        }));
+      } else {
+        console.error('Empty or invalid response data:', response.data);
+        setError('Received empty data from API');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(`Failed to fetch data: ${error.message || 'Unknown error'}`);
+      
+      // Try to use cached data if available
+      const cachedData = localStorage.getItem('coinData');
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          if (Date.now() - parsed.timestamp < 3600000) { // 1 hour
+            console.log('Using cached data');
+            setCoins(parsed.data);
+          } else {
+            // Fallback to mock data if cache is old
+            setCoins(getMockData());
+          }
+        } catch (e) {
           setCoins(getMockData());
         }
-      } finally {
-        setLoading(false);
+      } else {
+        setCoins(getMockData());
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  }, [sortBy]);
 
+  // Initial data fetch and periodic refresh
+  useEffect(() => {
     fetchCoins();
     const interval = setInterval(fetchCoins, 60000); // Update every minute
     
     return () => clearInterval(interval);
-  }, [sortBy]); // Add sortBy to dependency array to refetch when sorting changes
+  }, [fetchCoins]);
 
+  // Close side filter panel when clicking outside
   useEffect(() => {
-    // Close side filter panel when clicking outside of it
     function handleClickOutside(event) {
       if (sideFilterOpen && 
           filterPanelRef.current && 
@@ -96,9 +126,19 @@ function App() {
       }
     }
 
+    // Handle escape key for accessibility
+    function handleEscapeKey(event) {
+      if (event.key === 'Escape' && sideFilterOpen) {
+        setSideFilterOpen(false);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscapeKey);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [sideFilterOpen]);
 
@@ -135,17 +175,21 @@ function App() {
     setSearch(e.target.value);
   };
   
-  // Handle price range inputs
+  // Handle price range inputs - improved validation
   const handlePriceRangeChange = (e) => {
     const { name, value } = e.target;
-    setPriceRange(prev => ({
-      ...prev,
-      [name]: value === '' ? '' : parseFloat(value)
-    }));
+    
+    // Ensure only valid numbers are accepted
+    if (value === '' || (!isNaN(value) && Number(value) >= 0)) {
+      setPriceRange(prev => ({
+        ...prev,
+        [name]: value === '' ? '' : parseFloat(value)
+      }));
+    }
   };
   
-  // Handle category selection
-  const handleCategoryChange = (category) => {
+  // Handle category selection with toggle
+  const handleCategoryChange = useCallback((category) => {
     setSelectedCategories(prev => {
       if (prev.includes(category)) {
         return prev.filter(cat => cat !== category);
@@ -153,61 +197,74 @@ function App() {
         return [...prev, category];
       }
     });
-  };
+  }, []);
   
   // Handle sorting change
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
+  const handleSortChange = useCallback((e) => {
+    setSortBy(typeof e === 'string' ? e : e.target.value);
+  }, []);
   
   // Toggle view mode between grid and list
-  const toggleViewMode = (mode) => {
+  const toggleViewMode = useCallback((mode) => {
     setViewMode(mode);
-  };
+    // Save preference to localStorage
+    localStorage.setItem('preferredViewMode', mode);
+  }, []);
 
   // Reset all filters
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setSearch('');
     setSortBy('market_cap_desc');
     setPriceRange({ min: '', max: '' });
     setSelectedCategories([]);
-  };
+  }, []);
+
+  // Load user preferences from localStorage on initial load
+  useEffect(() => {
+    const savedViewMode = localStorage.getItem('preferredViewMode');
+    if (savedViewMode) {
+      setViewMode(savedViewMode);
+    }
+  }, []);
 
   // Update active filter count whenever filters change
   useEffect(() => {
     let count = 0;
     
-    if (search) count++;
+    if (debouncedSearch) count++;
     if (sortBy !== 'market_cap_desc') count++;
     if (priceRange.min !== '' || priceRange.max !== '') count++;
     if (selectedCategories.length > 0) count++;
     
     setActiveFilterCount(count);
-  }, [search, sortBy, priceRange, selectedCategories]);
+  }, [debouncedSearch, sortBy, priceRange, selectedCategories]);
 
-  // Apply all filters to the coins
-  const filteredCoins = coins.filter((coin) => {
-    // Text search filter
-    const matchesSearch = 
-      coin.name.toLowerCase().includes(search.toLowerCase()) ||
-      coin.symbol.toLowerCase().includes(search.toLowerCase());
+  // Apply all filters to the coins - moved to useCallback for memoization
+  const filteredCoins = useCallback(() => {
+    return coins.filter((coin) => {
+      // Text search filter
+      const matchesSearch = 
+        !debouncedSearch || 
+        coin.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(debouncedSearch.toLowerCase());
+        
+      // Price range filter
+      const matchesPrice = 
+        (priceRange.min === '' || coin.current_price >= priceRange.min) && 
+        (priceRange.max === '' || coin.current_price <= priceRange.max);
+        
+      // Category filter
+      let matchesCategory = true;
+      if (selectedCategories.length > 0) {
+        matchesCategory = selectedCategories.some(category => {
+          const cat = marketCapCategories.find(c => c.name === category);
+          return cat && coin.market_cap >= cat.min && coin.market_cap < cat.max;
+        });
+      }
       
-    // Price range filter
-    const matchesPrice = 
-      (priceRange.min === '' || coin.current_price >= priceRange.min) && 
-      (priceRange.max === '' || coin.current_price <= priceRange.max);
-      
-    // Category filter
-    let matchesCategory = true;
-    if (selectedCategories.length > 0) {
-      matchesCategory = selectedCategories.some(category => {
-        const cat = marketCapCategories.find(c => c.name === category);
-        return cat && coin.market_cap >= cat.min && coin.market_cap < cat.max;
-      });
-    }
-    
-    return matchesSearch && matchesPrice && matchesCategory;
-  });
+      return matchesSearch && matchesPrice && matchesCategory;
+    });
+  }, [coins, debouncedSearch, priceRange, selectedCategories, marketCapCategories]);
 
   const renderFilters = () => (
     <div 
@@ -436,12 +493,12 @@ function App() {
       
       <div className="results-summary">
         <p className="results-summary-text">
-          Showing {filteredCoins.length} of {coins.length} cryptocurrencies
+          Showing {filteredCoins().length} of {coins.length} cryptocurrencies
         </p>
       </div>
       
       {/* Pass sorting function to ListHeader for interactive column headers */}
-      {viewMode === 'list' && !loading && filteredCoins.length > 0 && 
+      {viewMode === 'list' && !loading && filteredCoins().length > 0 && 
         <ListHeader 
           onSort={setSortBy} 
           sortBy={sortBy} 
@@ -451,8 +508,8 @@ function App() {
       <div className={`coins-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
         {loading ? (
           Array(10).fill(0).map((_, index) => <CoinSkeleton key={index} />)
-        ) : filteredCoins.length > 0 ? (
-          filteredCoins.map((coin) => (
+        ) : filteredCoins().length > 0 ? (
+          filteredCoins().map((coin) => (
             <Coin
               key={coin.id}
               id={coin.id}
@@ -536,7 +593,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {!loading && filteredCoins
+              {!loading && filteredCoins()
                 .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
                 .slice(0, 5)
                 .map(coin => (
@@ -578,7 +635,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {!loading && filteredCoins
+              {!loading && filteredCoins()
                 .sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h)
                 .slice(0, 5)
                 .map(coin => (
@@ -620,7 +677,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {!loading && filteredCoins
+              {!loading && filteredCoins()
                 .sort((a, b) => b.total_volume - a.total_volume)
                 .slice(0, 5)
                 .map(coin => (
@@ -662,7 +719,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {!loading && filteredCoins
+              {!loading && filteredCoins()
                 .sort((a, b) => b.market_cap - a.market_cap)
                 .slice(0, 5)
                 .map(coin => (
@@ -817,11 +874,13 @@ function App() {
           </button>
         </nav>
       </header>
-      <main className="main-content">
+      <main className="main-content" id="main-content">
+        {/* Skip to content link for accessibility */}
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         {renderContent()}
       </main>
       <footer className="footer">
-        <p>© 2023 Cryptocurrency Price Tracker. Data provided by CoinGecko API.</p>
+        <p>© {new Date().getFullYear()} Cryptocurrency Price Tracker. Data provided by CoinGecko API.</p>
       </footer>
     </div>
   );
