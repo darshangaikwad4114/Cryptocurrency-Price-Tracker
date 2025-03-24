@@ -37,6 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "jsdom": "^24.1.3",
     "rollup-plugin-visualizer": "^5.14.0",
+    "terser": "^5.29.2",
     "vite": "^4.5.10",
     "vitest": "^1.6.1"
   }
