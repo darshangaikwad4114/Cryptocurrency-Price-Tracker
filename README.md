@@ -18,13 +18,18 @@ A modern, responsive cryptocurrency tracking application that provides real-time
 - **Market Overview**: Statistics, top gainers/losers, and volume leaders on the Markets page
 - **Loading States**: Smooth skeleton loading states for enhanced user experience
 - **Error Handling**: Robust error handling with fallback data and clear user messaging
+- **Historical Price Charts**: Interactive charts showing price history over different time periods (24h, 7d, 30d, 90d, 1y)
+- **Cryptocurrency News Feed**: Latest news from the crypto industry powered by CryptoCompare API
+- **Detailed Coin Information**: Comprehensive metrics and information for each cryptocurrency
+- **Market Insights**: Key market metrics including Fear & Greed Index and Bitcoin dominance
 
 ## 🛠️ Tech Stack
 
 - **Frontend Framework**: React.js with functional components and hooks
 - **HTTP Client**: Axios for API requests
+- **Charting**: Chart.js with react-chartjs-2 for interactive price charts
 - **Styling**: Custom CSS3 with variables, animations, and responsive design
-- **API**: CoinGecko cryptocurrency data API
+- **API**: CoinGecko cryptocurrency data API and CryptoCompare news API
 - **Development Environment**: Vite for fast development and optimized builds
 - **State Management**: React's built-in useState and useEffect hooks
 
@@ -50,7 +55,6 @@ Follow these steps to set up the project locally:
   ```
 5. **Open the application**
   Open your browser and navigate to `http://localhost:3000` to see the application in action.
-
 
 ## 👥 Contributing
 

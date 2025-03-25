@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import './Coin.css';
+import { memo } from 'react';
 
 const Coin = ({ 
   id, 
@@ -12,12 +12,11 @@ const Coin = ({
   priceChange, 
   marketCap,
   rank,
-  viewMode = 'grid' 
+  viewMode = 'grid',
+  onClick
 }) => {
   const priceChangeClass = priceChange < 0 ? 'negative' : 'positive';
-  const formattedMarketCap = marketCap?.toLocaleString() || 'N/A';
   const formattedPrice = price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 'N/A';
-  const formattedVolume = volume?.toLocaleString() || 'N/A';
   const formattedPriceChange = priceChange?.toFixed(2) || 'N/A';
   
   // Convert market cap to readable format (B for billions, M for millions)
@@ -34,13 +33,21 @@ const Coin = ({
       ? `$${(volume / 1e6).toFixed(2)}M` 
       : `$${volume}`;
 
+  const handleCoinClick = () => {
+    if (onClick) {
+      onClick(id);
+    }
+  };
+
   if (viewMode === 'list') {
     return (
       <div 
         className="coin-list-item" 
-        role="row"
+        role="button"
         tabIndex={0}
         aria-label={`${name} at $${formattedPrice}, ${priceChange > 0 ? 'up' : 'down'} ${Math.abs(priceChange)}% in 24 hours`}
+        onClick={handleCoinClick}
+        onKeyDown={(e) => e.key === 'Enter' && handleCoinClick()}
       >
         <div className="coin-rank-list" aria-label={`Rank ${rank}`}>{rank}</div>
         <div className="coin-info-list">
@@ -67,8 +74,11 @@ const Coin = ({
   return (
     <div 
       className="coin-card"
+      role="button"
       tabIndex={0}
       aria-label={`${name} cryptocurrency card`}
+      onClick={handleCoinClick}
+      onKeyDown={(e) => e.key === 'Enter' && handleCoinClick()}
     >
       <div className="coin-card-header">
         <div className="coin-rank" aria-label={`Rank ${rank}`}>#{rank}</div>
@@ -97,6 +107,8 @@ const Coin = ({
           <span className="market-cap-value" aria-label={`Market Cap: ${readableMarketCap}`}>{readableMarketCap}</span>
         </div>
       </div>
+      
+      <div className="coin-expand-hint">Click for more details</div>
     </div>
   );
 };
@@ -106,12 +118,13 @@ Coin.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   symbol: PropTypes.string.isRequired,
-  price: PropTypes.number,
-  volume: PropTypes.number,
+  price: PropTypes.number.isRequired,
+  volume: PropTypes.number.isRequired,
   priceChange: PropTypes.number,
-  marketCap: PropTypes.number,
-  rank: PropTypes.number,
-  viewMode: PropTypes.oneOf(['grid', 'list'])
+  marketCap: PropTypes.number.isRequired,
+  rank: PropTypes.number.isRequired,
+  viewMode: PropTypes.oneOf(['grid', 'list']).isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 // Memoize the component to prevent unnecessary re-renders

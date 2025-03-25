@@ -1,6 +1,3 @@
-import React from "react";
-import "./CoinSkeleton.css";
-
 const CoinSkeleton = () => {
   return (
     <div className="coin-skeleton">

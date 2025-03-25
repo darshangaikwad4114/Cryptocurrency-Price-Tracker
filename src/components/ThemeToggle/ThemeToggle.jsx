@@ -1,5 +1,5 @@
-import React from 'react';
-import { useTheme } from '../../context/ThemeContext';
+import PropTypes from 'prop-types';
+import { useTheme } from '../../context/index';
 import './ThemeToggle.css';
 
 const ThemeToggle = ({ compact = false }) => {
@@ -47,6 +47,14 @@ const ThemeToggle = ({ compact = false }) => {
       )}
     </button>
   );
+};
+
+ThemeToggle.propTypes = {
+  compact: PropTypes.bool
+};
+
+ThemeToggle.defaultProps = {
+  compact: false
 };
 
 export default ThemeToggle;

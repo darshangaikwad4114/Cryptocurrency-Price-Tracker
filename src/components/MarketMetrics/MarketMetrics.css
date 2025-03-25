@@ -1,5 +1,5 @@
 .market-metrics-section {
-  margin-bottom: 2rem;
+  margin: 2rem 0;
 }
 
 .market-metrics-section h2 {
@@ -17,19 +17,20 @@
 
 .metric-card {
   background: linear-gradient(145deg, var(--secondary-color), #1c324d);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .metric-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-color: rgba(100, 255, 218, 0.1);
 }
 
 .metric-icon {
@@ -43,17 +44,17 @@
 }
 
 .metric-icon.fear-icon {
-  background-color: rgba(255, 193, 7, 0.1);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
   color: #ffc107;
 }
 
 .metric-icon.btc-dominance {
-  background-color: rgba(255, 152, 0, 0.1);
-  color: #ff9800;
+  background: linear-gradient(135deg, rgba(247, 147, 26, 0.2), rgba(247, 147, 26, 0.1));
+  color: #f7931a;
 }
 
 .metric-icon.trending {
-  background-color: rgba(33, 150, 243, 0.1);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(33, 150, 243, 0.1));
   color: #2196f3;
 }
 
@@ -72,19 +73,23 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
 .metric-description {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .metric-meter {
   height: 6px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
   overflow: hidden;
   position: relative;
 }
@@ -96,36 +101,38 @@
   height: 100%;
   background: linear-gradient(to right, #f44336, #ffc107, #4caf50);
   border-radius: 3px;
-  transition: width 0.3s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .metric-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .trending-tags {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
 
 .trend-tag {
-  padding: 4px 10px;
-  background-color: rgba(33, 150, 243, 0.1);
+  padding: 0.25rem 0.75rem;
+  background: rgba(33, 150, 243, 0.1);
   color: #2196f3;
-  border-radius: 20px;
+  border-radius: 16px;
   font-size: 0.8rem;
+  font-weight: 500;
   transition: all 0.2s ease;
   cursor: pointer;
+  border: 1px solid rgba(33, 150, 243, 0.2);
 }
 
 .trend-tag:hover {
-  background-color: rgba(33, 150, 243, 0.2);
+  background: rgba(33, 150, 243, 0.2);
   transform: translateY(-2px);
 }
 
@@ -138,31 +145,36 @@
 
 .metric-card.skeleton {
   height: 140px;
-  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
-  position: relative;
-  overflow: hidden;
-}
-
-.metric-card.skeleton::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
-  transform: translateX(-100%);
-  animation: shimmer 2s infinite;
+  background: linear-gradient(90deg, var(--secondary-color) 25%, #1e3355 50%, var(--secondary-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
 
 @keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @media (max-width: 768px) {
   .market-metrics-cards {
     grid-template-columns: 1fr;
+  }
+  
+  .metric-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-card:hover {
+    transform: none;
+  }
+  
+  .metric-progress {
+    transition: none;
+  }
+  
+  .trend-tag:hover {
+    transform: none;
   }
 }

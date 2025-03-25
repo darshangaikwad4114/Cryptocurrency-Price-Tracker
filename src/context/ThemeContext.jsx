@@ -1,8 +1,11 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
+// Create context in a separate file
 const ThemeContext = createContext();
 
-export const ThemeProvider = ({ children }) => {
+// Rename to prevent name collision
+const ThemeProviderComponent = ({ children }) => {
   // Check localStorage first, then system preference, default to dark
   const getInitialTheme = () => {
     const savedTheme = localStorage.getItem('theme');
@@ -78,4 +81,8 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export const useTheme = () => useContext(ThemeContext);
+ThemeProviderComponent.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+export { ThemeContext, ThemeProviderComponent as ThemeProvider };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Header.css';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../context/index';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
 // Fallback logo component when SVG import fails
@@ -24,18 +24,8 @@ const LogoFallback = () => (
 );
 
 const Header = () => {
+  const { theme } = useTheme(); // Remove toggleTheme if not using it
   const [activeTab, setActiveTab] = useState('dashboard');
-  
-  // Use a try/catch to handle the case when ThemeProvider is not available
-  let theme = "dark"; // Default theme
-  try {
-    const themeContext = useTheme();
-    if (themeContext && themeContext.theme) {
-      theme = themeContext.theme;
-    }
-  } catch (e) {
-    console.warn("ThemeContext not available, using default theme");
-  }
   
   // Import logo dynamically to handle potential missing file
   const [logo, setLogo] = useState(null);
@@ -53,7 +43,7 @@ const Header = () => {
   }, []);
   
   return (
-    <header className="header">
+    <header className={`header ${theme}`}> {/* Use theme in className */}
       <div className="logo-container">
         {logo ? (
           <img src={logo} alt="Cryptocurrency Tracker Logo" className="logo" width="36" height="36" />
