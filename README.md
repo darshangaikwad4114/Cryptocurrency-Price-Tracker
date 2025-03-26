@@ -77,6 +77,6 @@ Contributions are welcome! Please follow these steps:
 
 ## 📞 Contact
 
-For any inquiries or feedback, please reach out to [darshangaikwad4114@example.com](mailto:darshangaikwad4114@example.com).
+For any inquiries or feedback, please reach out to [darshangaikwad4114@gmail.com](mailto:darshangaikwad4114@gmail.com).
 
 
