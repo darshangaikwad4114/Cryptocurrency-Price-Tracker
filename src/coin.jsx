@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import "./Coin.css";
 
 const Coin = ({
@@ -35,6 +35,17 @@ const Coin = ({
       </div>
     </div>
   );
+};
+
+// Add PropTypes validation for all props
+Coin.propTypes = {
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  symbol: PropTypes.string.isRequired,
+  marketcap: PropTypes.number.isRequired,
+  volume: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  priceChange: PropTypes.number.isRequired
 };
 
 export default Coin;

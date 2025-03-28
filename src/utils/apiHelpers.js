@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 /**
  * Makes an API request with automatic retry on failure
  * 
