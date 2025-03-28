@@ -49,6 +49,20 @@ function App() {
     
     try {
       console.log('Fetching cryptocurrency data...');
+      
+      // Check if we've exceeded rate limits recently
+      const lastApiCall = localStorage.getItem('lastApiCall');
+      if (lastApiCall && Date.now() - parseInt(lastApiCall) < 10000) { // 10 seconds cooldown
+        console.log('Rate limit cooldown in effect, using cached data');
+        const cachedData = localStorage.getItem('coinData');
+        if (cachedData) {
+          const parsed = JSON.parse(cachedData);
+          setCoins(parsed.data);
+          setLoading(false);
+          return;
+        }
+      }
+      
       const response = await axios.get(
         'https://api.coingecko.com/api/v3/coins/markets',
         {
@@ -59,13 +73,16 @@ function App() {
             page: 1,
             sparkline: false,
           },
-          timeout: 10000,
+          timeout: 15000, // Increased timeout
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            // Removed Content-Type header which is not needed for GET requests
           }
         }
       );
+      
+      // Record this successful API call time
+      localStorage.setItem('lastApiCall', Date.now().toString());
       
       console.log('Data received:', response.data.length, 'coins');
       if (response.data && Array.isArray(response.data) && response.data.length > 0) {
@@ -83,7 +100,24 @@ function App() {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      setError(`Failed to fetch data: ${error.message || 'Unknown error'}`);
+      
+      // More specific error handling
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        if (error.response.status === 429) {
+          setError('Rate limit exceeded. Please try again in a minute.');
+        } else if (error.response.status >= 500) {
+          setError('CoinGecko API service is currently unavailable. Please try again later.');
+        } else {
+          setError(`API Error: ${error.response.status} - ${error.response.statusText}`);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError('No response received from API. Please check your internet connection.');
+      } else {
+        // Something happened in setting up the request
+        setError(`Failed to fetch data: ${error.message || 'Unknown error'}`);
+      }
       
       // Try to use cached data if available
       const cachedData = localStorage.getItem('coinData');
@@ -564,9 +598,6 @@ function App() {
           </div>
         )}
       </div>
-      
-      {/* Add News feed component */}
-      <NewsFeed />
       
       {/* Add coin detail overlay when a coin is selected */}
       {selectedCoinId && (

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import './NewsFeed.css';
+import { withRetry } from '../../utils/apiHelpers';
 
 const NewsFeed = ({ limit = 9 }) => {
   const [news, setNews] = useState([]);
@@ -31,23 +32,39 @@ const NewsFeed = ({ limit = 9 }) => {
     if (cachedData && cachedTimestamp) {
       const isStillValid = (Date.now() - parseInt(cachedTimestamp, 10)) < 15 * 60 * 1000;
       if (isStillValid) {
-        setNews(JSON.parse(cachedData));
-        setLoading(false);
-        return;
+        try {
+          setNews(JSON.parse(cachedData));
+          setLoading(false);
+          return;
+        } catch (e) {
+          console.error("Failed to parse cached data:", e);
+          // Continue to fetch fresh data
+        }
       }
     }
     
     try {
       // Add AbortController for cleanup
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 20000); // Increased timeout
       
-      const response = await axios.get(
-        'https://min-api.cryptocompare.com/data/v2/news/?lang=EN&categories=BTC,ETH,Cryptocurrency,Trading,Business',
-        { 
-          timeout: 10000,
-          signal: controller.signal
-        }
+      // Use environment variable for API key
+      const apiKey = import.meta.env.VITE_CRYPTOCOMPARE_API_KEY;
+      
+      // Use our retry utility
+      const response = await withRetry(
+        () => axios.get(
+          'https://min-api.cryptocompare.com/data/v2/news/?lang=EN',
+          { 
+            timeout: 15000,
+            signal: controller.signal,
+            params: {
+              api_key: apiKey,
+              categories: 'BTC,ETH,Cryptocurrency,Trading,Business'
+            }
+          }
+        ),
+        { maxRetries: 2, retryDelay: 2000 }
       );
       
       clearTimeout(timeoutId);
@@ -58,18 +75,43 @@ const NewsFeed = ({ limit = 9 }) => {
         setNews(newsData);
         
         // Cache the news data
-        sessionStorage.setItem(cacheKey, JSON.stringify(newsData));
-        sessionStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(newsData));
+          sessionStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
+        } catch (e) {
+          console.warn("Failed to cache news data:", e);
+          // Non-fatal error, continue execution
+        }
       } else {
         setError('Invalid news data format received');
       }
     } catch (err) {
       console.error('Error fetching news:', err);
-      setError(
-        err.name === 'AbortError' 
-          ? 'Request timed out. Please try again.' 
-          : `Failed to fetch news: ${err.message || 'Unknown error'}`
-      );
+      
+      let errorMessage;
+      if (err.name === 'AbortError') {
+        errorMessage = 'Request timed out. Please try again.';
+      } else if (err.code === 'ECONNABORTED') {
+        errorMessage = 'Connection timed out. The news API may be experiencing high traffic.';
+      } else if (err.response) {
+        errorMessage = `API error: ${err.response.status} - ${err.response.statusText}`;
+      } else {
+        errorMessage = `Failed to fetch news: ${err.message || 'Unknown error'}`;
+      }
+      
+      setError(errorMessage);
+      
+      // Try to use stale cached data if available
+      const cachedData = sessionStorage.getItem(cacheKey);
+      if (cachedData) {
+        try {
+          const parsedData = JSON.parse(cachedData);
+          setNews(parsedData);
+          console.log("Using stale cached news data due to fetch failure");
+        } catch (e) {
+          console.error("Failed to parse stale cached data:", e);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -220,10 +262,6 @@ const NewsFeed = ({ limit = 9 }) => {
 
 NewsFeed.propTypes = {
   limit: PropTypes.number
-};
-
-NewsFeed.defaultProps = {
-  limit: 5
 };
 
 export default NewsFeed;
