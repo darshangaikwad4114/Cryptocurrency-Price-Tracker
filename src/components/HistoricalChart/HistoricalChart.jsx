@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
@@ -159,9 +159,12 @@ const HistoricalChart = ({ coinId }) => {
           maxRotation: 0,
           autoSkipPadding: 15,
           font: {
-            size: 11
-          }
-        }
+            size: 10
+          },
+          maxTicksLimit: timeframe.days <= 1 ? 6 : 
+                        timeframe.days <= 7 ? 7 : 
+                        timeframe.days <= 30 ? 6 : 5,
+        },
       },
       y: {
         grid: {
@@ -234,8 +237,8 @@ const HistoricalChart = ({ coinId }) => {
     },
   }), [timeframe.days]);
 
-  // Retry handler
-  const handleRetry = () => {
+  // Cache-busting mechanism for stale data
+  const refreshChart = useCallback(() => {
     setLoading(true);
     // Clear cache for this specific item
     setDataCache(prev => {
@@ -243,7 +246,7 @@ const HistoricalChart = ({ coinId }) => {
       delete newCache[`${coinId}-${timeframe.days}`];
       return newCache;
     });
-  };
+  }, [coinId, timeframe.days]);
 
   return (
     <div className="historical-chart-container">
@@ -273,7 +276,7 @@ const HistoricalChart = ({ coinId }) => {
         ) : error ? (
           <div className="chart-error" role="alert">
             <p>{error}</p>
-            <button onClick={handleRetry}>Retry</button>
+            <button onClick={refreshChart}>Retry</button>
           </div>
         ) : historicalData.length > 0 ? (
           <div className="chart-wrapper" ref={chartRef}>

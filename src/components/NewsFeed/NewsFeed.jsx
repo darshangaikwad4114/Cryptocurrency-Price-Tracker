@@ -33,9 +33,12 @@ const NewsFeed = ({ limit = 9 }) => {
       const isStillValid = (Date.now() - parseInt(cachedTimestamp, 10)) < 15 * 60 * 1000;
       if (isStillValid) {
         try {
-          setNews(JSON.parse(cachedData));
-          setLoading(false);
-          return;
+          const parsedData = JSON.parse(cachedData);
+          if (Array.isArray(parsedData) && parsedData.length > 0) {
+            setNews(parsedData);
+            setLoading(false);
+            return;
+          }
         } catch (e) {
           console.error("Failed to parse cached data:", e);
           // Continue to fetch fresh data

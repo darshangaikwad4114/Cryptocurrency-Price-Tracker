@@ -33,82 +33,72 @@ const Coin = ({
       ? `$${(volume / 1e6).toFixed(2)}M` 
       : `$${volume}`;
 
-  const handleCoinClick = () => {
-    if (onClick) {
-      onClick(id);
-    }
-  };
-
-  if (viewMode === 'list') {
-    return (
-      <div 
-        className="coin-list-item" 
-        role="button"
-        tabIndex={0}
-        aria-label={`${name} at $${formattedPrice}, ${priceChange > 0 ? 'up' : 'down'} ${Math.abs(priceChange)}% in 24 hours`}
-        onClick={handleCoinClick}
-        onKeyDown={(e) => e.key === 'Enter' && handleCoinClick()}
-      >
-        <div className="coin-rank-list" aria-label={`Rank ${rank}`}>{rank}</div>
-        <div className="coin-info-list">
-          <img src={image} alt={`${name} logo`} className="coin-image-list" loading="lazy" />
-          <div className="coin-name-container">
-            <h2 className="coin-name-list">{name}</h2>
-            <span className="coin-symbol-list">{symbol.toUpperCase()}</span>
-          </div>
-        </div>
-        <div className="coin-price-list" aria-label={`Price: $${formattedPrice}`}>${formattedPrice}</div>
-        <div 
-          className={`coin-percent-list ${priceChangeClass}`}
-          aria-label={`${priceChange > 0 ? 'Increased' : 'Decreased'} by ${Math.abs(formattedPriceChange)}% in 24 hours`}
-        >
-          {priceChange > 0 ? '+' : ''}{formattedPriceChange}%
-        </div>
-        <div className="coin-marketcap-list" aria-label={`Market Cap: ${readableMarketCap}`}>{readableMarketCap}</div>
-        <div className="coin-volume-list" aria-label={`24h Volume: ${readableVolume}`}>{readableVolume}</div>
-      </div>
-    );
-  }
-
-  // Grid view with enhanced accessibility
+  // Use memoized render content to improve performance
   return (
     <div 
-      className="coin-card"
+      className={viewMode === 'grid' ? 'coin-card' : 'coin-list-item'} 
+      onClick={() => onClick(id)}
+      tabIndex="0"
       role="button"
-      tabIndex={0}
-      aria-label={`${name} cryptocurrency card`}
-      onClick={handleCoinClick}
-      onKeyDown={(e) => e.key === 'Enter' && handleCoinClick()}
+      aria-label={`View details for ${name}`}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          onClick(id);
+        }
+      }}
     >
-      <div className="coin-card-header">
-        <div className="coin-rank" aria-label={`Rank ${rank}`}>#{rank}</div>
-        <img src={image} alt={`${name} logo`} className="coin-image" loading="lazy" />
-      </div>
-      <div className="coin-content">
-        <h2 className="coin-name">{name}</h2>
-        <p className="coin-symbol">{symbol.toUpperCase()}</p>
-      </div>
-      <div className="coin-data">
-        <div className="coin-price-container">
-          <span className="coin-price-label">Price</span>
-          <span className="coin-price-value" aria-label={`Price: $${formattedPrice}`}>${formattedPrice}</span>
-        </div>
-        <div className="coin-price-change">
-          <span className="price-change-label">24h Change</span>
-          <span 
-            className={`price-change-value ${priceChangeClass}`}
+      {viewMode === 'list' ? (
+        <>
+          <div className="coin-rank-list" aria-label={`Rank ${rank}`}>{rank}</div>
+          <div className="coin-info-list">
+            <img src={image} alt={`${name} logo`} className="coin-image-list" loading="lazy" />
+            <div className="coin-name-container">
+              <h2 className="coin-name-list">{name}</h2>
+              <span className="coin-symbol-list">{symbol.toUpperCase()}</span>
+            </div>
+          </div>
+          <div className="coin-price-list" aria-label={`Price: $${formattedPrice}`}>${formattedPrice}</div>
+          <div 
+            className={`coin-percent-list ${priceChangeClass}`}
             aria-label={`${priceChange > 0 ? 'Increased' : 'Decreased'} by ${Math.abs(formattedPriceChange)}% in 24 hours`}
           >
             {priceChange > 0 ? '+' : ''}{formattedPriceChange}%
-          </span>
-        </div>
-        <div className="coin-market-cap">
-          <span className="market-cap-label">Market Cap</span>
-          <span className="market-cap-value" aria-label={`Market Cap: ${readableMarketCap}`}>{readableMarketCap}</span>
-        </div>
-      </div>
-      
-      <div className="coin-expand-hint">Click for more details</div>
+          </div>
+          <div className="coin-marketcap-list" aria-label={`Market Cap: ${readableMarketCap}`}>{readableMarketCap}</div>
+          <div className="coin-volume-list" aria-label={`24h Volume: ${readableVolume}`}>{readableVolume}</div>
+        </>
+      ) : (
+        <>
+          <div className="coin-card-header">
+            <div className="coin-rank" aria-label={`Rank ${rank}`}>#{rank}</div>
+            <img src={image} alt={`${name} logo`} className="coin-image" loading="lazy" />
+          </div>
+          <div className="coin-content">
+            <h2 className="coin-name">{name}</h2>
+            <p className="coin-symbol">{symbol.toUpperCase()}</p>
+          </div>
+          <div className="coin-data">
+            <div className="coin-price-container">
+              <span className="coin-price-label">Price</span>
+              <span className="coin-price-value" aria-label={`Price: $${formattedPrice}`}>${formattedPrice}</span>
+            </div>
+            <div className="coin-price-change">
+              <span className="price-change-label">24h Change</span>
+              <span 
+                className={`price-change-value ${priceChangeClass}`}
+                aria-label={`${priceChange > 0 ? 'Increased' : 'Decreased'} by ${Math.abs(formattedPriceChange)}% in 24 hours`}
+              >
+                {priceChange > 0 ? '+' : ''}{formattedPriceChange}%
+              </span>
+            </div>
+            <div className="coin-market-cap">
+              <span className="market-cap-label">Market Cap</span>
+              <span className="market-cap-value" aria-label={`Market Cap: ${readableMarketCap}`}>{readableMarketCap}</span>
+            </div>
+          </div>
+        </>
+      )}
+      <div className="coin-expand-hint" aria-hidden="true">Click for more details</div>
     </div>
   );
 };

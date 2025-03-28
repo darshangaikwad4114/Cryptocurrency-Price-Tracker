@@ -99,20 +99,20 @@ function App() {
         setError('Received empty data from API');
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching cryptocurrency data:', error);
       
-      // More specific error handling
+      // Enhanced error handling
       if (error.response) {
-        // The request was made and the server responded with a status code
+        // Server responded with an error
         if (error.response.status === 429) {
-          setError('Rate limit exceeded. Please try again in a minute.');
+          setError('API rate limit exceeded. Please try again later.');
         } else if (error.response.status >= 500) {
-          setError('CoinGecko API service is currently unavailable. Please try again later.');
+          setError('The cryptocurrency server is experiencing issues. Please try again later.');
         } else {
-          setError(`API Error: ${error.response.status} - ${error.response.statusText}`);
+          setError(`API error ${error.response.status}: ${error.response.data?.error || 'Unknown error'}`);
         }
       } else if (error.request) {
-        // The request was made but no response was received
+        // No response received
         setError('No response received from API. Please check your internet connection.');
       } else {
         // Something happened in setting up the request
@@ -434,9 +434,9 @@ function App() {
             <div className="filter-tag">
               <span>
                 Price: 
-                {priceRange.min !== '' ? ` $${priceRange.min}` : ' $0'} 
+                {priceRange.min !== '' ? ` $${Number(priceRange.min).toLocaleString()}` : ' $0'} 
                 {' - '} 
-                {priceRange.max !== '' ? `$${priceRange.max}` : 'Any'}
+                {priceRange.max !== '' ? `$${Number(priceRange.max).toLocaleString()}` : 'Any'}
               </span>
               <button onClick={() => setPriceRange({ min: '', max: '' })}>×</button>
             </div>

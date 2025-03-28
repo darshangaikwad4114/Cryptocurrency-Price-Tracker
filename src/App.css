@@ -1277,16 +1277,17 @@ h1 {
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-size: 0.9rem;
+  font-size: 1rem;
   transition: all 0.2s ease;
   padding: 0;
   line-height: 1;
+  margin-left: 4px;
 }
 
 .filter-tag button:hover {
