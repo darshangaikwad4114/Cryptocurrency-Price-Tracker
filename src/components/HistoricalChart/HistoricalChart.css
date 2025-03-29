@@ -1,53 +1,110 @@
 .historical-chart-container {
-  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  background: linear-gradient(145deg, #172a46, #1c324d);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
   position: relative;
-  transition: all 0.3s ease-in-out;
 }
 
 .historical-chart-container:hover {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  transform: translateY(-2px);
-  border-color: rgba(100, 255, 218, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Theme-based styling */
+.historical-chart-container[data-theme="positive"] {
+  border-left: 3px solid rgba(100, 255, 218, 0.7);
+}
+
+.historical-chart-container[data-theme="negative"] {
+  border-left: 3px solid rgba(255, 99, 132, 0.7);
 }
 
 .chart-header {
   display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.chart-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chart-title-section h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.chart-title-section h3 span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+.price-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.current-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.current-price.positive {
+  color: var(--accent-color);
+}
+
+.current-price.negative {
+  color: var(--danger-color);
+}
+
+.price-change {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.price-change.positive {
+  background-color: rgba(100, 255, 218, 0.1);
+  color: var(--accent-color);
+}
+
+.price-change.negative {
+  background-color: rgba(255, 99, 132, 0.1);
+  color: var(--danger-color);
+}
+
+.chart-controls {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.chart-header h3 {
-  font-size: 1.1rem;
-  color: var(--accent-color);
-  font-weight: 600;
-  margin: 0;
-  position: relative;
-}
-
-.chart-header h3::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 30px;
-  height: 2px;
-  background-color: var(--accent-color);
-  border-radius: 2px;
+  width: 100%;
 }
 
 .timeframe-selector {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   background-color: rgba(255, 255, 255, 0.05);
+  padding: 4px;
   border-radius: 8px;
-  padding: 3px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .timeframe-btn {
@@ -55,58 +112,103 @@
   border: none;
   color: var(--text-secondary);
   font-size: 0.85rem;
+  padding: 5px 10px;
   border-radius: 6px;
-  padding: 8px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
-  min-width: 45px;
-  position: relative;
-  overflow: hidden;
-}
-
-.timeframe-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(100, 255, 218, 0);
-  transform: scale(0);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  border-radius: 6px;
-  z-index: -1;
-}
-
-.timeframe-btn:hover::before {
-  transform: scale(1);
-  background-color: rgba(100, 255, 218, 0.05);
 }
 
 .timeframe-btn:hover {
   color: var(--accent-color);
-}
-
-.timeframe-btn:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+  background-color: rgba(100, 255, 218, 0.05);
 }
 
 .timeframe-btn.active {
   background-color: rgba(100, 255, 218, 0.15);
   color: var(--accent-color);
-  font-weight: 600;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.chart-wrapper {
+.historical-chart-container[data-theme="negative"] .timeframe-btn:hover {
+  color: var(--danger-color);
+  background-color: rgba(255, 99, 132, 0.05);
+}
+
+.historical-chart-container[data-theme="negative"] .timeframe-btn.active {
+  background-color: rgba(255, 99, 132, 0.15);
+  color: var(--danger-color);
+}
+
+.reset-zoom-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.chart-content {
   position: relative;
-  height: 300px;
   width: 100%;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
   border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.price-range-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding: 0 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.range-item {
+  display: flex;
+  gap: 5px;
+}
+
+.range-item span {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.chart-instructions {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.chart-instructions span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .chart-loading {
@@ -115,6 +217,9 @@
   align-items: center;
   justify-content: center;
   height: 300px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .chart-loading-animation {
@@ -133,72 +238,150 @@
   100% { transform: rotate(360deg); }
 }
 
-.chart-error, .no-data-message {
+.chart-error {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 300px;
-  color: var(--text-secondary);
+  width: 100%;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  color: var(--text-secondary);
+  text-align: center;
   padding: 20px;
 }
 
+.chart-error p {
+  margin-bottom: 15px;
+}
+
 .chart-error button {
-  margin-top: 1rem;
-  background-color: rgba(100, 255, 218, 0.1);
-  color: var(--accent-color);
+  background: rgba(100, 255, 218, 0.1);
   border: none;
+  color: var(--accent-color);
+  padding: 8px 16px;
   border-radius: 6px;
-  padding: 0.5rem 1.25rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: 500;
-  min-width: 100px;
-  text-align: center;
 }
 
 .chart-error button:hover {
-  background-color: rgba(100, 255, 218, 0.2);
+  background: rgba(100, 255, 218, 0.2);
   transform: translateY(-2px);
 }
 
-.chart-error button:active {
-  transform: translateY(0);
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: var(--text-secondary);
 }
 
-/* Enhanced responsive styles */
+/* Responsive styles */
 @media (max-width: 768px) {
+  .historical-chart-container {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
   .chart-header {
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .chart-title-section {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 8px;
   }
-  
-  .timeframe-selector {
+
+  .price-stats {
     width: 100%;
     justify-content: space-between;
   }
-  
+
+  .current-price {
+    font-size: 1.2rem;
+  }
+
+  .chart-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .timeframe-selector {
+    width: 100%;
+    justify-content: space-between;
+    padding: 2px;
+  }
+
   .timeframe-btn {
     flex: 1;
-    text-align: center;
     font-size: 0.8rem;
-    padding: 6px 8px;
+    padding: 6px 2px;
+    text-align: center;
   }
 
   .chart-wrapper {
-    height: 250px;
+    height: 220px;
+  }
+
+  .price-range-info {
+    margin-top: 10px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .historical-chart-container {
+    padding: 18px;
+  }
+
+  .chart-wrapper {
+    height: 260px;
+  }
+
+  .timeframe-btn {
+    font-size: 0.8rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chart-loading-animation {
-    animation: none;
-  }
-  
   .historical-chart-container:hover {
     transform: none;
   }
+
+  .chart-loading-animation {
+    animation: none;
+  }
+}
+
+/* Chart tooltip custom styling */
+.chart-tooltip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 8px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  padding: 12px !important;
+  pointer-events: none;
+  z-index: 10;
+  max-width: 200px;
+}
+
+.chart-tooltip-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--accent-color);
+}
+
+.chart-tooltip-value {
+  font-size: 1.2rem;
+  font-weight: 700;
 }

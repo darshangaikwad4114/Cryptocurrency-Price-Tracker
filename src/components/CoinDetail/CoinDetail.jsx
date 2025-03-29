@@ -148,7 +148,7 @@ const CoinDetail = ({ coinId, onClose }) => {
             </div>
             
             <div className="price-chart-section">
-              <HistoricalChart coinId={coinId} />
+              <HistoricalChart coinId={coinId} coinName={coinData?.name} />
             </div>
             
             <div className="market-stats-section">
