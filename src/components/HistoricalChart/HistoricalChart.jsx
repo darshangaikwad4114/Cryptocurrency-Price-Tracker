@@ -50,6 +50,25 @@ const HistoricalChart = ({ coinId, coinName }) => {
   const [priceInfo, setPriceInfo] = useState({ min: 0, max: 0, current: 0, change: 0 });
   const [screenSize, setScreenSize] = useState(window.innerWidth);
 
+  // Calculate price statistics from the data - Move this up before useEffect
+  const calculatePriceInfo = useCallback((data) => {
+    if (!data || data.length === 0) return;
+    
+    const prices = data.map(item => item[1]);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    const current = prices[prices.length - 1];
+    const first = prices[0];
+    const change = ((current - first) / first) * 100;
+    
+    setPriceInfo({
+      min,
+      max,
+      current,
+      change
+    });
+  }, []);
+
   // Track window resize for responsive adjustments
   useEffect(() => {
     const handleResize = () => {
@@ -129,25 +148,6 @@ const HistoricalChart = ({ coinId, coinName }) => {
 
     fetchHistoricalData();
   }, [coinId, timeframe.days, dataCache, screenSize, calculatePriceInfo]);
-
-  // Calculate price statistics from the data
-  const calculatePriceInfo = useCallback((data) => {
-    if (!data || data.length === 0) return;
-    
-    const prices = data.map(item => item[1]);
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    const current = prices[prices.length - 1];
-    const first = prices[0];
-    const change = ((current - first) / first) * 100;
-    
-    setPriceInfo({
-      min,
-      max,
-      current,
-      change
-    });
-  }, []);
 
   // Format price with appropriate precision
   const formatPrice = useCallback((price) => {
