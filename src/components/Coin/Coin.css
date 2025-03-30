@@ -595,5 +595,14 @@
 }
 
 .coin-card, .coin-list-item {
+  contain: content;
   animation: fadeInUp 0.5s ease forwards;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coin-card, .coin-list-item {
+    animation: none;
+    transform: none !important;
+  }
 }

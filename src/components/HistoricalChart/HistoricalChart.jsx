@@ -326,15 +326,16 @@ const HistoricalChart = ({ coinId, coinName }) => {
       },
       zoom: {
         pan: {
-          enabled: !isMobile,
+          enabled: true, // Enable for both mobile and desktop
           mode: 'x',
+          modifierKey: 'ctrl', // Require ctrl key on desktop
         },
         zoom: {
           wheel: {
             enabled: !isMobile,
           },
           pinch: {
-            enabled: !isMobile,
+            enabled: true, // Enable pinch zoom on mobile
           },
           mode: 'x',
         }

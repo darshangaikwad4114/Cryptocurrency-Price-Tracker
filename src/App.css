@@ -735,6 +735,16 @@ h1 {
   background: linear-gradient(to right, var(--accent-color), #64d6ff);
   color: #0a192f;
   font-weight: 600;
+  background: var(--accent-gradient);
+  color: var(--primary-color);
+  font-weight: 600;
+  transition: var(--hover-transition);
+}
+
+.toggle-filters-btn.has-filters:hover {
+  background: var(--accent-hover-gradient);
+  transform: var(--hover-transform);
+  box-shadow: var(--hover-shadow);
 }
 
 .toggle-filters-btn:hover {
@@ -1190,10 +1200,15 @@ h1 {
   font-size: 0.95rem;
   font-weight: 600;
   transition: all 0.2s ease;
+  background: var(--accent-gradient);
+  transition: var(--hover-transition);
 }
 
 .apply-filters-btn:hover {
   background-color: #89e2ff;
+  background: var(--accent-hover-gradient);
+  transform: var(--hover-transform);
+  box-shadow: var(--hover-shadow);
 }
 
 .reset-filters-btn {
@@ -1208,8 +1223,8 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.reset-filters-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.reset-filters-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .reset-filters-btn:disabled {

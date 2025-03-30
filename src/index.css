@@ -14,6 +14,17 @@
   --danger-light: rgba(244, 67, 54, 0.1);
   --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Gradient variations */
+  --accent-gradient: linear-gradient(to right, var(--accent-color), #64d6ff);
+  --accent-hover-gradient: linear-gradient(to right, var(--accent-hover), #89e2ff);
+  
+  /* Hover states */
+  --hover-transform: translateY(-2px); 
+  --hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  
+  /* Transitions */
+  --hover-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Light theme variables */
