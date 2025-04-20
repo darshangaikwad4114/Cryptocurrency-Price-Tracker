@@ -1,0 +1,477 @@
+.market-screener-section {
+  background: linear-gradient(145deg, var(--secondary-color), #1c324d);
+  border-radius: 16px;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.screener-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.screener-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.screener-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.screener-tabs button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.screener-tabs button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.screener-tabs button.active {
+  background: rgba(100, 255, 218, 0.1);
+  border-color: rgba(100, 255, 218, 0.3);
+  color: var(--accent-color);
+}
+
+/* Sector Performance Table */
+.sector-performance-table {
+  display: grid;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sector-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.sector-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.sector-item:last-child {
+  border-bottom: none;
+}
+
+.sector-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.sector-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sector-change.positive {
+  color: var(--success-color);
+}
+
+.sector-change.negative {
+  color: var(--danger-color);
+}
+
+.sector-value {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Exchange Volume Grid */
+.exchange-volume-grid {
+  display: grid;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.exchange-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.exchange-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.exchange-item:last-child {
+  border-bottom: none;
+}
+
+.exchange-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.exchange-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.exchange-logo-placeholder {
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.exchange-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-right: 8px;
+}
+
+.exchange-volume, 
+.exchange-markets {
+  font-weight: 500;
+}
+
+.exchange-trust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trust-score-bar {
+  height: 6px;
+  background: linear-gradient(to right, #4caf50, #8bc34a);
+  border-radius: 3px;
+  flex-grow: 1;
+}
+
+/* Top Movers Grid */
+.top-movers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.movers-column {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.movers-title {
+  padding: 0.75rem 1rem;
+  margin: 0;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.movers-column:first-child .movers-title {
+  color: var(--success-color);
+}
+
+.movers-column:last-child .movers-title {
+  color: var(--danger-color);
+}
+
+.movers-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mover-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+}
+
+.mover-item:last-child {
+  border-bottom: none;
+}
+
+.mover-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mover-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.mover-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.mover-name .name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.mover-name .symbol {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.mover-price {
+  font-weight: 500;
+}
+
+.mover-change.positive {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.mover-change.negative {
+  color: var(--danger-color);
+  font-weight: 600;
+}
+
+/* NFT Collections Styling */
+.nft-collections-grid {
+  display: grid;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nft-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.nft-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.nft-item:last-child {
+  border-bottom: none;
+}
+
+.nft-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.nft-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nft-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nft-name-symbol {
+  display: flex;
+  flex-direction: column;
+}
+
+.nft-name-symbol .name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.nft-name-symbol .symbol {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.nft-floor,
+.nft-volume {
+  font-weight: 500;
+}
+
+.nft-change.positive {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.nft-change.negative {
+  color: var(--danger-color);
+  font-weight: 600;
+}
+
+/* API Error Message */
+.api-error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background-color: rgba(255, 87, 34, 0.1);
+  border-radius: 8px;
+  color: #FF9800;
+  font-size: 0.85rem;
+}
+
+.api-error-message svg {
+  flex-shrink: 0;
+}
+
+/* Skeleton Loading */
+.screener-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-row {
+  height: 36px;
+  background: linear-gradient(90deg, var(--secondary-color) 25%, #1e3355 50%, var(--secondary-color) 75%);
+  border-radius: 8px;
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .screener-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .sector-performance-table,
+  .sector-table-header,
+  .sector-item,
+  .exchange-header,
+  .exchange-item {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  
+  .exchange-markets {
+    display: none;
+  }
+  
+  .top-movers-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .nft-header,
+  .nft-item {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  
+  .nft-volume {
+    display: none;
+  }
+  
+  .screener-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .screener-tabs button {
+    flex: 1;
+    min-width: calc(50% - 8px);
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .sector-performance-table,
+  .sector-table-header,
+  .sector-item,
+  .exchange-header,
+  .exchange-item {
+    grid-template-columns: 1.5fr 1fr;
+  }
+  
+  .sector-value,
+  .exchange-trust {
+    display: none;
+  }
+  
+  .screener-tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .screener-tabs button {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+  
+  .mover-item {
+    grid-template-columns: 2fr 1fr;
+  }
+  
+  .mover-price {
+    display: none;
+  }
+  
+  .nft-header,
+  .nft-item {
+    grid-template-columns: 2fr 1fr;
+  }
+  
+  .nft-change {
+    display: none;
+  }
+}

@@ -3058,3 +3058,53 @@ h1 {
   color: var(--accent-color);
   text-transform: capitalize;
 }
+
+/* Enhanced Market Dashboard Styles */
+.loading-metrics {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  margin: 1rem 0;
+}
+
+.markets-header {
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  background: linear-gradient(90deg, rgba(100, 255, 218, 0), rgba(100, 255, 218, 0.1), rgba(100, 255, 218, 0));
+  padding: 0.75rem 0;
+  border-radius: 8px;
+}
+
+/* Responsive adjustments for market page */
+@media (max-width: 768px) {
+  .markets-header {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+  }
+  
+  .market-trends-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .loading-metrics {
+    height: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  .markets-container {
+    padding: 0.5rem;
+  }
+  
+  .markets-header {
+    font-size: 1.25rem;
+    padding: 0.5rem 0;
+  }
+}

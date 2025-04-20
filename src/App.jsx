@@ -11,6 +11,8 @@ import CoinDetail from './components/CoinDetail/CoinDetail';
 
 // Lazy load components for better performance
 const MarketMetrics = lazy(() => import('./components/MarketMetrics/MarketMetrics'));
+const MarketScreener = lazy(() => import('./components/MarketScreener/MarketScreener'));
+const MarketSummary = lazy(() => import('./components/MarketSummary/MarketSummary'));
 
 function App() {
   const [coins, setCoins] = useState([]);
@@ -615,29 +617,20 @@ function App() {
     <div className="markets-container">
       <h2 className="markets-header">Global Crypto Market Dashboard</h2>
       
+      {/* Quick Market Summary */}
+      <Suspense fallback={<div className="loading-metrics">Loading market summary...</div>}>
+        <MarketSummary coins={coins} loading={loading} />
+      </Suspense>
+      
       {/* Use Suspense for lazy-loaded MarketMetrics component */}
       <Suspense fallback={<div className="loading-metrics">Loading market metrics...</div>}>
         <MarketMetrics coins={coins} loading={loading} />
       </Suspense>
       
-      <div className="market-stats">
-        <div className="stat-card">
-          <h3>Global Market Cap</h3>
-          <p>$2.1T</p>
-        </div>
-        <div className="stat-card">
-          <h3>24h Volume</h3>
-          <p>$78.5B</p>
-        </div>
-        <div className="stat-card">
-          <h3>BTC Dominance</h3>
-          <p>42.1%</p>
-        </div>
-        <div className="stat-card">
-          <h3>Active Cryptocurrencies</h3>
-          <p>10,000+</p>
-        </div>
-      </div>
+      {/* Market Screeners */}
+      <Suspense fallback={<div className="loading-metrics">Loading market screeners...</div>}>
+        <MarketScreener coins={coins} loading={loading} />
+      </Suspense>
       
       <div className="market-trends-grid">
         {/* Top Gainers Card */}
@@ -724,7 +717,7 @@ function App() {
           </table>
         </div>
         
-        {/* Highest Volume Card - FIXED: removed extra closing div */}
+        {/* Highest Volume Card */}
         <div className="market-trend-card">
           <div className="trend-card-header volume">
             <h3>
@@ -766,7 +759,7 @@ function App() {
           </table>
         </div>
         
-        {/* Market Cap Leaders Card - FIXED: restructured to match others */}
+        {/* Market Cap Leaders Card */}
         <div className="market-trend-card">
           <div className="trend-card-header market-cap">
             <h3>
