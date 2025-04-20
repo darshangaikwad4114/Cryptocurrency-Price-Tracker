@@ -829,7 +829,7 @@ function App() {
           the crypto market with advanced filtering, sorting, and multiple view modes.
         </p>
         <p>
-          Whether you're a casual investor or a crypto enthusiast, this application provides all the 
+          Whether you&apos;re a casual investor or a crypto enthusiast, this application provides all the 
           essential tools you need to stay informed about the cryptocurrency market in a clean, 
           user-friendly interface.
         </p>
