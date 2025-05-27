@@ -2,12 +2,20 @@
   "name": "cryptocurrency-price-tracker",
   "private": true,
   "description": "Cryptocurrency Price Tracker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "author": {
     "name": "Darshan Gaikwad",
     "email": "darshangaikwad4114@gmail.com",
     "url": "https://darshan-gaikwad-portfolio.vercel.app/"
+  },
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "license": "MIT",
   "homepage": "https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker#readme",
@@ -23,18 +31,6 @@
     "react",
     "crypto-dashboard"
   ],
-  "funding": {
-    "type": "individual",
-    "url": "https://darshan-gaikwad-portfolio.vercel.app/"
-  },
-  "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  },
   "dependencies": {
     "axios": "^1.9.0",
     "chart.js": "^4.4.9",
@@ -63,33 +59,8 @@
     "vite": "^4.5.14",
     "vitest": "^1.6.1"
   },
-  "engineStrict": true,
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
-  },
-  "createdBy": "Built with ❤️ by Darshan Gaikwad",
-  "contributors": [
-    "Darshan Gaikwad <darshangaikwad4114@gmail.com> (https://github.com/darshangaikwad4114)"
-  ],
-  "website": "https://crypto-tracker-darshan.netlify.app",
-  "signature": {
-    "developer": "Darshan Gaikwad",
-    "motto": "Mining insights from crypto data",
-    "blockHeight": "2023",
-    "hash": "DG64ffda1989",
-    "tokens": [
-      "React",
-      "Chart.js",
-      "CoinGecko API"
-    ],
-    "chain": "Web Development"
-  },
-  "coinInfo": {
-    "symbol": "DG",
-    "name": "DarshanCoin",
-    "type": "Developer",
-    "algorithm": "Code + Creativity",
-    "maxSupply": "Unlimited Potential"
   }
 }
