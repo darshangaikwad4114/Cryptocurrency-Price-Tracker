@@ -47,7 +47,6 @@ export const withRetry = async (apiCall, options = {}) => {
         break;
       }
       
-      // If it's the last attempt, don't retry
       if (attempt === maxRetries) {
         break;
       }
