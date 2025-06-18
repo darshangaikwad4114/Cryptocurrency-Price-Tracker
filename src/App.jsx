@@ -758,48 +758,6 @@ function App() {
             </tbody>
           </table>
         </div>
-        
-        {/* Market Cap Leaders Card */}
-        <div className="market-trend-card">
-          <div className="trend-card-header market-cap">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18">
-                <path fill="currentColor" d="M6,16.5L3,19.44V11H6M11,14.66L9.43,13.32L8,14.64V7H11M16,13L13,16V3H16M18.81,12.81L17,11H22V16L20.21,14.21L13,21.36L9.53,18.34L5.75,22H3L9.47,15.66L13,18.64" />
-              </svg>
-              Market Cap Leaders
-            </h3>
-            <span className="view-all">View All</span>
-          </div>
-          <table className="market-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Market Cap</th>
-              </tr>
-            </thead>
-            <tbody>
-              {!loading && filteredCoins()
-                .sort((a, b) => b.market_cap - a.market_cap)
-                .slice(0, 5)
-                .map(coin => (
-                  <tr key={coin.id}>
-                    <td>
-                      <div className="coin-name-cell">
-                        <img src={coin.image} alt={coin.name} className="mini-coin-logo" />
-                        <div className="coin-name-symbol">
-                          <span className="table-coin-name">{coin.name}</span>
-                          <span className="table-coin-symbol">{coin.symbol.toUpperCase()}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>${coin.current_price.toLocaleString()}</td>
-                    <td className="marketcap-value">${(coin.market_cap / 1000000000).toFixed(1)}B</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
