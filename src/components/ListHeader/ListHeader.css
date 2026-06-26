@@ -1,86 +1,63 @@
+/* ListHeader styles — uses design tokens from src/styles/design-tokens.css */
+/* Grid must match the Coin list-item grid exactly */
+
 .list-header {
   display: grid;
-  grid-template-columns: 0.5fr 3fr 1.5fr 1fr 2fr 2fr;
-  padding: 1rem 1.5rem;
-  background: linear-gradient(to right, rgba(100, 255, 218, 0.05), rgba(100, 255, 218, 0.02));
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(100, 255, 218, 0.1);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  letter-spacing: 0.5px;
+  grid-template-columns: 48px 1fr 120px 100px 120px 120px;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-4);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  align-items: center;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+  border: var(--border-subtle);
+  gap: 0;
 }
 
-.list-header > div {
+.header-rank,
+.header-name,
+.header-price,
+.header-change,
+.header-marketcap,
+.header-volume {
+  cursor: pointer;
+  padding: 0 var(--sp-1);
+  transition: color var(--transition-fast);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.2s ease;
-  padding: 0.5rem;
-  border-radius: 4px;
 }
 
-.list-header > div:hover {
-  color: var(--accent-color);
-  background: rgba(100, 255, 218, 0.05);
-}
-
-.list-header > div:focus {
-  outline: none;
-  color: var(--accent-hover);
-}
-
-.sort-arrow {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 10px;
-}
-
-.header-price, 
-.header-change, 
-.header-marketcap, 
-.header-volume {
-  justify-content: flex-end;
-}
-
-/* Accessibility focus indicator */
-.list-header > div:focus-visible {
-  outline: 2px solid var(--accent-color);
-  border-radius: 4px;
-  outline-offset: 2px;
+.header-rank:hover,
+.header-name:hover,
+.header-price:hover,
+.header-change:hover,
+.header-marketcap:hover,
+.header-volume:hover {
+  color: var(--color-accent);
 }
 
 .sort-icon {
-  font-size: 0.8rem;
-  opacity: 0.7;
+  margin-left: var(--sp-1);
+  font-size: var(--text-xs);
+  opacity: 0.6;
 }
 
 .list-header > div[aria-sort='ascending'] .sort-icon,
 .list-header > div[aria-sort='descending'] .sort-icon {
-  color: var(--accent-color);
+  color: var(--color-accent);
   opacity: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .list-header {
-    grid-template-columns: 0.5fr 3fr 1.5fr 1fr 2fr;
-  }
-  
-  .header-volume {
-    display: none;
-  }
-}
-
+/* Responsive */
 @media (max-width: 968px) {
   .list-header {
-    grid-template-columns: 0.5fr 3fr 1.5fr 1fr 2fr;
+    grid-template-columns: 48px 1fr 120px 100px 120px;
   }
-  
   .header-volume {
     display: none;
   }
@@ -88,10 +65,8 @@
 
 @media (max-width: 768px) {
   .list-header {
-    grid-template-columns: 0.5fr 3fr 1.5fr 1fr;
-    padding: 0.75rem 1rem;
+    grid-template-columns: 48px 1fr 120px 100px;
   }
-  
   .header-marketcap {
     display: none;
   }
@@ -99,6 +74,9 @@
 
 @media (max-width: 576px) {
   .list-header {
+    grid-template-columns: 48px 1fr 100px;
+  }
+  .header-change {
     display: none;
   }
 }

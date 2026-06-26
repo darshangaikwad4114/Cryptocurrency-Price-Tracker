@@ -1,0 +1,171 @@
+/* ============================================
+   Design Tokens — Cryptocurrency Price Tracker
+   Spacing scale: 4px base (4, 8, 12, 16, 20, 24, 32, 40, 48, 64)
+   Typography: Inter (body) / Montserrat (headings)
+   ============================================ */
+
+:root {
+  /* ----- Spacing Scale (4px base) ----- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ----- Border Radius ----- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ----- Typography ----- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Montserrat', var(--font-sans);
+  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Consolas, monospace;
+
+  --text-xs:   0.6875rem;  /* 11px */
+  --text-sm:   0.75rem;    /* 12px */
+  --text-base: 0.875rem;   /* 14px */
+  --text-md:   1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  2rem;       /* 32px */
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* ----- Colors (Dark theme — default) ----- */
+  --color-bg-primary: #0a192f;
+  --color-bg-secondary: #172a46;
+  --color-bg-tertiary: #1c324d;
+  --color-bg-elevated: #1e3355;
+  --color-bg-hover: rgba(255, 255, 255, 0.05);
+  --color-bg-active: rgba(255, 255, 255, 0.08);
+
+  --color-text-primary: #e6f1ff;
+  --color-text-secondary: #8892b0;
+  --color-text-tertiary: #5a6a85;
+  --color-text-inverse: #0a192f;
+
+  --color-accent: #64ffda;
+  --color-accent-hover: #7fffe0;
+  --color-accent-muted: rgba(100, 255, 218, 0.15);
+  --color-accent-subtle: rgba(100, 255, 218, 0.06);
+
+  /* Semantic signal colors */
+  --color-bullish: #4caf50;
+  --color-bullish-bg: rgba(76, 175, 80, 0.12);
+  --color-bullish-text: #66bb6a;
+  --color-bearish: #f44336;
+  --color-bearish-bg: rgba(244, 67, 54, 0.12);
+  --color-bearish-text: #ef5350;
+  --color-neutral: #78909c;
+  --color-neutral-bg: rgba(120, 144, 156, 0.12);
+
+  --color-volume: #2196f3;
+  --color-volume-bg: rgba(33, 150, 243, 0.1);
+  --color-warning: #ffc107;
+  --color-warning-bg: rgba(255, 193, 7, 0.1);
+
+  /* ----- Borders ----- */
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+  --border-default: 1px solid rgba(255, 255, 255, 0.1);
+  --border-accent: 1px solid rgba(100, 255, 218, 0.15);
+
+  /* ----- Shadows ----- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 20px rgba(100, 255, 218, 0.1);
+
+  /* ----- Transitions ----- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ----- Z-Index ----- */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* ----- Layout ----- */
+  --content-max-width: 1200px;
+  --header-height: 64px;
+
+  /* ----- Backward Compatibility Aliases ----- */
+  --bg-color: var(--color-bg-primary);
+  --text-color: var(--color-text-primary);
+  --card-bg: var(--color-bg-secondary);
+  --border-color: var(--color-text-tertiary);
+  --primary-color: var(--color-bg-primary);
+  --secondary-color: var(--color-bg-secondary);
+  --accent-color: var(--color-accent);
+  --accent-hover: var(--color-accent-hover);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --success-color: var(--color-bullish);
+  --success-light: var(--color-bullish-bg);
+  --danger-color: var(--color-bearish);
+  --danger-light: var(--color-bearish-bg);
+  --error-color: var(--color-bearish);
+  --card-shadow: var(--shadow-md);
+  --border-radius: var(--radius-md);
+  --transition: var(--transition-base);
+  --transition-speed: 0.3s;
+  --shadow-light: var(--shadow-md);
+  --shadow-dark: var(--shadow-lg);
+  --z-dropdown: 300;
+}
+
+/* ----- Light Theme Overrides ----- */
+[data-theme='light'] {
+  --color-bg-primary: #f8fafc;
+  --color-bg-secondary: #f1f5f9;
+  --color-bg-tertiary: #e2e8f0;
+  --color-bg-elevated: #ffffff;
+  --color-bg-hover: rgba(0, 0, 0, 0.04);
+  --color-bg-active: rgba(0, 0, 0, 0.08);
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  --color-accent: #0891b2;
+  --color-accent-hover: #0e7490;
+  --color-accent-muted: rgba(8, 145, 178, 0.12);
+  --color-accent-subtle: rgba(8, 145, 178, 0.06);
+
+  --color-bullish: #16a34a;
+  --color-bullish-bg: rgba(22, 163, 74, 0.1);
+  --color-bullish-text: #15803d;
+  --color-bearish: #dc2626;
+  --color-bearish-bg: rgba(220, 38, 38, 0.1);
+  --color-bearish-text: #b91c1c;
+
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+  --border-default: 1px solid rgba(0, 0, 0, 0.1);
+  --border-accent: 1px solid rgba(8, 145, 178, 0.2);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
