@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { WatchlistContext } from './watchlistContext';
-import { readArray, STORAGE_KEYS, writeStorage } from '../../lib/storage';
+import { readArray, STORAGE_KEYS, writeStorage } from '../../utils/storage';
 
 const MAX_ITEMS = 200;
 const COIN_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;

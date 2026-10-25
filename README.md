@@ -66,14 +66,14 @@ CoinGecko · CryptoCompare · Alternative.me
 
 ### Tech stack
 
-| Layer | Choice |
-|---|---|
-| UI | React 18.3, React Router 7, Chart.js 4 + react-chartjs-2 |
-| Data | TanStack Query 5, native `fetch`, custom query client |
-| Styling | Design-token CSS (custom properties), Inter variable font |
-| API | Node serverless functions (Vercel + Netlify v2 function adapters) |
+| Layer   | Choice                                                            |
+| ------- | ----------------------------------------------------------------- |
+| UI      | React 18.3, React Router 7, Chart.js 4 + react-chartjs-2          |
+| Data    | TanStack Query 5, native `fetch`, custom query client             |
+| Styling | Design-token CSS (custom properties), Inter variable font         |
+| API     | Node serverless functions (Vercel + Netlify v2 function adapters) |
 | Tooling | Vite 8, Vitest 5, Playwright 1.64, ESLint 9 flat config, Prettier |
-| Runtime | Node.js ≥ 22.12, npm ≥ 10 |
+| Runtime | Node.js ≥ 22.12, npm ≥ 10                                         |
 
 ---
 
@@ -87,19 +87,20 @@ netlify/functions/       # Netlify Functions v2 adapter (/api/*)
 server/dev-api.mjs       # Local API server (port 3001)
 scripts/generate-seo.mjs # Canonical, sitemap, robots generation from SITE_URL
 src/
-  api/                   # fetch client, query keys, hooks
-  app/                   # QueryClient configuration
+  app/                   # entry point, App composition, QueryClient configuration
+  layouts/               # app shell: header, footer, theme toggle, error boundary
+  pages/                 # route-level screens
   components/
-    layout/              # header, footer, theme toggle
     market/              # market table/grid, overview, explorer, watch button
     chart/               # lazy-loaded price chart
-    news/                # news list and cards
+    news/                # news feed and dashboard preview
     ui/                  # shared primitives (buttons, panels, icons, status)
   features/              # alerts, portfolio, watchlist, theme, toast providers
-  hooks/                 # document title, URL market filters
-  lib/                   # formatters, market math, storage helpers (+ tests)
-  pages/                 # route-level screens
+  hooks/                 # cross-cutting hooks incl. market query hooks
+  services/              # API transport + TanStack Query options
+  utils/                 # formatters, market math, storage helpers (+ tests)
   styles/                # design tokens, base, layout, components, pages
+tests/                   # global Vitest setup (unit tests stay colocated)
 e2e/                     # Playwright specs + deterministic API fixtures
 docs/                    # audit, roadmap, API, deployment, implementation report
 public/                  # favicon, robots, pre-paint theme script
@@ -132,18 +133,18 @@ The app still renders market data if news is not configured; `/api/news` returns
 
 ### Scripts
 
-| Command | Purpose |
-|---|---|
-| `npm run dev` | Client + local API with watch mode |
-| `npm run dev:client` | Vite client only (expects an API on port 3001) |
-| `npm run dev:api` | Local API only |
-| `npm run build` | Production build + SEO artifact generation |
-| `npm run preview` | Static preview of `dist` (no `/api`; use a platform emulator for full-stack) |
-| `npm run lint` | ESLint over the whole repo |
-| `npm test` | Vitest unit/API suite |
-| `npm run test:coverage` | Vitest with V8 coverage |
-| `npm run test:e2e` | Playwright desktop + mobile suites |
-| `npm run test:e2e:ui` | Playwright interactive UI |
+| Command                 | Purpose                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `npm run dev`           | Client + local API with watch mode                                           |
+| `npm run dev:client`    | Vite client only (expects an API on port 3001)                               |
+| `npm run dev:api`       | Local API only                                                               |
+| `npm run build`         | Production build + SEO artifact generation                                   |
+| `npm run preview`       | Static preview of `dist` (no `/api`; use a platform emulator for full-stack) |
+| `npm run lint`          | ESLint over the whole repo                                                   |
+| `npm test`              | Vitest unit/API suite                                                        |
+| `npm run test:coverage` | Vitest with V8 coverage                                                      |
+| `npm run test:e2e`      | Playwright desktop + mobile suites                                           |
+| `npm run test:e2e:ui`   | Playwright interactive UI                                                    |
 
 ---
 
@@ -151,14 +152,14 @@ The app still renders market data if news is not configured; `/api/news` returns
 
 All variables are server-side unless noted. Never prefix secrets with `VITE_`.
 
-| Variable | Required | Default | Purpose |
-|---|---|---|---|
-| `CRYPTOCOMPARE_API_KEY` | For news | — | CryptoCompare news API key |
-| `COINGECKO_API_KEY` | No | — | CoinGecko demo/pro key |
-| `COINGECKO_PLAN` | No | `demo` | Set to `pro` when using a Pro key |
-| `SITE_URL` | Production | — | Public HTTPS origin used for canonical URL, sitemap, and robots |
-| `API_PORT` | No | `3001` | Local API port |
-| `API_HOST` | No | `127.0.0.1` | Local API bind host |
+| Variable                | Required   | Default     | Purpose                                                         |
+| ----------------------- | ---------- | ----------- | --------------------------------------------------------------- |
+| `CRYPTOCOMPARE_API_KEY` | For news   | —           | CryptoCompare news API key                                      |
+| `COINGECKO_API_KEY`     | No         | —           | CoinGecko demo/pro key                                          |
+| `COINGECKO_PLAN`        | No         | `demo`      | Set to `pro` when using a Pro key                               |
+| `SITE_URL`              | Production | —           | Public HTTPS origin used for canonical URL, sitemap, and robots |
+| `API_PORT`              | No         | `3001`      | Local API port                                                  |
+| `API_HOST`              | No         | `127.0.0.1` | Local API bind host                                             |
 
 `SITE_URL` must be a public HTTPS origin with a dotted hostname. Localhost, non-HTTPS, credentials,
 query strings, and fragments are rejected; when absent, canonical/sitemap generation is skipped.
@@ -171,18 +172,18 @@ Same-origin only, read-only (`GET`/`HEAD`), rate-limited to **120 requests/minut
 validated server-side. Success responses use `{ data, meta }`; errors use
 `{ error: { code, message, requestId } }`.
 
-| Endpoint | Description |
-|---|---|
-| `GET /api/health` | Service status and whether news/CoinGecko keys are configured |
-| `GET /api/market?resource=coins` | Top 100 coins (`order`, `per_page`, `page`) |
-| `GET /api/market?resource=global` | Global market statistics |
-| `GET /api/market?resource=coin&id=bitcoin` | Single coin snapshot |
-| `GET /api/market?resource=chart&id=bitcoin&days=30` | Chart series (1, 7, 14, 30, 90, 180, 365) |
-| `GET /api/market?resource=categories` | Category performance |
-| `GET /api/market?resource=exchanges` | Spot exchange activity |
-| `GET /api/market?resource=trending` | Trending assets |
-| `GET /api/market?resource=fear-greed` | Fear & Greed index |
-| `GET /api/news?limit=24` | Sanitized news (1–60 items) |
+| Endpoint                                            | Description                                                   |
+| --------------------------------------------------- | ------------------------------------------------------------- |
+| `GET /api/health`                                   | Service status and whether news/CoinGecko keys are configured |
+| `GET /api/market?resource=coins`                    | Top 100 coins (`order`, `per_page`, `page`)                   |
+| `GET /api/market?resource=global`                   | Global market statistics                                      |
+| `GET /api/market?resource=coin&id=bitcoin`          | Single coin snapshot                                          |
+| `GET /api/market?resource=chart&id=bitcoin&days=30` | Chart series (1, 7, 14, 30, 90, 180, 365)                     |
+| `GET /api/market?resource=categories`               | Category performance                                          |
+| `GET /api/market?resource=exchanges`                | Spot exchange activity                                        |
+| `GET /api/market?resource=trending`                 | Trending assets                                               |
+| `GET /api/market?resource=fear-greed`               | Fear & Greed index                                            |
+| `GET /api/news?limit=24`                            | Sanitized news (1–60 items)                                   |
 
 Full contract, cache TTLs, headers, and error codes: [docs/API.md](docs/API.md).
 
@@ -210,14 +211,14 @@ CI runs lint, unit tests, production build, and Playwright on pushes and pull re
 
 ### Verified results (2026-10-26)
 
-| Gate | Result |
-|---|---|
-| `npm run lint` | Pass |
-| `npm test` | 99 passed / 8 files |
-| `npm run test:e2e` | 41 passed, 11 intentional project skips, 0 failed |
-| `npm run build` | Pass; no source maps; no secrets in `dist/` |
-| `npm audit --omit=dev` | 0 vulnerabilities |
-| axe WCAG 2.1 A/AA | 8 desktop audits pass (4 routes × 2 themes) |
+| Gate                   | Result                                            |
+| ---------------------- | ------------------------------------------------- |
+| `npm run lint`         | Pass                                              |
+| `npm test`             | 99 passed / 8 files                               |
+| `npm run test:e2e`     | 41 passed, 11 intentional project skips, 0 failed |
+| `npm run build`        | Pass; no source maps; no secrets in `dist/`       |
+| `npm audit --omit=dev` | 0 vulnerabilities                                 |
+| axe WCAG 2.1 A/AA      | 8 desktop audits pass (4 routes × 2 themes)       |
 
 ---
 
@@ -295,4 +296,4 @@ advice.
 
 ## License
 
-MIT — see [LICENCE](LICENCE).
+MIT — see [LICENSE](LICENSE).

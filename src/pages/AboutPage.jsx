@@ -95,7 +95,9 @@ export default function AboutPage() {
             <li>Market coverage is the top 100 assets by market cap, not every listed token.</li>
             <li>Upstream data can be delayed or briefly unavailable; cached values are labeled.</li>
             <li>Price alerts only run while a Crypto Tracker tab is open and online.</li>
-            <li>Portfolio calculations do not include fees, taxes, staking rewards, or transfers.</li>
+            <li>
+              Portfolio calculations do not include fees, taxes, staking rewards, or transfers.
+            </li>
             <li>Nothing here is financial advice. Verify prices on an exchange before trading.</li>
             <li>
               Coin logos and metadata belong to their respective owners and are displayed for

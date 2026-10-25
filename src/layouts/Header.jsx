@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import Logo from '../ui/Logo';
-import Icon from '../ui/Icon';
+import Logo from '../components/ui/Logo';
+import Icon from '../components/ui/Icon';
 import ThemeToggle from './ThemeToggle';
-import { useWatchlist } from '../../features/watchlist/watchlistContext';
-import { useAlerts } from '../../features/alerts/alertsContext';
-import { useCoins } from '../../api/hooks';
-import { formatTime } from '../../lib/format';
+import { useWatchlist } from '../features/watchlist/watchlistContext';
+import { useAlerts } from '../features/alerts/alertsContext';
+import { useCoins } from '../hooks/useMarketData';
+import { formatTime } from '../utils/format';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', end: true },
@@ -74,7 +74,12 @@ export default function Header() {
         </nav>
 
         <div className="header__actions">
-          <span className="header__status" title={lastUpdated ? `Data updated ${formatTime(lastUpdated)}` : 'Connecting to market data'}>
+          <span
+            className="header__status"
+            title={
+              lastUpdated ? `Data updated ${formatTime(lastUpdated)}` : 'Connecting to market data'
+            }
+          >
             <span className={`live-dot${query.isFetching ? ' live-dot--pulsing' : ''}`} />
             <span>{coins.length ? 'Live' : 'Connecting'}</span>
           </span>
@@ -86,7 +91,9 @@ export default function Header() {
             title="Price alerts"
           >
             <Icon name="bell" size={19} />
-            {activeCount > 0 && <span className="nav-count nav-count--floating">{activeCount}</span>}
+            {activeCount > 0 && (
+              <span className="nav-count nav-count--floating">{activeCount}</span>
+            )}
           </Link>
 
           <ThemeToggle />

@@ -4,8 +4,8 @@ import Skeleton from '../ui/Skeleton';
 import StatusPanel from '../ui/StatusPanel';
 import ChangeBadge from '../ui/ChangeBadge';
 import CoinLogo from '../ui/CoinLogo';
-import { useCategories, useExchanges } from '../../api/hooks';
-import { clamp, formatCompactCurrency, formatCompactNumber } from '../../lib/format';
+import { useCategories, useExchanges } from '../../hooks/useMarketData';
+import { clamp, formatCompactCurrency, formatCompactNumber } from '../../utils/format';
 
 function CategoriesPanel() {
   const { categories, query } = useCategories();
@@ -32,7 +32,11 @@ function CategoriesPanel() {
         title="Categories unavailable"
         message="Sector-level market data could not be loaded."
         actions={
-          <button type="button" className="button button--secondary" onClick={() => query.refetch()}>
+          <button
+            type="button"
+            className="button button--secondary"
+            onClick={() => query.refetch()}
+          >
             Retry
           </button>
         }
@@ -119,7 +123,11 @@ function ExchangesPanel() {
         title="Exchanges unavailable"
         message="Spot exchange data could not be loaded."
         actions={
-          <button type="button" className="button button--secondary" onClick={() => query.refetch()}>
+          <button
+            type="button"
+            className="button button--secondary"
+            onClick={() => query.refetch()}
+          >
             Retry
           </button>
         }
@@ -171,9 +179,7 @@ function ExchangesPanel() {
                   </div>
                 </div>
               </td>
-              <td className="align-right mono">
-                {formatCompactNumber(exchange.volume24hBtc)} BTC
-              </td>
+              <td className="align-right mono">{formatCompactNumber(exchange.volume24hBtc)} BTC</td>
               <td>
                 {Number.isFinite(exchange.trustScore) ? (
                   <div className="trust-cell">

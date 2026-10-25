@@ -63,8 +63,8 @@ Key files: `api/_lib/cache.js`, `api/_lib/core.js`, `api/_lib/node-adapter.js`,
 
 ### 2.3 Frontend architecture
 
-- Replaced legacy scattered components with a `pages / components / features / hooks / lib / api`
-  structure and a single app shell.
+- Replaced legacy scattered components with an `app / layouts / pages / components / features /
+hooks / services / utils` structure and a single app shell.
 - TanStack Query owns fetching, caching, deduplication, retries, and refresh intervals.
 - Lazy-loaded the Chart.js route/bundle; isolated React and chart vendors.
 - URL-driven market state (`q`, `sort`, `min`, `max`, `cap`) and persisted grid/table view.
@@ -72,9 +72,9 @@ Key files: `api/_lib/cache.js`, `api/_lib/core.js`, `api/_lib/node-adapter.js`,
 - Pre-paint theme restoration to avoid a flash of the wrong theme.
 - Real loading, empty, stale, and recoverable error states instead of fabricated data.
 
-Key areas: `src/api/`, `src/app/`, `src/pages/`, `src/components/{layout,market,chart,news,ui}/`,
-`src/features/{alerts,portfolio,watchlist,theme,toast}/`, `src/hooks/`, `src/lib/`,
-`src/styles/`.
+Key areas: `src/app/`, `src/layouts/`, `src/pages/`, `src/components/{market,chart,news,ui}/`,
+`src/features/{alerts,portfolio,watchlist,theme,toast}/`, `src/hooks/`, `src/services/`,
+`src/utils/`, `src/styles/`.
 
 ### 2.4 UI/UX, responsiveness, and accessibility
 
@@ -86,8 +86,7 @@ Key areas: `src/api/`, `src/app/`, `src/pages/`, `src/components/{layout,market,
 - Axe audits pass for `/`, `/markets`, `/portfolio`, `/alerts` in dark and light themes.
 
 Key files: `src/styles/{design-tokens,base,layout,components,pages}.css`,
-`src/features/toast/ToastProvider.jsx`, `src/components/layout/Header.jsx`,
-`src/components/layout/Footer.jsx`.
+`src/features/toast/ToastProvider.jsx`, `src/layouts/Header.jsx`, `src/layouts/Footer.jsx`.
 
 ### 2.5 Testing
 
@@ -96,7 +95,7 @@ Key files: `src/styles/{design-tokens,base,layout,components,pages}.css`,
 - **axe WCAG 2.1 A/AA** checks for four routes in two themes.
 - CI workflow for lint, unit tests, build, and Playwright.
 
-Key files: `src/lib/*.test.js`, `src/features/*/*Provider.test.jsx`,
+Key files: `src/utils/*.test.js`, `src/features/*/*Provider.test.jsx`,
 `api/_lib/*.test.js`, `e2e/fixtures.js`, `e2e/*.spec.js`, `playwright.config.js`,
 `.github/workflows/ci.yml`.
 
@@ -112,22 +111,22 @@ Key files: `src/lib/*.test.js`, `src/features/*/*Provider.test.jsx`,
 
 ## 3. Defects found and fixed
 
-| Defect | Impact | Resolution |
-|---|---|---|
-| Provider key shipped to the browser via `VITE_` env | Anyone could extract and abuse the key | Moved news calls server-side; removed `VITE_CRYPTOCOMPARE_API_KEY` fallback; scanned `dist` |
-| `finiteNumber(null)` / `finiteNumber('')` returned `0` | Missing API values became fake zero prices | Returns `null` for null/undefined/boolean/blank |
-| Watchlist accepted numeric IDs | Malformed persisted data could enter state | String + slug validation in provider |
-| Alert `triggeredPrice: null` could become `0` | False "triggered at $0.00" display | Preserved `null`; regression test added |
-| Rate-limit header hard-coded 120 | Misleading headers under custom limits | Header uses the actual configured limit |
-| Mobile menu toggle visible on desktop | Desktop users could open a duplicate mobile nav | Raised selector specificity over `.icon-button` |
-| Toast region had `aria-label` without a role | Axe `aria-prohibited-attr` | Added `role="region"` |
-| Brand links' `aria-label` hid visible text | Axe label/content mismatch | Removed redundant labels |
-| Low-contrast metadata, pills, and change badges | WCAG AA failures in both themes | Retuned text/semantic tokens per theme |
-| Fetch loop/flicker on dashboard | Excess requests, unstable UI | Query layer with intervals, caching, retry/backoff |
-| Unsanitized news HTML | XSS risk from upstream content | HTML stripping and HTTPS URL validation |
-| Fabricated market/Fear & Greed data | Misleading financial information | Replaced with real endpoints and honest unavailable states |
-| Production source maps | Source disclosure | Disabled in Vite |
-| Vulnerable/duplicate legacy dependencies | Security and maintenance risk | Toolchain upgrade; audit clean |
+| Defect                                                 | Impact                                          | Resolution                                                                                  |
+| ------------------------------------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Provider key shipped to the browser via `VITE_` env    | Anyone could extract and abuse the key          | Moved news calls server-side; removed `VITE_CRYPTOCOMPARE_API_KEY` fallback; scanned `dist` |
+| `finiteNumber(null)` / `finiteNumber('')` returned `0` | Missing API values became fake zero prices      | Returns `null` for null/undefined/boolean/blank                                             |
+| Watchlist accepted numeric IDs                         | Malformed persisted data could enter state      | String + slug validation in provider                                                        |
+| Alert `triggeredPrice: null` could become `0`          | False "triggered at $0.00" display              | Preserved `null`; regression test added                                                     |
+| Rate-limit header hard-coded 120                       | Misleading headers under custom limits          | Header uses the actual configured limit                                                     |
+| Mobile menu toggle visible on desktop                  | Desktop users could open a duplicate mobile nav | Raised selector specificity over `.icon-button`                                             |
+| Toast region had `aria-label` without a role           | Axe `aria-prohibited-attr`                      | Added `role="region"`                                                                       |
+| Brand links' `aria-label` hid visible text             | Axe label/content mismatch                      | Removed redundant labels                                                                    |
+| Low-contrast metadata, pills, and change badges        | WCAG AA failures in both themes                 | Retuned text/semantic tokens per theme                                                      |
+| Fetch loop/flicker on dashboard                        | Excess requests, unstable UI                    | Query layer with intervals, caching, retry/backoff                                          |
+| Unsanitized news HTML                                  | XSS risk from upstream content                  | HTML stripping and HTTPS URL validation                                                     |
+| Fabricated market/Fear & Greed data                    | Misleading financial information                | Replaced with real endpoints and honest unavailable states                                  |
+| Production source maps                                 | Source disclosure                               | Disabled in Vite                                                                            |
+| Vulnerable/duplicate legacy dependencies               | Security and maintenance risk                   | Toolchain upgrade; audit clean                                                              |
 
 The Playwright work also surfaced that a filter checkbox test was racing React's URL update. The app
 behavior was correct; the test now asserts checked state, URL, and row count with auto-waiting
@@ -139,27 +138,27 @@ expectations instead of `check()`'s immediate state verification.
 
 Run locally on 2026-10-26:
 
-| Gate | Command | Result |
-|---|---|---|
-| Lint | `npm run lint` | Pass |
-| Unit/API | `npm test` | **99 passed**, 8 files |
-| E2E | `npm run test:e2e` | **41 passed**, 11 intentional skips, 0 failed |
-| Build | `npm run build` | Pass |
-| Dependency audit | `npm audit --omit=dev` | 0 vulnerabilities |
-| Secret scan | key grep over `dist/` and repo | Not present outside `.env` |
-| SEO generation | `SITE_URL=https://example.com` build | Canonical, sitemap, robots generated; neutral rebuild restored |
-| Accessibility | Playwright + axe | 8 desktop audits pass (4 routes × 2 themes) |
+| Gate             | Command                              | Result                                                         |
+| ---------------- | ------------------------------------ | -------------------------------------------------------------- |
+| Lint             | `npm run lint`                       | Pass                                                           |
+| Unit/API         | `npm test`                           | **99 passed**, 8 files                                         |
+| E2E              | `npm run test:e2e`                   | **41 passed**, 11 intentional skips, 0 failed                  |
+| Build            | `npm run build`                      | Pass                                                           |
+| Dependency audit | `npm audit --omit=dev`               | 0 vulnerabilities                                              |
+| Secret scan      | key grep over `dist/` and repo       | Not present outside `.env`                                     |
+| SEO generation   | `SITE_URL=https://example.com` build | Canonical, sitemap, robots generated; neutral rebuild restored |
+| Accessibility    | Playwright + axe                     | 8 desktop audits pass (4 routes × 2 themes)                    |
 
 Intentional E2E skips are project-specific: mobile-only layout/navigation tests on desktop and
 desktop-only axe audits on mobile.
 
 ### Bundle snapshot (latest local build)
 
-| Asset | Size | Gzip |
-|---|---|---|
-| Entry JS | 144.14 kB | 36.68 kB |
-| React vendor | 171.26 kB | 56.60 kB |
-| CSS | 61.13 kB | 10.72 kB |
+| Asset               | Size      | Gzip     |
+| ------------------- | --------- | -------- |
+| Entry JS            | 144.14 kB | 36.68 kB |
+| React vendor        | 171.26 kB | 56.60 kB |
+| CSS                 | 61.13 kB  | 10.72 kB |
 | Chart vendor (lazy) | 211.40 kB | 73.61 kB |
 
 ---
@@ -201,15 +200,15 @@ Remaining owner actions:
 
 Planning estimates only; verify current provider pricing:
 
-| Item | Early-stage estimate | Notes |
-|---|---|---|
-| Vercel/Netlify | Hobby free; Pro commonly ~$20/mo | Static + functions |
-| CoinGecko | Paid plan required for commercial scale | Free/demo tiers are limited |
-| CryptoCompare | Plan dependent | Required for news |
-| Domain/TLS | ~$10–20/yr | TLS included by platform |
-| Redis (optional) | ~$0–30/mo | Only for shared cache/rate limits at scale |
-| Error tracking (optional) | Free tier → ~$26/mo | Not wired in |
-| Legal review | One-time | Terms/privacy if productizing |
+| Item                      | Early-stage estimate                    | Notes                                      |
+| ------------------------- | --------------------------------------- | ------------------------------------------ |
+| Vercel/Netlify            | Hobby free; Pro commonly ~$20/mo        | Static + functions                         |
+| CoinGecko                 | Paid plan required for commercial scale | Free/demo tiers are limited                |
+| CryptoCompare             | Plan dependent                          | Required for news                          |
+| Domain/TLS                | ~$10–20/yr                              | TLS included by platform                   |
+| Redis (optional)          | ~$0–30/mo                               | Only for shared cache/rate limits at scale |
+| Error tracking (optional) | Free tier → ~$26/mo                     | Not wired in                               |
+| Legal review              | One-time                                | Terms/privacy if productizing              |
 
 The current product has no billing or subscription costs because billing is intentionally out of
 scope.
@@ -221,20 +220,20 @@ scope.
 The app is **ready to deploy as an anonymous, local-first market dashboard**, not as a multi-user
 SaaS. Readiness by capability:
 
-| Capability | Status |
-|---|---|
-| Public market dashboard | Ready; deployment + key rotation pending |
-| Secure API boundary | Ready; rate limit/cache per instance |
-| Anonymous personalization (watchlist/portfolio/alerts) | Ready; browser-local only |
-| Accounts, sessions, email verification | Not implemented (deferred) |
-| Database, sync, multi-device | Not implemented (deferred) |
-| Multi-tenancy / RBAC | Not implemented (deferred) |
-| Plans, entitlements, billing | Not implemented (skipped by decision) |
-| Admin console | Not implemented (deferred) |
-| Observability (error tracking, uptime) | Partial: platform logs only |
-| CI/E2E/deployment config | Ready |
-| Legal/compliance | Disclaimer + attribution present; full ToS/privacy needed only if accounts/data are added |
-| Scale beyond one function instance | Needs shared cache/rate limiter and confirmed provider plans |
+| Capability                                             | Status                                                                                    |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| Public market dashboard                                | Ready; deployment + key rotation pending                                                  |
+| Secure API boundary                                    | Ready; rate limit/cache per instance                                                      |
+| Anonymous personalization (watchlist/portfolio/alerts) | Ready; browser-local only                                                                 |
+| Accounts, sessions, email verification                 | Not implemented (deferred)                                                                |
+| Database, sync, multi-device                           | Not implemented (deferred)                                                                |
+| Multi-tenancy / RBAC                                   | Not implemented (deferred)                                                                |
+| Plans, entitlements, billing                           | Not implemented (skipped by decision)                                                     |
+| Admin console                                          | Not implemented (deferred)                                                                |
+| Observability (error tracking, uptime)                 | Partial: platform logs only                                                               |
+| CI/E2E/deployment config                               | Ready                                                                                     |
+| Legal/compliance                                       | Disclaimer + attribution present; full ToS/privacy needed only if accounts/data are added |
+| Scale beyond one function instance                     | Needs shared cache/rate limiter and confirmed provider plans                              |
 
 The deliberate architecture keeps a clean seam for future accounts: replace local providers with
 authenticated API calls and add a database, auth, and tenant scoping. That remains a product decision,
@@ -252,8 +251,9 @@ not a missing implementation of this release.
 5. Add Sentry (or equivalent) and uptime checks before public launch.
 6. Replace in-memory cache/rate limit with Redis when scaling past one instance.
 7. Consider background alert evaluation (queue/scheduler) if alerts should work with the tab closed.
-8. Optional cleanup: archive legacy root helper scripts, `src/App.jsx.backup`, stale style notes, and
-   `build-analysis.html`. They are not part of the build but add noise.
+8. ~~Optional cleanup: archive legacy root helper scripts, `src/App.jsx.backup`, stale style notes,
+   and `build-analysis.html`.~~ Completed: these files are archived under the ignored `_legacy/`
+   directory and no longer appear in the project root or source tree.
 9. Per-route SEO requires prerendering/SSR if organic coin-page acquisition matters.
 10. Re-run Lighthouse/WebPageTest on the deployed URL; local bundle sizes are not field data.
 
@@ -266,8 +266,10 @@ not a missing implementation of this release.
 - **API:** `api/_lib/{cache,core,normalize,node-adapter,upstream}.js`,
   `api/_lib/{core,normalize}.test.js`, `api/{market,news,health}.js`
 - **Serverless/local:** `netlify/functions/api.mjs`, `server/dev-api.mjs`
-- **Frontend:** `src/api/*`, `src/app/queryClient.js`, `src/components/{chart,layout,news,ui}/**`,
-  `src/features/{alerts,portfolio,theme,toast,watchlist}/**`, `src/hooks/*`, `src/pages/*`
+- **Frontend:** `src/app/{main.jsx,App.jsx,queryClient.js}`, `src/layouts/**`,
+  `src/components/{chart,market,news,ui}/**`,
+  `src/features/{alerts,portfolio,theme,toast,watchlist}/**`, `src/hooks/*`, `src/services/*`,
+  `src/utils/*`, `src/pages/*`
 - **Styles:** `src/styles/{design-tokens,base,layout,components,pages}.css`
 - **Tests:** `src/**/*.test.{js,jsx}`, `api/**/*.test.js`, `e2e/**`, `tests/setup.js`
 - **Config:** `vercel.json`, `netlify.toml`, `.github/workflows/ci.yml`, `playwright.config.js`,
@@ -284,8 +286,9 @@ removed.
 
 ### Updated
 
-`package.json`, `package-lock.json`, `vite.config.js`, `index.html`, `README.md`,
-`docs/AUDIT.md`, `docs/ROADMAP.md`, `src/App.jsx`, `src/main.jsx`, `src/styles/design-tokens.css`.
+`package.json`, `package-lock.json`, `vite.config.js`, `vitest.config.js`, `eslint.config.js`,
+`index.html`, `README.md`, `docs/AUDIT.md`, `docs/ROADMAP.md`, `src/app/App.jsx`,
+`src/app/main.jsx`, `src/styles/design-tokens.css`.
 
 ---
 

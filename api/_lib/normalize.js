@@ -40,10 +40,7 @@ export function stripHtml(value, max = MAX_TEXT) {
     .replace(/<(script|style|noscript)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ');
   const withoutTags = withoutBlocks.replace(/<[^>]*>/g, ' ');
-  return decodeEntities(withoutTags)
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, max);
+  return decodeEntities(withoutTags).replace(/\s+/g, ' ').trim().slice(0, max);
 }
 
 export function cleanText(value, max = MAX_NAME) {
@@ -150,7 +147,9 @@ export function normalizeCoin(raw) {
     marketCap: nonNegative(raw.market_cap),
     volume24h: nonNegative(raw.total_volume),
     change1h: percentage(raw.price_change_percentage_1h_in_currency),
-    change24h: percentage(raw.price_change_percentage_24h_in_currency ?? raw.price_change_percentage_24h),
+    change24h: percentage(
+      raw.price_change_percentage_24h_in_currency ?? raw.price_change_percentage_24h,
+    ),
     change7d: percentage(raw.price_change_percentage_7d_in_currency),
     change30d: percentage(raw.price_change_percentage_30d_in_currency),
     high24h: nonNegative(raw.high_24h),
@@ -342,8 +341,7 @@ export function normalizeNews(raw) {
               .map((category) => cleanText(category, 40))
               .filter(Boolean)
           : [],
-      publishedAt:
-        publishedOn === null ? null : new Date(publishedOn * 1000).toISOString(),
+      publishedAt: publishedOn === null ? null : new Date(publishedOn * 1000).toISOString(),
     });
     if (normalized.length >= 60) break;
   }
@@ -369,10 +367,7 @@ export function normalizeFearGreed(raw) {
 }
 
 export const normalizers = {
-  coins: (raw) =>
-    (Array.isArray(raw) ? raw : [])
-      .map(normalizeCoin)
-      .filter(Boolean),
+  coins: (raw) => (Array.isArray(raw) ? raw : []).map(normalizeCoin).filter(Boolean),
   global: normalizeGlobal,
   coin: normalizeCoinDetail,
   chart: normalizeChart,

@@ -124,7 +124,9 @@ function main() {
 
   if (!siteUrl) {
     writeFileSync(INDEX, stripCanonicalPlaceholder(html), 'utf8');
-    console.log('[seo] SITE_URL is not set to a valid public HTTPS URL; skipping sitemap and canonical tags.');
+    console.log(
+      '[seo] SITE_URL is not set to a valid public HTTPS URL; skipping sitemap and canonical tags.',
+    );
     return;
   }
 

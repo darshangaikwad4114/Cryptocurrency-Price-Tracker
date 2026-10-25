@@ -1,13 +1,10 @@
 import { queryOptions } from '@tanstack/react-query';
-import { api } from './client';
+import { api } from './apiClient';
 
 export const coinsQuery = queryOptions({
   queryKey: ['market', 'coins', 'top-100'],
   queryFn: ({ signal }) =>
-    api.market(
-      { resource: 'coins', order: 'market_cap_desc', per_page: 100, page: 1 },
-      { signal },
-    ),
+    api.market({ resource: 'coins', order: 'market_cap_desc', per_page: 100, page: 1 }, { signal }),
   staleTime: 60_000,
   refetchInterval: 60_000,
 });

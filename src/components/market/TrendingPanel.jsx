@@ -4,8 +4,8 @@ import ChangeBadge from '../ui/ChangeBadge';
 import Icon from '../ui/Icon';
 import Skeleton from '../ui/Skeleton';
 import StatusPanel from '../ui/StatusPanel';
-import { useTrending } from '../../api/hooks';
-import { formatPrice } from '../../lib/format';
+import { useTrending } from '../../hooks/useMarketData';
+import { formatPrice } from '../../utils/format';
 
 export default function TrendingPanel() {
   const { trending, query } = useTrending();

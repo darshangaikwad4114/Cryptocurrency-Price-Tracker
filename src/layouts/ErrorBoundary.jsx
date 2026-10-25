@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Icon from '../ui/Icon';
+import Icon from '../components/ui/Icon';
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -34,7 +34,11 @@ export default class ErrorBoundary extends Component {
             <button type="button" className="button button--primary" onClick={this.handleReset}>
               Reload dashboard
             </button>
-            <button type="button" className="button button--ghost" onClick={() => window.location.reload()}>
+            <button
+              type="button"
+              className="button button--ghost"
+              onClick={() => window.location.reload()}
+            >
               Retry
             </button>
           </div>

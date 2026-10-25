@@ -5,7 +5,7 @@ import CoinLogo from '../components/ui/CoinLogo';
 import Icon from '../components/ui/Icon';
 import Skeleton from '../components/ui/Skeleton';
 import StatusPanel from '../components/ui/StatusPanel';
-import { useCoins } from '../api/hooks';
+import { useCoins } from '../hooks/useMarketData';
 import { usePortfolio } from '../features/portfolio/portfolioContext';
 import { useToast } from '../features/toast/useToast';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -16,7 +16,7 @@ import {
   formatPercent,
   formatPrice,
   toneFor,
-} from '../lib/format';
+} from '../utils/format';
 
 const EMPTY_FORM = { coinId: '', amount: '', buyPrice: '' };
 
@@ -144,7 +144,9 @@ export default function PortfolioPage() {
               ? `${totals.pnl >= 0 ? '+' : '−'}${formatCompactCurrency(Math.abs(totals.pnl))}`
               : '—'}
           </strong>
-          <span className={`summary-card__meta${hasHoldings ? ` tone-${toneFor(totals.pnl)}` : ''}`}>
+          <span
+            className={`summary-card__meta${hasHoldings ? ` tone-${toneFor(totals.pnl)}` : ''}`}
+          >
             {hasHoldings && totals.pnlPercent !== null
               ? `${formatPercent(totals.pnlPercent)} on priced holdings`
               : 'Add a holding to begin'}
@@ -267,7 +269,9 @@ export default function PortfolioPage() {
           <div className="panel__header panel__header--padded">
             <div>
               <h2 id="holdings-heading">Your holdings</h2>
-              <p>{hasHoldings ? 'Live valuations from the top-100 snapshot.' : 'No positions yet.'}</p>
+              <p>
+                {hasHoldings ? 'Live valuations from the top-100 snapshot.' : 'No positions yet.'}
+              </p>
             </div>
           </div>
 

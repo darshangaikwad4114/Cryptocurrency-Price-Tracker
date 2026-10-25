@@ -3,8 +3,8 @@ import Skeleton from '../ui/Skeleton';
 import ChangeBadge from '../ui/ChangeBadge';
 import DataFreshness from '../ui/DataFreshness';
 import StatusPanel from '../ui/StatusPanel';
-import { useFearGreed, useGlobal } from '../../api/hooks';
-import { clamp, formatCompactCurrency, formatPercent } from '../../lib/format';
+import { useFearGreed, useGlobal } from '../../hooks/useMarketData';
+import { clamp, formatCompactCurrency, formatPercent } from '../../utils/format';
 
 function fearTone(value) {
   if (!Number.isFinite(value)) return 'neutral';
@@ -104,7 +104,11 @@ export default function MarketOverview() {
             </div>
             <p className="metric-card__value">{formatCompactCurrency(global.totalMarketCap)}</p>
             <div className="metric-card__footer">
-              <ChangeBadge value={global.marketCapChange24h} label="Market cap change 24h" size="sm" />
+              <ChangeBadge
+                value={global.marketCapChange24h}
+                label="Market cap change 24h"
+                size="sm"
+              />
               <span>24h</span>
             </div>
           </article>
@@ -145,7 +149,9 @@ export default function MarketOverview() {
               </span>
               <h3>BTC dominance</h3>
             </div>
-            <p className="metric-card__value">{formatPercent(global.btcDominance, { signed: false })}</p>
+            <p className="metric-card__value">
+              {formatPercent(global.btcDominance, { signed: false })}
+            </p>
             <div className="dominance-bar" aria-hidden="true">
               <span
                 className="dominance-bar__btc"
@@ -158,10 +164,12 @@ export default function MarketOverview() {
             </div>
             <div className="metric-card__footer metric-card__legend">
               <span>
-                <i className="legend-dot legend-dot--btc" /> BTC {formatPercent(global.btcDominance, { signed: false })}
+                <i className="legend-dot legend-dot--btc" /> BTC{' '}
+                {formatPercent(global.btcDominance, { signed: false })}
               </span>
               <span>
-                <i className="legend-dot legend-dot--eth" /> ETH {formatPercent(global.ethDominance, { signed: false })}
+                <i className="legend-dot legend-dot--eth" /> ETH{' '}
+                {formatPercent(global.ethDominance, { signed: false })}
               </span>
             </div>
           </article>
@@ -215,7 +223,11 @@ export default function MarketOverview() {
             title="Some metrics could not be refreshed"
             message="Showing the latest available values. Retry to update."
             actions={
-              <button type="button" className="button button--small button--secondary" onClick={refresh}>
+              <button
+                type="button"
+                className="button button--small button--secondary"
+                onClick={refresh}
+              >
                 Retry
               </button>
             }

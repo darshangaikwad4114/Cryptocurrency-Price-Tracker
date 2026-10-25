@@ -7,7 +7,7 @@ import Icon from '../components/ui/Icon';
 import Skeleton from '../components/ui/Skeleton';
 import StatusPanel from '../components/ui/StatusPanel';
 import WatchButton from '../components/market/WatchButton';
-import { useCoin } from '../api/hooks';
+import { useCoin } from '../hooks/useMarketData';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import {
   clamp,
@@ -15,7 +15,7 @@ import {
   formatCompactNumber,
   formatDate,
   formatPrice,
-} from '../lib/format';
+} from '../utils/format';
 
 const PriceChart = lazy(() => import('../components/chart/PriceChart'));
 
@@ -196,7 +196,9 @@ export default function CoinPage() {
             <ChangeBadge value={coin.change24h} label="24 hour change" />
           </div>
           <p className="coin-hero__timestamp">
-            {coin.lastUpdated ? `Market data updated ${formatDate(coin.lastUpdated)}` : 'Live market data'}
+            {coin.lastUpdated
+              ? `Market data updated ${formatDate(coin.lastUpdated)}`
+              : 'Live market data'}
           </p>
         </div>
 
@@ -245,13 +247,26 @@ export default function CoinPage() {
         </div>
         <dl className="stat-grid">
           <Stat label="Market cap" value={formatCompactCurrency(coin.marketCap)} />
-          <Stat label="Fully diluted valuation" value={formatCompactCurrency(coin.fullyDilutedValuation)} />
+          <Stat
+            label="Fully diluted valuation"
+            value={formatCompactCurrency(coin.fullyDilutedValuation)}
+          />
           <Stat label="24h volume" value={formatCompactCurrency(coin.volume24h)} />
-          <Stat label="Circulating supply" value={`${formatCompactNumber(coin.circulatingSupply)} ${coin.symbol.toUpperCase()}`} />
-          <Stat label="Total supply" value={`${formatCompactNumber(coin.totalSupply)} ${coin.symbol.toUpperCase()}`} />
+          <Stat
+            label="Circulating supply"
+            value={`${formatCompactNumber(coin.circulatingSupply)} ${coin.symbol.toUpperCase()}`}
+          />
+          <Stat
+            label="Total supply"
+            value={`${formatCompactNumber(coin.totalSupply)} ${coin.symbol.toUpperCase()}`}
+          />
           <Stat
             label="Max supply"
-            value={coin.maxSupply ? `${formatCompactNumber(coin.maxSupply)} ${coin.symbol.toUpperCase()}` : 'Uncapped'}
+            value={
+              coin.maxSupply
+                ? `${formatCompactNumber(coin.maxSupply)} ${coin.symbol.toUpperCase()}`
+                : 'Uncapped'
+            }
           />
           <Stat
             label="All-time high"

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAlerts } from './useAlerts';
 import { useToast } from '../toast/useToast';
-import { formatPrice } from '../../lib/format';
+import { formatPrice } from '../../utils/format';
 
 export function useAlertWatcher(coins) {
   const { alerts, markTriggered } = useAlerts();

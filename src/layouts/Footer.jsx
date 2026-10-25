@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Logo from '../ui/Logo';
-import Icon from '../ui/Icon';
+import Logo from '../components/ui/Logo';
+import Icon from '../components/ui/Icon';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -39,7 +39,11 @@ export default function Footer() {
           <a href="https://www.cryptocompare.com" target="_blank" rel="noopener noreferrer">
             CryptoCompare <Icon name="external" size={13} />
           </a>
-          <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://alternative.me/crypto/fear-and-greed-index/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Fear &amp; Greed <Icon name="external" size={13} />
           </a>
           <Link to="/about">How it works</Link>

@@ -39,14 +39,14 @@ key values.
 
 ### `GET /api/market`
 
-| Query | Required | Values | Default |
-|---|---|---|---|
-| `resource` | No | `coins`, `global`, `coin`, `chart`, `categories`, `exchanges`, `trending`, `fear-greed` | `coins` |
-| `order` | For `coins` | `market_cap_desc`, `market_cap_asc`, `volume_desc`, `volume_asc`, `id_asc`, `id_desc`, `gecko_desc`, `gecko_asc` | `market_cap_desc` |
-| `per_page` | No | 1–100 | `100` |
-| `page` | No | 1–100 | `1` |
-| `id` | For `coin`, `chart` | lowercase slug: `^[a-z0-9][a-z0-9-]{0,79}$` | — |
-| `days` | For `chart` | `1`, `7`, `14`, `30`, `90`, `180`, `365` | `30` |
+| Query      | Required            | Values                                                                                                           | Default           |
+| ---------- | ------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `resource` | No                  | `coins`, `global`, `coin`, `chart`, `categories`, `exchanges`, `trending`, `fear-greed`                          | `coins`           |
+| `order`    | For `coins`         | `market_cap_desc`, `market_cap_asc`, `volume_desc`, `volume_asc`, `id_asc`, `id_desc`, `gecko_desc`, `gecko_asc` | `market_cap_desc` |
+| `per_page` | No                  | 1–100                                                                                                            | `100`             |
+| `page`     | No                  | 1–100                                                                                                            | `1`               |
+| `id`       | For `coin`, `chart` | lowercase slug: `^[a-z0-9][a-z0-9-]{0,79}$`                                                                      | —                 |
+| `days`     | For `chart`         | `1`, `7`, `14`, `30`, `90`, `180`, `365`                                                                         | `30`              |
 
 Examples:
 
@@ -58,9 +58,9 @@ curl -s http://localhost:3001/api/market?resource=chart\&id=bitcoin\&days=7
 
 ### `GET /api/news`
 
-| Query | Required | Values | Default |
-|---|---|---|---|
-| `limit` | No | 1–60 | `24` |
+| Query   | Required | Values | Default |
+| ------- | -------- | ------ | ------- |
+| `limit` | No       | 1–60   | `24`    |
 
 News items are sanitized: HTML is stripped from titles/bodies, image and article URLs must be
 HTTPS, and duplicate articles are removed. If `CRYPTOCOMPARE_API_KEY` is absent, the endpoint
@@ -91,17 +91,17 @@ the upstream provider (`coingecko`, `cryptocompare`, or `alternative.me`).
 
 ### Response headers
 
-| Header | Meaning |
-|---|---|
-| `cache-control` | `public, max-age=0, s-maxage=<ttl>, stale-while-revalidate=<stale>` for data |
-| `x-cache` | `HIT`, `MISS`, or `STALE` |
-| `x-request-id` | Correlation ID for logs and support |
-| `x-ratelimit-limit` | Requests allowed in the window (120) |
-| `x-ratelimit-remaining` | Requests left in the current window |
-| `x-ratelimit-reset` | Unix timestamp (seconds) when the window resets |
-| `age` | Age of a stale snapshot, when applicable |
-| `referrer-policy` | `no-referrer` on API responses |
-| `x-content-type-options` | `nosniff` |
+| Header                   | Meaning                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| `cache-control`          | `public, max-age=0, s-maxage=<ttl>, stale-while-revalidate=<stale>` for data |
+| `x-cache`                | `HIT`, `MISS`, or `STALE`                                                    |
+| `x-request-id`           | Correlation ID for logs and support                                          |
+| `x-ratelimit-limit`      | Requests allowed in the window (120)                                         |
+| `x-ratelimit-remaining`  | Requests left in the current window                                          |
+| `x-ratelimit-reset`      | Unix timestamp (seconds) when the window resets                              |
+| `age`                    | Age of a stale snapshot, when applicable                                     |
+| `referrer-policy`        | `no-referrer` on API responses                                               |
+| `x-content-type-options` | `nosniff`                                                                    |
 
 ---
 
@@ -117,19 +117,19 @@ the upstream provider (`coingecko`, `cryptocompare`, or `alternative.me`).
 }
 ```
 
-| Status | Code | Meaning |
-|---|---|---|
-| 400 | `INVALID_REQUEST` | Invalid resource, coin ID, days, order, limit, or page |
-| 404 | `NOT_FOUND` | Unknown endpoint or upstream resource |
-| 404 | `UPSTREAM_NOT_FOUND` | Coin not found upstream |
-| 405 | `METHOD_NOT_ALLOWED` | Method other than GET/HEAD |
-| 429 | `RATE_LIMITED` | Per-IP limit exceeded; see `retry-after` |
-| 500 | `INTERNAL_ERROR` | Sanitized unexpected failure |
-| 502 | `UPSTREAM_UNAVAILABLE` | Provider unreachable or returned an error |
-| 502 | `UPSTREAM_INVALID_RESPONSE` | Provider payload could not be normalized |
-| 503 | `UPSTREAM_RATE_LIMITED` | Provider rate limit; a cooldown is applied |
-| 503 | `NEWS_NOT_CONFIGURED` | `CRYPTOCOMPARE_API_KEY` is missing |
-| 504 | `UPSTREAM_TIMEOUT` | Provider timed out |
+| Status | Code                        | Meaning                                                |
+| ------ | --------------------------- | ------------------------------------------------------ |
+| 400    | `INVALID_REQUEST`           | Invalid resource, coin ID, days, order, limit, or page |
+| 404    | `NOT_FOUND`                 | Unknown endpoint or upstream resource                  |
+| 404    | `UPSTREAM_NOT_FOUND`        | Coin not found upstream                                |
+| 405    | `METHOD_NOT_ALLOWED`        | Method other than GET/HEAD                             |
+| 429    | `RATE_LIMITED`              | Per-IP limit exceeded; see `retry-after`               |
+| 500    | `INTERNAL_ERROR`            | Sanitized unexpected failure                           |
+| 502    | `UPSTREAM_UNAVAILABLE`      | Provider unreachable or returned an error              |
+| 502    | `UPSTREAM_INVALID_RESPONSE` | Provider payload could not be normalized               |
+| 503    | `UPSTREAM_RATE_LIMITED`     | Provider rate limit; a cooldown is applied             |
+| 503    | `NEWS_NOT_CONFIGURED`       | `CRYPTOCOMPARE_API_KEY` is missing                     |
+| 504    | `UPSTREAM_TIMEOUT`          | Provider timed out                                     |
 
 5xx messages are replaced with generic text. Stack traces and upstream payloads are never returned.
 
@@ -141,17 +141,17 @@ Caches are in-memory, per function instance. Each cache entry has a fresh TTL an
 window. Concurrent misses for the same key are coalesced into one upstream request. A provider
 `429` also starts a short cooldown to avoid hammering upstream.
 
-| Resource | Fresh TTL | Stale window |
-|---|---|---|
-| `coins` | 60 s | 600 s |
-| `global` | 120 s | 900 s |
-| `coin` | 120 s | 900 s |
-| `chart` | 300 s | 1,800 s |
-| `categories` | 300 s | 1,800 s |
-| `exchanges` | 300 s | 1,800 s |
-| `trending` | 120 s | 900 s |
-| `fear-greed` | 300 s | 1,800 s |
-| `news` | 180 s | 1,800 s |
+| Resource     | Fresh TTL | Stale window |
+| ------------ | --------- | ------------ |
+| `coins`      | 60 s      | 600 s        |
+| `global`     | 120 s     | 900 s        |
+| `coin`       | 120 s     | 900 s        |
+| `chart`      | 300 s     | 1,800 s      |
+| `categories` | 300 s     | 1,800 s      |
+| `exchanges`  | 300 s     | 1,800 s      |
+| `trending`   | 120 s     | 900 s        |
+| `fear-greed` | 300 s     | 1,800 s      |
+| `news`       | 180 s     | 1,800 s      |
 
 Because caches are per instance, a cold or newly scaled instance may call upstream even while
 another instance holds a fresh value. For multi-instance consistency, replace the in-memory cache

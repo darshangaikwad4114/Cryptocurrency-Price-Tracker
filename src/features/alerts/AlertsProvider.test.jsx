@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { AlertsProvider } from './AlertsProvider';
 import { useAlerts } from './alertsContext';
-import { STORAGE_KEYS } from '../../lib/storage';
+import { STORAGE_KEYS } from '../../utils/storage';
 
 const wrapper = ({ children }) => <AlertsProvider>{children}</AlertsProvider>;
 
@@ -20,7 +20,11 @@ describe('AlertsProvider', () => {
 
     let created;
     act(() => {
-      created = result.current.addAlert({ coinId: 'bitcoin', direction: 'above', target: '100000' });
+      created = result.current.addAlert({
+        coinId: 'bitcoin',
+        direction: 'above',
+        target: '100000',
+      });
     });
 
     expect(created).toMatchObject({
@@ -41,9 +45,18 @@ describe('AlertsProvider', () => {
 
   it.each([
     [{ coinId: 'Bitcoin', direction: 'above', target: 1 }, 'Choose a valid coin.'],
-    [{ coinId: 'bitcoin', direction: 'sideways', target: 1 }, 'Choose whether the price should rise above or fall below your target.'],
-    [{ coinId: 'bitcoin', direction: 'above', target: 0 }, 'Target price must be greater than zero.'],
-    [{ coinId: 'bitcoin', direction: 'above', target: 'abc' }, 'Target price must be greater than zero.'],
+    [
+      { coinId: 'bitcoin', direction: 'sideways', target: 1 },
+      'Choose whether the price should rise above or fall below your target.',
+    ],
+    [
+      { coinId: 'bitcoin', direction: 'above', target: 0 },
+      'Target price must be greater than zero.',
+    ],
+    [
+      { coinId: 'bitcoin', direction: 'above', target: 'abc' },
+      'Target price must be greater than zero.',
+    ],
   ])('rejects invalid input %#', (input, message) => {
     const { result } = renderHook(() => useAlerts(), { wrapper });
 

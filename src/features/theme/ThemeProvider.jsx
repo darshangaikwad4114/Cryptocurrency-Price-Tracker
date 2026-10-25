@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ThemeContext } from './themeContext';
-import { readStorage, STORAGE_KEYS, writeStorage } from '../../lib/storage';
+import { readStorage, STORAGE_KEYS, writeStorage } from '../../utils/storage';
 
 function resolveInitialTheme() {
   if (typeof document !== 'undefined') {
@@ -9,7 +9,10 @@ function resolveInitialTheme() {
   }
   const stored = readStorage(STORAGE_KEYS.theme, null);
   if (stored === 'light' || stored === 'dark') return stored;
-  if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches) {
+  if (
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-color-scheme: light)').matches
+  ) {
     return 'light';
   }
   return 'dark';

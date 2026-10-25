@@ -6,15 +6,15 @@ import StatusPanel from '../components/ui/StatusPanel';
 import MarketOverview from '../components/market/MarketOverview';
 import MoversPanel from '../components/market/MoversPanel';
 import TrendingPanel from '../components/market/TrendingPanel';
-import NewsPreview from '../components/market/NewsPreview';
+import NewsPreview from '../components/news/NewsPreview';
 import CoinTable from '../components/market/CoinTable';
 import CoinListSkeleton from '../components/market/CoinListSkeleton';
-import { useCoins } from '../api/hooks';
+import { useCoins } from '../hooks/useMarketData';
 import { useWatchlist } from '../features/watchlist/watchlistContext';
 import { usePortfolio } from '../features/portfolio/portfolioContext';
 import { useAlerts } from '../features/alerts/alertsContext';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { formatCompactCurrency, formatInteger } from '../lib/format';
+import { formatCompactCurrency, formatInteger } from '../utils/format';
 
 function WorkspaceCard({ to, icon, label, value, meta }) {
   return (

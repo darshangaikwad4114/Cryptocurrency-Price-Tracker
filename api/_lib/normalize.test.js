@@ -37,7 +37,8 @@ describe('decodeEntities', () => {
 
 describe('stripHtml', () => {
   it('removes scripts, styles, comments, and tags', () => {
-    const raw = '<p>Hello <b>world</b></p><script>alert("x")</script><style>.x{}</style><!-- note -->&amp; friends';
+    const raw =
+      '<p>Hello <b>world</b></p><script>alert("x")</script><style>.x{}</style><!-- note -->&amp; friends';
     expect(stripHtml(raw)).toBe('Hello world & friends');
   });
 
@@ -242,7 +243,14 @@ describe('normalizeChart', () => {
     expect(normalizeChart(null)).toBeNull();
     expect(normalizeChart({ prices: [] })).toBeNull();
     expect(normalizeChart({ prices: [[1, 2]] })).toBeNull();
-    expect(normalizeChart({ prices: [[1, -2], [3, 4]] })).toBeNull();
+    expect(
+      normalizeChart({
+        prices: [
+          [1, -2],
+          [3, 4],
+        ],
+      }),
+    ).toBeNull();
   });
 
   it('filters malformed points and preserves order', () => {

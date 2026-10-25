@@ -4,16 +4,11 @@ import PageHeader from '../components/ui/PageHeader';
 import CoinLogo from '../components/ui/CoinLogo';
 import Icon from '../components/ui/Icon';
 import StatusPanel from '../components/ui/StatusPanel';
-import { useCoins } from '../api/hooks';
+import { useCoins } from '../hooks/useMarketData';
 import { useAlerts } from '../features/alerts/alertsContext';
 import { useToast } from '../features/toast/useToast';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import {
-  formatDateTime,
-  formatPercent,
-  formatPrice,
-  formatRelativeTime,
-} from '../lib/format';
+import { formatDateTime, formatPercent, formatPrice, formatRelativeTime } from '../utils/format';
 
 const EMPTY_FORM = { coinId: '', direction: 'above', target: '' };
 
@@ -50,8 +45,14 @@ function permissionCopy(permission) {
 
 export default function AlertsPage() {
   useDocumentTitle('Price alerts');
-  const { alerts, addAlert, removeAlert, clearTriggered, notificationPermission, requestNotifications } =
-    useAlerts();
+  const {
+    alerts,
+    addAlert,
+    removeAlert,
+    clearTriggered,
+    notificationPermission,
+    requestNotifications,
+  } = useAlerts();
   const { coins } = useCoins();
   const { notify } = useToast();
   const [form, setForm] = useState(EMPTY_FORM);
@@ -95,7 +96,11 @@ export default function AlertsPage() {
         )} — we will watch it while this tab is open.`,
         { tone: 'success', title: 'Price alert created' },
       );
-      setForm((current) => ({ ...EMPTY_FORM, coinId: current.coinId, direction: current.direction }));
+      setForm((current) => ({
+        ...EMPTY_FORM,
+        coinId: current.coinId,
+        direction: current.direction,
+      }));
     } catch (error) {
       setFormError(error.message);
     }
@@ -123,8 +128,7 @@ export default function AlertsPage() {
 
   const distanceFor = (alert, price) => {
     if (!Number.isFinite(price) || price <= 0) return null;
-    const difference =
-      alert.direction === 'above' ? alert.target - price : price - alert.target;
+    const difference = alert.direction === 'above' ? alert.target - price : price - alert.target;
     return (difference / price) * 100;
   };
 
@@ -294,16 +298,20 @@ export default function AlertsPage() {
                       />
                       <div>
                         <strong>{coin?.name ?? alert.coinId}</strong>
-                        <span>
-                          {coin ? coin.symbol.toUpperCase() : 'Not in top 100'}
-                        </span>
+                        <span>{coin ? coin.symbol.toUpperCase() : 'Not in top 100'}</span>
                       </div>
                     </div>
 
                     <div className="alert-card__condition">
-                      <span className={`pill pill--${alert.direction === 'above' ? 'positive' : 'negative'}`}>
-                        <Icon name={alert.direction === 'above' ? 'arrow-up' : 'arrow-down'} size={12} />
-                        {alert.direction === 'above' ? 'Above' : 'Below'} {formatPrice(alert.target)}
+                      <span
+                        className={`pill pill--${alert.direction === 'above' ? 'positive' : 'negative'}`}
+                      >
+                        <Icon
+                          name={alert.direction === 'above' ? 'arrow-up' : 'arrow-down'}
+                          size={12}
+                        />
+                        {alert.direction === 'above' ? 'Above' : 'Below'}{' '}
+                        {formatPrice(alert.target)}
                       </span>
                       <span className="alert-card__current">
                         Now {price !== null ? formatPrice(price) : '—'}
@@ -352,7 +360,11 @@ export default function AlertsPage() {
             <p>Alerts that have fired. They will not fire again.</p>
           </div>
           {triggered.length > 0 && (
-            <button type="button" className="button button--ghost button--small" onClick={clearTriggered}>
+            <button
+              type="button"
+              className="button button--ghost button--small"
+              onClick={clearTriggered}
+            >
               <Icon name="trash" size={14} /> Clear all
             </button>
           )}
@@ -383,11 +395,14 @@ export default function AlertsPage() {
 
                   <div className="alert-card__condition">
                     <span className="pill pill--success">
-                      <Icon name="check" size={12} /> {alert.direction === 'above' ? 'Above' : 'Below'}{' '}
-                      {formatPrice(alert.target)}
+                      <Icon name="check" size={12} />{' '}
+                      {alert.direction === 'above' ? 'Above' : 'Below'} {formatPrice(alert.target)}
                     </span>
                     <span className="alert-card__current">
-                      Triggered at {alert.triggeredPrice !== null ? formatPrice(alert.triggeredPrice) : 'an unavailable price'}
+                      Triggered at{' '}
+                      {alert.triggeredPrice !== null
+                        ? formatPrice(alert.triggeredPrice)
+                        : 'an unavailable price'}
                     </span>
                     <span className="alert-card__created" title={formatDateTime(alert.triggeredAt)}>
                       {formatRelativeTime(alert.triggeredAt)}

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MARKET_CAP_BUCKETS, SORT_VALUES } from '../lib/market';
+import { MARKET_CAP_BUCKETS, SORT_VALUES } from '../utils/market';
 
 const CAP_IDS = new Set(MARKET_CAP_BUCKETS.map((bucket) => bucket.id));
 const DEFAULT_SORT = 'market_cap_desc';
@@ -35,15 +35,16 @@ export function useMarketFilters() {
   const sort = SORT_VALUES.has(params.get('sort')) ? params.get('sort') : DEFAULT_SORT;
   const minPrice = params.get('min') ?? '';
   const maxPrice = params.get('max') ?? '';
-  const caps = useMemo(
-    () => params.getAll('cap').filter((id) => CAP_IDS.has(id)),
-    [params],
-  );
+  const caps = useMemo(() => params.getAll('cap').filter((id) => CAP_IDS.has(id)), [params]);
 
   const setSearch = useCallback((value) => update({ q: value }), [update]);
-  const setSort = useCallback((value) => update({ sort: value === DEFAULT_SORT ? '' : value }), [update]);
+  const setSort = useCallback(
+    (value) => update({ sort: value === DEFAULT_SORT ? '' : value }),
+    [update],
+  );
   const setPriceRange = useCallback(
-    (min, max) => update({ min: min === '' ? '' : String(min), max: max === '' ? '' : String(max) }),
+    (min, max) =>
+      update({ min: min === '' ? '' : String(min), max: max === '' ? '' : String(max) }),
     [update],
   );
   const toggleCap = useCallback(

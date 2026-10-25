@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { WatchlistProvider } from './WatchlistProvider';
 import { useWatchlist } from './watchlistContext';
-import { STORAGE_KEYS } from '../../lib/storage';
+import { STORAGE_KEYS } from '../../utils/storage';
 
 const wrapper = ({ children }) => <WatchlistProvider>{children}</WatchlistProvider>;
 

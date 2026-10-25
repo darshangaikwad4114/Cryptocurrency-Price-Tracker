@@ -67,5 +67,13 @@ export function createCache({ maxEntries = DEFAULT_MAX_ENTRIES, now = Date.now }
     inFlight.clear();
   }
 
-  return { read, set, wrap, clear, get size() { return entries.size; } };
+  return {
+    read,
+    set,
+    wrap,
+    clear,
+    get size() {
+      return entries.size;
+    },
+  };
 }

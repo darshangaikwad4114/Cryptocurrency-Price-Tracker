@@ -115,6 +115,9 @@ export function getTopMovers(coins, limit = 4) {
 
 export function marketCapBucket(coin) {
   return MARKET_CAP_BUCKETS.find(
-    (bucket) => Number.isFinite(coin.marketCap) && coin.marketCap >= bucket.min && coin.marketCap < bucket.max,
+    (bucket) =>
+      Number.isFinite(coin.marketCap) &&
+      coin.marketCap >= bucket.min &&
+      coin.marketCap < bucket.max,
   );
 }

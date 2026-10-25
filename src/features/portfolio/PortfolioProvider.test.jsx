@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { PortfolioProvider } from './PortfolioProvider';
 import { usePortfolio } from './portfolioContext';
-import { STORAGE_KEYS } from '../../lib/storage';
+import { STORAGE_KEYS } from '../../utils/storage';
 
 const wrapper = ({ children }) => <PortfolioProvider>{children}</PortfolioProvider>;
 
@@ -71,7 +71,13 @@ describe('PortfolioProvider', () => {
 
   it('drops invalid persisted holdings and normalizes valid ones', () => {
     seed([
-      { id: 'ok', coinId: 'bitcoin', amount: '0.25', buyPrice: '40000', addedAt: '2026-01-01T00:00:00.000Z' },
+      {
+        id: 'ok',
+        coinId: 'bitcoin',
+        amount: '0.25',
+        buyPrice: '40000',
+        addedAt: '2026-01-01T00:00:00.000Z',
+      },
       { id: 'bad-coin', coinId: 'Bad Coin', amount: 1, buyPrice: 1 },
       { id: 'zero-amount', coinId: 'ethereum', amount: 0, buyPrice: 10 },
       { id: 'zero-price', coinId: 'ethereum', amount: 1, buyPrice: 0 },

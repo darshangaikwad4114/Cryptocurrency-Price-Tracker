@@ -8,9 +8,7 @@ test.beforeEach(async ({ page }) => {
 test('renders the market dashboard with live data', async ({ page }) => {
   await page.goto('/');
 
-  await expect(
-    page.getByRole('heading', { name: 'The crypto market at a glance' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The crypto market at a glance' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Market pulse' })).toBeVisible();
   await expect(page.getByText('$2.5T')).toBeVisible();
   await expect(page.getByText('55.50%').first()).toBeVisible();
@@ -36,9 +34,9 @@ test('shows a recoverable error when market data fails', async ({ page }) => {
 
   await page.goto('/');
 
-  await expect(
-    page.getByRole('heading', { name: 'Market data unavailable' }),
-  ).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole('heading', { name: 'Market data unavailable' })).toBeVisible({
+    timeout: 15_000,
+  });
   await expect(page.getByRole('button', { name: 'Retry' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Latest news' })).toBeVisible();
 });

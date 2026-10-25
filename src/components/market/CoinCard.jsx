@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import CoinLogo from '../ui/CoinLogo';
 import ChangeBadge from '../ui/ChangeBadge';
 import WatchButton from './WatchButton';
-import { formatCompactCurrency, formatPrice } from '../../lib/format';
+import { formatCompactCurrency, formatPrice } from '../../utils/format';
 
 export default function CoinCard({ coin }) {
   return (

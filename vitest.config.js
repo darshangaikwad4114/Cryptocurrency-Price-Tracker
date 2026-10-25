@@ -6,11 +6,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/setup.js'],
-    include: [
-      'src/**/*.test.{js,jsx}',
-      'api/**/*.test.js',
-      'tests/**/*.test.{js,jsx}',
-    ],
+    include: ['src/**/*.test.{js,jsx}', 'api/**/*.test.js', 'tests/**/*.test.{js,jsx}'],
     css: false,
     clearMocks: true,
     restoreMocks: true,
@@ -18,12 +14,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       include: ['src/**/*.{js,jsx}', 'api/**/*.js'],
-      exclude: [
-        'src/main.jsx',
-        'src/**/*.test.{js,jsx}',
-        'src/**/*.backup',
-        'api/**/*.test.js',
-      ],
+      exclude: ['src/app/main.jsx', 'src/**/*.test.{js,jsx}', 'api/**/*.test.js'],
     },
   },
 });

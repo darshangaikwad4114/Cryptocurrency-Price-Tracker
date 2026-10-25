@@ -1,6 +1,11 @@
 import { createCache } from './cache.js';
 import { normalizers } from './normalize.js';
-import { createUpstream, coingeckoCredentials, newsCredentials, UpstreamError } from './upstream.js';
+import {
+  createUpstream,
+  coingeckoCredentials,
+  newsCredentials,
+  UpstreamError,
+} from './upstream.js';
 
 const ORDERS = new Set([
   'market_cap_desc',
@@ -88,10 +93,7 @@ function readCoinId(query) {
 function readDays(query) {
   const days = readInt(query, 'days', { min: 1, max: 365, fallback: 30 });
   if (!CHART_DAYS.has(days)) {
-    throw new RequestError(
-      'INVALID_REQUEST',
-      `days must be one of ${[...CHART_DAYS].join(', ')}.`,
-    );
+    throw new RequestError('INVALID_REQUEST', `days must be one of ${[...CHART_DAYS].join(', ')}.`);
   }
   return days;
 }
@@ -132,9 +134,10 @@ function createRateLimiter({ limit, windowMs, now }) {
   return function check(clientId) {
     const timestamp = now();
     const existing = clients.get(clientId);
-    const entry = existing && existing.resetAt > timestamp
-      ? existing
-      : { count: 0, resetAt: timestamp + windowMs };
+    const entry =
+      existing && existing.resetAt > timestamp
+        ? existing
+        : { count: 0, resetAt: timestamp + windowMs };
     entry.count += 1;
     clients.set(clientId, entry);
     prune(timestamp);
@@ -258,7 +261,8 @@ export function createApi({
         vary: 'Accept-Encoding',
         ...rateLimitHeaders(rate),
       };
-      if (result.stale) headers.age = String(Math.max(0, Math.floor((servedAt - result.cachedAt) / 1000)));
+      if (result.stale)
+        headers.age = String(Math.max(0, Math.floor((servedAt - result.cachedAt) / 1000)));
 
       logger.info?.(
         JSON.stringify({
@@ -289,8 +293,7 @@ export function createApi({
       };
     } catch (error) {
       const status = error instanceof RequestError ? error.status : (error.status ?? 502);
-      const code =
-        error instanceof RequestError ? error.code : (error.code ?? 'INTERNAL_ERROR');
+      const code = error instanceof RequestError ? error.code : (error.code ?? 'INTERNAL_ERROR');
       const message =
         status >= 500 && !(error instanceof UpstreamError)
           ? 'An unexpected error occurred.'
@@ -419,12 +422,7 @@ export function createApi({
           }
           const perPage = readInt(query, 'per_page', { min: 1, max: 100, fallback: 100 });
           const page = readInt(query, 'page', { min: 1, max: 100, fallback: 1 });
-          return await serveResource(
-            resource,
-            { order, perPage, page },
-            context,
-            rate,
-          );
+          return await serveResource(resource, { order, perPage, page }, context, rate);
         }
         if (resource === 'coin') {
           return await serveResource(resource, { id: readCoinId(query) }, context, rate);

@@ -108,10 +108,30 @@ describe('routing and validation', () => {
     ['resource=nope', '/api/market', { resource: 'nope' }, 'INVALID_REQUEST'],
     ['invalid coin id', '/api/market', { resource: 'coin', id: 'Bad Coin' }, 'INVALID_REQUEST'],
     ['missing coin id', '/api/market', { resource: 'coin' }, 'INVALID_REQUEST'],
-    ['unsupported chart range', '/api/market', { resource: 'chart', id: 'bitcoin', days: '42' }, 'INVALID_REQUEST'],
-    ['non-numeric chart range', '/api/market', { resource: 'chart', id: 'bitcoin', days: 'one' }, 'INVALID_REQUEST'],
-    ['unsupported sort', '/api/market', { resource: 'coins', order: 'price_desc' }, 'INVALID_REQUEST'],
-    ['page size too large', '/api/market', { resource: 'coins', per_page: '101' }, 'INVALID_REQUEST'],
+    [
+      'unsupported chart range',
+      '/api/market',
+      { resource: 'chart', id: 'bitcoin', days: '42' },
+      'INVALID_REQUEST',
+    ],
+    [
+      'non-numeric chart range',
+      '/api/market',
+      { resource: 'chart', id: 'bitcoin', days: 'one' },
+      'INVALID_REQUEST',
+    ],
+    [
+      'unsupported sort',
+      '/api/market',
+      { resource: 'coins', order: 'price_desc' },
+      'INVALID_REQUEST',
+    ],
+    [
+      'page size too large',
+      '/api/market',
+      { resource: 'coins', per_page: '101' },
+      'INVALID_REQUEST',
+    ],
     ['page zero', '/api/market', { resource: 'coins', page: '0' }, 'INVALID_REQUEST'],
     ['news limit too high', '/api/news', { limit: '61' }, 'INVALID_REQUEST'],
   ])('rejects %s', async (_, pathname, query, code) => {
@@ -222,9 +242,7 @@ describe('upstream failures', () => {
     expect(limited.body.error.code).toBe('UPSTREAM_RATE_LIMITED');
     expect(limited.headers['retry-after']).toBe('5');
 
-    const coolingDown = await api.handle(
-      request('/api/market', { query: { resource: 'global' } }),
-    );
+    const coolingDown = await api.handle(request('/api/market', { query: { resource: 'global' } }));
     expect(coolingDown.status).toBe(503);
     expect(coolingDown.body.error.code).toBe('UPSTREAM_RATE_LIMITED');
     expect(fetchImpl).toHaveBeenCalledTimes(1);
@@ -256,9 +274,15 @@ describe('rate limiting', () => {
     const fetchImpl = vi.fn(async () => response(GLOBAL));
     const { api } = makeApi({ fetchImpl, rateLimit: { limit: 2, windowMs: 60_000 } });
 
-    const first = await api.handle(request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }));
-    const second = await api.handle(request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }));
-    const third = await api.handle(request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }));
+    const first = await api.handle(
+      request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }),
+    );
+    const second = await api.handle(
+      request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }),
+    );
+    const third = await api.handle(
+      request('/api/market', { query: { resource: 'global' }, ip: '9.9.9.9' }),
+    );
 
     expect(first.status).toBe(200);
     expect(first.headers['x-ratelimit-limit']).toBe('2');

@@ -25,12 +25,12 @@ Never add secrets with a `VITE_` prefix. Vite exposes `VITE_*` values to the cli
 
 ## 2. Environment variables
 
-| Variable | Required | Scope | Notes |
-|---|---|---|---|
-| `CRYPTOCOMPARE_API_KEY` | For news | Production + preview | Server-only |
-| `COINGECKO_API_KEY` | No | Production + preview | Server-only |
-| `COINGECKO_PLAN` | No | Production + preview | `demo` (default) or `pro` |
-| `SITE_URL` | Production | Build time | Public HTTPS origin for canonical/sitemap/robots |
+| Variable                | Required   | Scope                | Notes                                            |
+| ----------------------- | ---------- | -------------------- | ------------------------------------------------ |
+| `CRYPTOCOMPARE_API_KEY` | For news   | Production + preview | Server-only                                      |
+| `COINGECKO_API_KEY`     | No         | Production + preview | Server-only                                      |
+| `COINGECKO_PLAN`        | No         | Production + preview | `demo` (default) or `pro`                        |
+| `SITE_URL`              | Production | Build time           | Public HTTPS origin for canonical/sitemap/robots |
 
 `SITE_URL` rules: HTTPS, a dotted hostname, no credentials, query, or fragment. A trailing path is
 allowed (for example a subdirectory deploy) and is normalized without a trailing slash. Localhost is
@@ -112,15 +112,15 @@ Also confirm `dist/` contains no `.map` files.
 
 Both configurations send:
 
-| Header | Value |
-|---|---|
-| `Content-Security-Policy` | `default-src 'self'`; scripts/connects/fonts self; images limited to self, data, CoinGecko, and CryptoCompare hosts; inline styles allowed for React/Chart.js; `frame-ancestors 'none'`; `form-action 'self'`; `upgrade-insecure-requests` |
-| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains` |
-| `X-Content-Type-Options` | `nosniff` |
-| `X-Frame-Options` | `DENY` |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` |
-| `Cross-Origin-Opener-Policy` | `same-origin` |
-| `Permissions-Policy` | camera, microphone, geolocation, payment, USB disabled |
+| Header                       | Value                                                                                                                                                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Content-Security-Policy`    | `default-src 'self'`; scripts/connects/fonts self; images limited to self, data, CoinGecko, and CryptoCompare hosts; inline styles allowed for React/Chart.js; `frame-ancestors 'none'`; `form-action 'self'`; `upgrade-insecure-requests` |
+| `Strict-Transport-Security`  | `max-age=63072000; includeSubDomains`                                                                                                                                                                                                      |
+| `X-Content-Type-Options`     | `nosniff`                                                                                                                                                                                                                                  |
+| `X-Frame-Options`            | `DENY`                                                                                                                                                                                                                                     |
+| `Referrer-Policy`            | `strict-origin-when-cross-origin`                                                                                                                                                                                                          |
+| `Cross-Origin-Opener-Policy` | `same-origin`                                                                                                                                                                                                                              |
+| `Permissions-Policy`         | camera, microphone, geolocation, payment, USB disabled                                                                                                                                                                                     |
 
 **CSP changes:** all API calls are same-origin, fonts are bundled, and charts are local. Images come
 from provider CDNs. If a provider adds a new image host, or you add analytics/fonts/embeds, update
@@ -136,12 +136,12 @@ remove `includeSubDomains` before deploying.
 
 ## 7. Caching
 
-| Path | Policy |
-|---|---|
-| `/assets/*` | `public, max-age=31536000, immutable` (hashed filenames) |
-| `/index.html` | `public, max-age=0, must-revalidate` |
-| `/theme-init.js` | `public, max-age=0, must-revalidate` (unhashed pre-paint script) |
-| API data | `public, max-age=0, s-maxage=<resource TTL>, stale-while-revalidate=<stale window>` |
+| Path             | Policy                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| `/assets/*`      | `public, max-age=31536000, immutable` (hashed filenames)                            |
+| `/index.html`    | `public, max-age=0, must-revalidate`                                                |
+| `/theme-init.js` | `public, max-age=0, must-revalidate` (unhashed pre-paint script)                    |
+| API data         | `public, max-age=0, s-maxage=<resource TTL>, stale-while-revalidate=<stale window>` |
 
 API TTLs are listed in [API.md](./API.md#cache-policy). The edge/CDN may serve API responses within
 `s-maxage`; the function cache is per instance and provides stale fallback when upstream fails.
@@ -188,15 +188,15 @@ goal, add prerendering/SSR in a later phase.
 
 Ranges are indicative and must be verified against current provider pricing:
 
-| Item | Typical option | Notes |
-|---|---|---|
-| Hosting | Vercel/Netlify Hobby or Pro | Static + functions; Pro plans are commonly ~$20/mo per member |
-| Market data | CoinGecko paid/demo plan | Free tiers are rate-limited; commercial use needs a suitable plan |
-| News | CryptoCompare plan | Required for `/api/news` |
-| Domain/TLS | Registrar + platform TLS | ~$10–20/yr |
-| Error tracking | Sentry free tier | Optional; not wired in yet |
-| Shared cache/limits | Upstash Redis | Needed only when scaling beyond a single instance |
-| Legal | Terms/privacy review | Required before monetization |
+| Item                | Typical option              | Notes                                                             |
+| ------------------- | --------------------------- | ----------------------------------------------------------------- |
+| Hosting             | Vercel/Netlify Hobby or Pro | Static + functions; Pro plans are commonly ~$20/mo per member     |
+| Market data         | CoinGecko paid/demo plan    | Free tiers are rate-limited; commercial use needs a suitable plan |
+| News                | CryptoCompare plan          | Required for `/api/news`                                          |
+| Domain/TLS          | Registrar + platform TLS    | ~$10–20/yr                                                        |
+| Error tracking      | Sentry free tier            | Optional; not wired in yet                                        |
+| Shared cache/limits | Upstash Redis               | Needed only when scaling beyond a single instance                 |
+| Legal               | Terms/privacy review        | Required before monetization                                      |
 
 No billing, subscription, or payment surface is included by decision; see
 [ROADMAP.md](./ROADMAP.md).

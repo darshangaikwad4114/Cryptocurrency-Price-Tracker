@@ -3,8 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import ErrorBoundary from './ErrorBoundary';
-import { useCoins } from '../../api/hooks';
-import { useAlertWatcher } from '../../features/alerts/useAlertWatcher';
+import { useCoins } from '../hooks/useMarketData';
+import { useAlertWatcher } from '../features/alerts/useAlertWatcher';
 
 export default function AppLayout() {
   const location = useLocation();

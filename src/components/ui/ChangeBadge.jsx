@@ -1,5 +1,5 @@
 import Icon from './Icon';
-import { formatPercent, toneFor } from '../../lib/format';
+import { formatPercent, toneFor } from '../../utils/format';
 
 export default function ChangeBadge({ value, label = '24h change', size = 'md' }) {
   const tone = toneFor(value);

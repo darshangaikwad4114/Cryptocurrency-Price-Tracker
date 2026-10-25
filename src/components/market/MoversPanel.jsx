@@ -4,8 +4,8 @@ import CoinLogo from '../ui/CoinLogo';
 import ChangeBadge from '../ui/ChangeBadge';
 import Icon from '../ui/Icon';
 import Skeleton from '../ui/Skeleton';
-import { getTopMovers } from '../../lib/market';
-import { formatPrice } from '../../lib/format';
+import { getTopMovers } from '../../utils/market';
+import { formatPrice } from '../../utils/format';
 
 export default function MoversPanel({ coins, loading }) {
   const [tab, setTab] = useState('gainers');

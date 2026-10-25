@@ -1,11 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  activeFilterCount,
-  filterCoins,
-  getTopMovers,
-  marketCapBucket,
-  sortCoins,
-} from './market';
+import { activeFilterCount, filterCoins, getTopMovers, marketCapBucket, sortCoins } from './market';
 
 const coins = [
   {

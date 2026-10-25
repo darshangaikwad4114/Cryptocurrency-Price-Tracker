@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PortfolioContext } from './portfolioContext';
-import { readArray, STORAGE_KEYS, uid, writeStorage } from '../../lib/storage';
+import { readArray, STORAGE_KEYS, uid, writeStorage } from '../../utils/storage';
 
 const MAX_ITEMS = 200;
 const COIN_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;

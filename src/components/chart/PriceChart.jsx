@@ -14,16 +14,25 @@ import { Line } from 'react-chartjs-2';
 import Icon from '../ui/Icon';
 import Skeleton from '../ui/Skeleton';
 import StatusPanel from '../ui/StatusPanel';
-import { useChart } from '../../api/hooks';
+import { useChart } from '../../hooks/useMarketData';
 import { useTheme } from '../../features/theme/themeContext';
 import {
   formatCompactCurrency,
   formatDateTime,
   formatPercent,
   formatPrice,
-} from '../../lib/format';
+} from '../../utils/format';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Legend, Tooltip, zoomPlugin);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Legend,
+  Tooltip,
+  zoomPlugin,
+);
 
 const RANGES = [
   { days: 1, label: '1D' },
@@ -192,9 +201,7 @@ export default function PriceChart({ coinId, coinName }) {
       <div className="panel__header panel__header--wrap">
         <div>
           <h2 id="price-chart-heading">Price history</h2>
-          <p>
-            {coinName} priced in USD. Data from CoinGecko, sampled for a fast render.
-          </p>
+          <p>{coinName} priced in USD. Data from CoinGecko, sampled for a fast render.</p>
         </div>
         <div className="chart-controls">
           {zoomed && (

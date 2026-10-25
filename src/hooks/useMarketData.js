@@ -9,7 +9,7 @@ import {
   globalQuery,
   newsQuery,
   trendingQuery,
-} from './queries';
+} from '../services/queries';
 
 export function useCoins() {
   const query = useQuery(coinsQuery);

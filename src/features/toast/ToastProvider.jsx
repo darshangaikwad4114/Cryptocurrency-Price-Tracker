@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ToastContext } from './toastContext';
-import { uid } from '../../lib/storage';
+import { uid } from '../../utils/storage';
 import Icon from '../../components/ui/Icon';
 
 const ICONS = {
@@ -16,7 +16,10 @@ function ToastItem({ toast, onDismiss }) {
   }, [toast.id, onDismiss]);
 
   return (
-    <div className={`toast toast--${toast.tone}`} role={toast.tone === 'error' ? 'alert' : 'status'}>
+    <div
+      className={`toast toast--${toast.tone}`}
+      role={toast.tone === 'error' ? 'alert' : 'status'}
+    >
       <Icon name={ICONS[toast.tone] ?? 'info'} size={18} />
       <div className="toast__body">
         {toast.title && <strong>{toast.title}</strong>}

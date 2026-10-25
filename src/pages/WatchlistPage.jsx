@@ -5,11 +5,11 @@ import Icon from '../components/ui/Icon';
 import StatusPanel from '../components/ui/StatusPanel';
 import CoinTable from '../components/market/CoinTable';
 import CoinListSkeleton from '../components/market/CoinListSkeleton';
-import { useCoins } from '../api/hooks';
+import { useCoins } from '../hooks/useMarketData';
 import { useWatchlist } from '../features/watchlist/watchlistContext';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { SORT_OPTIONS, sortCoins } from '../lib/market';
-import { formatInteger, formatPercent, toneFor } from '../lib/format';
+import { SORT_OPTIONS, sortCoins } from '../utils/market';
+import { formatInteger, formatPercent, toneFor } from '../utils/format';
 
 export default function WatchlistPage() {
   useDocumentTitle('Watchlist');
@@ -18,10 +18,7 @@ export default function WatchlistPage() {
   const [sort, setSort] = useState('market_cap_desc');
 
   const byId = useMemo(() => new Map(coins.map((coin) => [coin.id, coin])), [coins]);
-  const saved = useMemo(
-    () => ids.map((id) => byId.get(id)).filter(Boolean),
-    [ids, byId],
-  );
+  const saved = useMemo(() => ids.map((id) => byId.get(id)).filter(Boolean), [ids, byId]);
   const sorted = useMemo(() => sortCoins(saved, sort), [saved, sort]);
   const missing = query.isSuccess ? ids.filter((id) => !byId.has(id)) : [];
   const averageChange = saved.length
@@ -76,7 +73,11 @@ export default function WatchlistPage() {
           title="Market data unavailable"
           message="Your watchlist is intact, but prices could not be loaded right now."
           actions={
-            <button type="button" className="button button--secondary" onClick={() => query.refetch()}>
+            <button
+              type="button"
+              className="button button--secondary"
+              onClick={() => query.refetch()}
+            >
               Retry
             </button>
           }

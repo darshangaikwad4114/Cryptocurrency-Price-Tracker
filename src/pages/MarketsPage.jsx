@@ -9,11 +9,11 @@ import MarketToolbar from '../components/market/MarketToolbar';
 import CoinTable from '../components/market/CoinTable';
 import CoinGrid from '../components/market/CoinGrid';
 import CoinListSkeleton from '../components/market/CoinListSkeleton';
-import { useCoins } from '../api/hooks';
+import { useCoins } from '../hooks/useMarketData';
 import { useMarketFilters } from '../hooks/useMarketFilters';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { activeFilterCount, filterCoins, sortCoins } from '../lib/market';
-import { readStorage, STORAGE_KEYS, writeStorage } from '../lib/storage';
+import { activeFilterCount, filterCoins, sortCoins } from '../utils/market';
+import { readStorage, STORAGE_KEYS, writeStorage } from '../utils/storage';
 
 export default function MarketsPage() {
   useDocumentTitle('Markets');

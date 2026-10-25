@@ -15,17 +15,17 @@
 
 ## 1. Executive summary
 
-| Area | Current state | Rating |
-|---|---|---|
-| Architecture | Single 1,060-line page component, duplicated hooks/components, no routing in use | 🔴 Needs refactor |
-| Security | API key shipped to browsers; unsanitized third-party HTML; vulnerable runtime deps; no backend trust boundary | 🔴 Critical |
-| Data integrity | Hard-coded Fear & Greed, fake sectors/NFTs, fake "live" clock, hard-coded fallback prices | 🔴 Critical for a finance app |
-| Reliability | Fetch loop, full-page flicker every refresh, broken sort options, broken retry, race conditions | 🔴 Critical |
-| Performance | 511 KB JS + 2.1 MB source maps; Chart.js eagerly loaded; 100 remote images unoptimized | 🟠 Needs work |
-| Accessibility & UX | Hidden filter panel remains focusable; nested interactive controls; no dialog semantics/focus trap; theme toggle unreachable | 🟠 Needs work |
-| Code quality | ESLint fails with 30 errors; 1 placeholder test; legacy/dead files | 🔴 Baseline red |
-| Testing | No meaningful tests; no CI | 🔴 Critical |
-| SaaS readiness | No auth, database, tenancy, billing, admin, audit logs, observability, legal pages | 🔴 Not started |
+| Area               | Current state                                                                                                                | Rating                        |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Architecture       | Single 1,060-line page component, duplicated hooks/components, no routing in use                                             | 🔴 Needs refactor             |
+| Security           | API key shipped to browsers; unsanitized third-party HTML; vulnerable runtime deps; no backend trust boundary                | 🔴 Critical                   |
+| Data integrity     | Hard-coded Fear & Greed, fake sectors/NFTs, fake "live" clock, hard-coded fallback prices                                    | 🔴 Critical for a finance app |
+| Reliability        | Fetch loop, full-page flicker every refresh, broken sort options, broken retry, race conditions                              | 🔴 Critical                   |
+| Performance        | 511 KB JS + 2.1 MB source maps; Chart.js eagerly loaded; 100 remote images unoptimized                                       | 🟠 Needs work                 |
+| Accessibility & UX | Hidden filter panel remains focusable; nested interactive controls; no dialog semantics/focus trap; theme toggle unreachable | 🟠 Needs work                 |
+| Code quality       | ESLint fails with 30 errors; 1 placeholder test; legacy/dead files                                                           | 🔴 Baseline red               |
+| Testing            | No meaningful tests; no CI                                                                                                   | 🔴 Critical                   |
+| SaaS readiness     | No auth, database, tenancy, billing, admin, audit logs, observability, legal pages                                           | 🔴 Not started                |
 
 **Immediate action required:** rotate the CryptoCompare API key. It is compiled into the public JavaScript bundle (confirmed by scanning `dist/`), so it must be considered compromised.
 
@@ -49,16 +49,16 @@
 
 ### Verified baseline (run during audit)
 
-| Check | Result |
-|---|---|
-| `npm run build` | Passes; main JS 211 KB (61 KB gzip), chart vendor 162 KB (56 KB gzip), React vendor 139 KB (45 KB gzip); 2.1 MB source maps emitted |
-| `npm run lint` | **Fails**: 30 errors, 0 warnings |
-| `npm test` | Passes 1 placeholder assertion (`1 + 1 === 2`); no application tests |
-| `npm audit` (all) | **24 vulnerabilities**: 2 critical, 16 high, 6 moderate |
-| `npm audit --omit=dev` | 4 vulnerabilities: 2 high (axios, follow-redirects), 2 moderate (react-router) |
-| API key in bundle | **Confirmed exposed** in `dist/assets/index-*.js` |
-| Runtime console | 3 market fetches within seconds; "rate limit cooldown" triggered on load |
-| Rendered UI | Coin list periodically replaced by loading skeletons because refresh sets `loading=true` |
+| Check                  | Result                                                                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`        | Passes; main JS 211 KB (61 KB gzip), chart vendor 162 KB (56 KB gzip), React vendor 139 KB (45 KB gzip); 2.1 MB source maps emitted |
+| `npm run lint`         | **Fails**: 30 errors, 0 warnings                                                                                                    |
+| `npm test`             | Passes 1 placeholder assertion (`1 + 1 === 2`); no application tests                                                                |
+| `npm audit` (all)      | **24 vulnerabilities**: 2 critical, 16 high, 6 moderate                                                                             |
+| `npm audit --omit=dev` | 4 vulnerabilities: 2 high (axios, follow-redirects), 2 moderate (react-router)                                                      |
+| API key in bundle      | **Confirmed exposed** in `dist/assets/index-*.js`                                                                                   |
+| Runtime console        | 3 market fetches within seconds; "rate limit cooldown" triggered on load                                                            |
+| Rendered UI            | Coin list periodically replaced by loading skeletons because refresh sets `loading=true`                                            |
 
 ---
 
@@ -67,24 +67,29 @@
 ### P0 — Release blockers (fix first)
 
 #### P0-1. Secret API key is exposed to every visitor
+
 - **Evidence:** `.env` contains `VITE_CRYPTOCOMPARE_API_KEY`; `NewsFeed.jsx:55` reads it via `import.meta.env`; Vite inlines `VITE_*` variables into client JS. A scan of `dist/assets/index-*.js` found the 64-character key.
 - **Impact:** Anyone can extract and exhaust/abuse the key; possible billing/quota abuse; key appears in browser caches, proxies, and error reports.
 - **Fix:** Remove the secret from the client, proxy news through a server, rotate the key. Add CSP and secret scanning to CI.
 
 #### P0-2. Market data fetch loop and UI flicker
+
 - **Evidence:** `App.jsx:67-174` `fetchCoins` has dependencies `[sortBy, loading, coins.length]` and is itself an effect dependency. Calling `setLoading(true)` changes the callback identity, which re-runs the effect and fetches again. Console showed 3 fetches plus a cooldown hit during one page load. Every refresh sets `loading=true`, replacing all 100 cards with skeletons.
 - **Impact:** Duplicate API calls, rate-limit exhaustion, constant screen blanking, wasted bandwidth. Confirmed in headless screenshots (0 cards while summary reads "100 of 100").
 - **Fix:** Stable query function independent of loading/state; keep previous data during background refresh; TanStack Query or equivalent; dedupe/abort.
 
 #### P0-3. API key rotation and secret removal (same as P0-1; operational step)
+
 - Revoke the current key in CryptoCompare, issue a new one, store it only on the server. Do not commit `.env`.
 
 #### P0-4. Unsanitized HTML injection
+
 - **Evidence:** `CoinDetail.jsx` uses `dangerouslySetInnerHTML` with CoinGecko's `description.en`.
 - **Impact:** Third-party content becomes an XSS vector if the upstream feed is compromised or manipulated; violates trust boundary.
 - **Fix:** Strip/sanitize HTML to an allow-list (or render plain text), add CSP; never inject remote HTML.
 
 #### P0-5. Fake or misleading financial data
+
 - **Evidence:**
   - `MarketMetrics.jsx:22-27` hard-codes Fear & Greed = 48 "Neutral" and a fabricated "vs last week" statement.
   - `MarketScreener.jsx:21-30` hard-codes sector performance; `:125-140` returns fabricated NFT collections; `:105-111` uses stale exchanges including FTX.US.
@@ -94,21 +99,25 @@
 - **Fix:** Remove fabricated data; fetch real endpoints or clearly label simulators; surface `dataUpdatedAt` and staleness; never present mocked values as live.
 
 #### P0-6. No authentication, authorization, or tenant isolation
+
 - **Evidence:** No server, no sessions, no users. All "account" data lives in `localStorage` (`cryptoFavorites`, `cryptoPortfolio`, `cryptoAlerts`).
 - **Impact:** No SaaS account model; any user can edit local data; no cross-device sync; no admin controls; no way to enforce plans.
 - **Fix:** Add backend auth with secure sessions, workspaces/memberships, server-side authorization on every resource, RBAC, audit logs.
 
 #### P0-7. Production source maps expose full source code
+
 - **Evidence:** `vite.config.js` sets `sourcemap: true`; 30+ `.map` files (2.1 MB) are emitted and would be publicly served.
 - **Impact:** Source disclosure aids attackers; increases deploy size and build time.
 - **Fix:** Disable source maps for production (or upload privately to an error tracker).
 
 #### P0-8. Vulnerable runtime dependencies
+
 - **Evidence:** `axios@1.18.1` is affected by multiple advisories including prototype pollution and ReDoS (`<1.20.0`); `react-router-dom@6.30.4` has a moderate advisory. `vite@4`/`vitest@1` are EOL and carry critical advisories in dev tooling.
 - **Impact:** Known vulnerabilities; unpatched toolchain; supply-chain exposure.
 - **Fix:** Upgrade axios ≥1.20, react-router ≥7.18, Vite ≥8, Vitest ≥5, ESLint flat config; remove `@rollup/plugin-terser` (use Vite/esbuild minifier); re-run audit.
 
 #### P0-9. Quality gates are red
+
 - **Evidence:** 30 ESLint errors; placeholder test only.
 - **Impact:** No reliable regression safety net; dead code accumulates.
 - **Fix:** Green lint, meaningful unit/component/API tests, CI required checks.
@@ -159,18 +168,18 @@
 
 ## 4. Security risk register
 
-| # | Risk | Severity | Likelihood | Evidence | Required control |
-|---|---|---|---|---|---|
-| 1 | API key theft/abuse | Critical | Certain (already public) | Key in bundle | Server proxy, rotate, secret scanning |
-| 2 | Stored/reflected XSS via coin description | High | Medium | `dangerouslySetInnerHTML` | Sanitize/strip HTML, CSP |
-| 3 | Broken access control / no tenancy | Critical (as SaaS) | Certain | No auth/backend | Sessions, RBAC, tenant-scoped queries, tests |
-| 4 | Mass data scraping/abuse via API | High | High | Direct provider calls per client | Server cache, rate limits, quotas |
-| 5 | Supply-chain vulnerabilities | High | Medium | 2 high runtime advisories | Upgrade, audit, lockfile, CI |
-| 6 | Source disclosure | Medium | High | Source maps | Disable maps in prod |
-| 7 | Open redirect/XSS in router advisories | Medium | Low | react-router advisory | Upgrade |
-| 8 | CSRF on future cookie auth | High (future) | Medium | Not yet present | SameSite + Origin checks + CSRF tokens |
-| 9 | Credential stuffing / brute force | High (future) | High | Not yet present | Rate limits, lockouts, MFA-ready design, strong hashing |
-| 10 | PII/data retention non-compliance | High (as SaaS) | Medium | No privacy/account deletion | GDPR flows, retention policy, encryption |
+| #   | Risk                                      | Severity           | Likelihood               | Evidence                         | Required control                                        |
+| --- | ----------------------------------------- | ------------------ | ------------------------ | -------------------------------- | ------------------------------------------------------- |
+| 1   | API key theft/abuse                       | Critical           | Certain (already public) | Key in bundle                    | Server proxy, rotate, secret scanning                   |
+| 2   | Stored/reflected XSS via coin description | High               | Medium                   | `dangerouslySetInnerHTML`        | Sanitize/strip HTML, CSP                                |
+| 3   | Broken access control / no tenancy        | Critical (as SaaS) | Certain                  | No auth/backend                  | Sessions, RBAC, tenant-scoped queries, tests            |
+| 4   | Mass data scraping/abuse via API          | High               | High                     | Direct provider calls per client | Server cache, rate limits, quotas                       |
+| 5   | Supply-chain vulnerabilities              | High               | Medium                   | 2 high runtime advisories        | Upgrade, audit, lockfile, CI                            |
+| 6   | Source disclosure                         | Medium             | High                     | Source maps                      | Disable maps in prod                                    |
+| 7   | Open redirect/XSS in router advisories    | Medium             | Low                      | react-router advisory            | Upgrade                                                 |
+| 8   | CSRF on future cookie auth                | High (future)      | Medium                   | Not yet present                  | SameSite + Origin checks + CSRF tokens                  |
+| 9   | Credential stuffing / brute force         | High (future)      | High                     | Not yet present                  | Rate limits, lockouts, MFA-ready design, strong hashing |
+| 10  | PII/data retention non-compliance         | High (as SaaS)     | Medium                   | No privacy/account deletion      | GDPR flows, retention policy, encryption                |
 
 ---
 
@@ -188,13 +197,13 @@
 
 ## 6. Test coverage baseline
 
-| Area | Coverage |
-|---|---|
-| Unit (filters, formatters, entitlements) | 0% |
-| Components (list, filters, detail, auth forms) | 0% |
-| API (auth, authorization, tenancy, rate limits) | 0% |
-| E2E (guest browse, signup, watchlist, plan limits, admin) | 0% |
-| Accessibility automated checks | 0% |
+| Area                                                      | Coverage |
+| --------------------------------------------------------- | -------- |
+| Unit (filters, formatters, entitlements)                  | 0%       |
+| Components (list, filters, detail, auth forms)            | 0%       |
+| API (auth, authorization, tenancy, rate limits)           | 0%       |
+| E2E (guest browse, signup, watchlist, plan limits, admin) | 0%       |
+| Accessibility automated checks                            | 0%       |
 
 Current test file contains a single arithmetic assertion; it cannot fail if the app breaks.
 
@@ -223,18 +232,18 @@ Current test file contains a single arithmetic assertion; it cannot fail if the 
 
 These are planning ranges, not quotes; current provider pricing must be verified:
 
-| Item | Typical early-stage option | Notes |
-|---|---|---|
-| Market data | CoinGecko paid API plan | Free/demo tier is rate-limited and not intended for commercial redistribution; paid plans scale with calls/min and monthly credits |
-| News | CryptoCompare API paid tier or alternative | Key must remain server-side |
-| Hosting | Render/Fly/Railway/Docker VPS | Single instance + managed Postgres; ~$7–$50/mo early stage |
-| Database | Managed Postgres (Neon/Supabase/RDS) | Free tier possible; backups and PITR cost more |
-| Redis (rate limits/cache) | Upstash/managed Redis | Only needed when horizontally scaling; ~$0–$30/mo |
-| Email | Postmark/Resend/SES | Verification, reset, alerts; ~$0–$15/mo early |
-| Error tracking | Sentry | Free tier, then ~$26/mo |
-| Payments | Stripe | ~2.9% + $0.30 per transaction (varies by country) + tax tooling |
-| Domain/TLS | Registrar + Let's Encrypt | ~$10–$20/yr |
-| Legal | Terms/privacy templates or counsel | One-time cost; budget for review |
+| Item                      | Typical early-stage option                 | Notes                                                                                                                              |
+| ------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Market data               | CoinGecko paid API plan                    | Free/demo tier is rate-limited and not intended for commercial redistribution; paid plans scale with calls/min and monthly credits |
+| News                      | CryptoCompare API paid tier or alternative | Key must remain server-side                                                                                                        |
+| Hosting                   | Render/Fly/Railway/Docker VPS              | Single instance + managed Postgres; ~$7–$50/mo early stage                                                                         |
+| Database                  | Managed Postgres (Neon/Supabase/RDS)       | Free tier possible; backups and PITR cost more                                                                                     |
+| Redis (rate limits/cache) | Upstash/managed Redis                      | Only needed when horizontally scaling; ~$0–$30/mo                                                                                  |
+| Email                     | Postmark/Resend/SES                        | Verification, reset, alerts; ~$0–$15/mo early                                                                                      |
+| Error tracking            | Sentry                                     | Free tier, then ~$26/mo                                                                                                            |
+| Payments                  | Stripe                                     | ~2.9% + $0.30 per transaction (varies by country) + tax tooling                                                                    |
+| Domain/TLS                | Registrar + Let's Encrypt                  | ~$10–$20/yr                                                                                                                        |
+| Legal                     | Terms/privacy templates or counsel         | One-time cost; budget for review                                                                                                   |
 
 Data licensing is the largest product-specific cost and legal dependency; confirm before selling subscriptions.
 

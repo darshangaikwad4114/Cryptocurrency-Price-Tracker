@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import Icon from '../ui/Icon';
 import Skeleton from '../ui/Skeleton';
 import StatusPanel from '../ui/StatusPanel';
-import { useNews } from '../../api/hooks';
-import { formatRelativeTime } from '../../lib/format';
+import { useNews } from '../../hooks/useMarketData';
+import { formatRelativeTime } from '../../utils/format';
 
 export default function NewsPreview() {
   const { articles, query } = useNews(3);

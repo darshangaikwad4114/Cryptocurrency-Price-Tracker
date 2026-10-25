@@ -100,7 +100,9 @@
   font-size: 0.875rem;
   font-weight: var(--weight-medium);
   color: var(--color-text-secondary);
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .primary-nav__link:hover {

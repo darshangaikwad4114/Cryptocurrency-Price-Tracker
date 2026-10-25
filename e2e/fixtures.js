@@ -154,8 +154,24 @@ export const FEAR_GREED = {
 
 export const TRENDING = [
   { id: 'solana', name: 'Solana', symbol: 'SOL', image: null, rank: 4, price: 150, change24h: 4.2 },
-  { id: 'dogecoin', name: 'Dogecoin', symbol: 'DOGE', image: null, rank: 9, price: 0.12, change24h: -1.2 },
-  { id: 'chainlink', name: 'Chainlink', symbol: 'LINK', image: null, rank: 12, price: 15, change24h: 0 },
+  {
+    id: 'dogecoin',
+    name: 'Dogecoin',
+    symbol: 'DOGE',
+    image: null,
+    rank: 9,
+    price: 0.12,
+    change24h: -1.2,
+  },
+  {
+    id: 'chainlink',
+    name: 'Chainlink',
+    symbol: 'LINK',
+    image: null,
+    rank: 12,
+    price: 15,
+    change24h: 0,
+  },
 ];
 
 export const CATEGORIES = [
@@ -293,9 +309,11 @@ export async function installApiMocks(page, { failMarket = false } = {}) {
 
     if (resource === 'coins') return fulfillJson(route, 200, envelope('coins', COINS));
     if (resource === 'global') return fulfillJson(route, 200, envelope('global', GLOBAL));
-    if (resource === 'fear-greed') return fulfillJson(route, 200, envelope('fear-greed', FEAR_GREED));
+    if (resource === 'fear-greed')
+      return fulfillJson(route, 200, envelope('fear-greed', FEAR_GREED));
     if (resource === 'trending') return fulfillJson(route, 200, envelope('trending', TRENDING));
-    if (resource === 'categories') return fulfillJson(route, 200, envelope('categories', CATEGORIES));
+    if (resource === 'categories')
+      return fulfillJson(route, 200, envelope('categories', CATEGORIES));
     if (resource === 'exchanges') return fulfillJson(route, 200, envelope('exchanges', EXCHANGES));
 
     if (resource === 'coin') {

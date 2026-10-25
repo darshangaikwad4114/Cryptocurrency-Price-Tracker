@@ -79,7 +79,9 @@ test('triggers an alert when the current price crosses the target', async ({ pag
 
   const triggered = page.locator('section[aria-labelledby="triggered-heading"]');
   await expect(triggered.getByText('Triggered at $50,000.00')).toBeVisible();
-  await expect(triggered.getByRole('button', { name: 'Remove triggered alert for Bitcoin' })).toBeVisible();
+  await expect(
+    triggered.getByRole('button', { name: 'Remove triggered alert for Bitcoin' }),
+  ).toBeVisible();
   await expect(page.getByText('No alerts are waiting.')).toBeVisible();
 
   await triggered.getByRole('button', { name: 'Clear all' }).click();

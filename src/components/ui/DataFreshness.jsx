@@ -1,5 +1,5 @@
 import Icon from './Icon';
-import { formatDateTime, formatTime } from '../../lib/format';
+import { formatDateTime, formatTime } from '../../utils/format';
 
 export default function DataFreshness({ meta, updatedAt, isFetching = false, label = 'Updated' }) {
   const timestamp = meta?.cachedAt ?? (updatedAt ? new Date(updatedAt).toISOString() : null);
@@ -7,10 +7,7 @@ export default function DataFreshness({ meta, updatedAt, isFetching = false, lab
 
   return (
     <span className="data-freshness" title={formatDateTime(timestamp)}>
-      <span
-        className={`live-dot${isFetching ? ' live-dot--pulsing' : ''}`}
-        aria-hidden="true"
-      />
+      <span className={`live-dot${isFetching ? ' live-dot--pulsing' : ''}`} aria-hidden="true" />
       <span>
         {label} <time dateTime={timestamp}>{formatTime(timestamp)}</time>
       </span>

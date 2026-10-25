@@ -31,9 +31,7 @@ test('shows a 404 page and returns to the dashboard', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'This page does not exist' })).toBeVisible();
   await page.getByRole('link', { name: 'Back to dashboard' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(
-    page.getByRole('heading', { name: 'The crypto market at a glance' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The crypto market at a glance' })).toBeVisible();
 });
 
 test('toggles the theme and restores it before paint on reload', async ({ page }) => {

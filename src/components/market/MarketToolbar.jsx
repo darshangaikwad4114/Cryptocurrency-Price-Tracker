@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Icon from '../ui/Icon';
-import { MARKET_CAP_BUCKETS, SORT_OPTIONS } from '../../lib/market';
+import { MARKET_CAP_BUCKETS, SORT_OPTIONS } from '../../utils/market';
 
 export default function MarketToolbar({
   search,
@@ -206,7 +206,8 @@ export default function MarketToolbar({
                 className="filter-chip"
                 onClick={() => onPriceRangeChange('', '')}
               >
-                {minPrice === '' ? '$0' : `$${minPrice}`} – {maxPrice === '' ? 'Any' : `$${maxPrice}`}
+                {minPrice === '' ? '$0' : `$${minPrice}`} –{' '}
+                {maxPrice === '' ? 'Any' : `$${maxPrice}`}
                 <Icon name="close" size={12} />
                 <span className="visually-hidden">Remove price filter</span>
               </button>

@@ -1,5 +1,5 @@
-import { useTheme } from '../../features/theme/themeContext';
-import Icon from '../ui/Icon';
+import { useTheme } from '../features/theme/themeContext';
+import Icon from '../components/ui/Icon';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();

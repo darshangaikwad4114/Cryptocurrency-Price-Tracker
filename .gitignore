@@ -33,6 +33,9 @@ dist-ssr
 
 # Testing
 coverage
+playwright-report
+test-results
+blob-report
 
 # Production build
 build
@@ -40,6 +43,10 @@ build
 # Misc
 .cache
 stats.html
+build-analysis.html
+
+# Local audit artifacts
+.qoder-audit/
 
 # Archived pre-3.0 source kept locally for reference
 _legacy/

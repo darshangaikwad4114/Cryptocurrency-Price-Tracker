@@ -3,8 +3,8 @@ import Icon from '../ui/Icon';
 import Skeleton from '../ui/Skeleton';
 import StatusPanel from '../ui/StatusPanel';
 import DataFreshness from '../ui/DataFreshness';
-import { useNews } from '../../api/hooks';
-import { formatRelativeTime } from '../../lib/format';
+import { useNews } from '../../hooks/useMarketData';
+import { formatRelativeTime } from '../../utils/format';
 
 const PAGE_SIZE = 9;
 
@@ -96,7 +96,11 @@ export default function NewsFeed({ limit = 24 }) {
         }
         actions={
           !unavailable && (
-            <button type="button" className="button button--secondary" onClick={() => query.refetch()}>
+            <button
+              type="button"
+              className="button button--secondary"
+              onClick={() => query.refetch()}
+            >
               Retry
             </button>
           )
@@ -155,7 +159,11 @@ export default function NewsFeed({ limit = 24 }) {
           title="No matching headlines"
           message={`No recent articles in the ${category} category.`}
           actions={
-            <button type="button" className="button button--secondary" onClick={() => selectCategory('all')}>
+            <button
+              type="button"
+              className="button button--secondary"
+              onClick={() => selectCategory('all')}
+            >
               Show all news
             </button>
           }
