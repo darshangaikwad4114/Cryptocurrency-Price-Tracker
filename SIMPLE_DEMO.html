@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feature Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .demo-box {
+            background: white;
+            color: #1f2937;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .live-indicator {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crypto Tracker v2.1 - New Features Ready!</h1>
+    
+    <div class="demo-box">
+        <h2>✅ New Component: Live Update Indicator</h2>
+        <p>This component shows real-time status with a pulsing green dot:</p>
+        
+        <div class="live-indicator">
+            <span class="pulse-dot"></span>
+            <strong>Live • Last updated: <span id="time">--:--:--</span></strong>
+        </div>
+        
+        <p style="margin-top: 1rem; color: #6b7280;">
+            <strong>Status:</strong> Component created and ready to use!<br>
+            <strong>Location:</strong> src/components/LastUpdated/<br>
+            <strong>Files:</strong> LastUpdated.jsx, LastUpdated.css, index.js
+        </p>
+    </div>
+    
+    <div class="demo-box">
+        <h2>📦 All Created Components</h2>
+        <ul style="text-align: left; line-height: 2;">
+            <li>✅ ErrorBoundary - Error handling</li>
+            <li>✅ FilterPanel - Side filter panel</li>
+            <li>✅ ActiveFilters - Filter tags display</li>
+            <li>✅ useCoins hook - Data fetching</li>
+            <li>✅ useFilters hook - Filter logic</li>
+            <li>✅ HomePage, MarketsPage, NewsPage, AboutPage</li>
+            <li>✅ LastUpdated - Live status indicator</li>
+        </ul>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('time').textContent = 
+                now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>

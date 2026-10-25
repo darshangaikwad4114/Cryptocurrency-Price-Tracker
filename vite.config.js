@@ -1,54 +1,47 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { visualizer } from 'rollup-plugin-visualizer';
-import terser from '@rollup/plugin-terser';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    visualizer({
-      template: 'treemap',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      filename: 'build-analysis.html',
-    }),
-  ],
-  build: {
-    target: 'esnext',
-    outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      plugins: [
-        terser({
-          format: {
-            comments: false,
-          },
-          compress: {
-            drop_console: true,
-            drop_debugger: true,
-          },
-        }),
-      ],
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'chart-vendor': ['chart.js', 'react-chartjs-2'],
-        },
-      },
-    },
-    chunkSizeWarningLimit: 1000,
-    minify: 'terser',
-  },
+  plugins: [react()],
   server: {
     port: 3000,
-    open: true,
-    cors: true,
+    strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3001',
+        changeOrigin: false,
+      },
+    },
   },
   preview: {
     port: 4000,
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'axios', 'prop-types']
-  }
+  build: {
+    target: 'es2022',
+    outDir: 'dist',
+    sourcemap: false,
+    chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.includes('node_modules/chart.js') ||
+            id.includes('node_modules/react-chartjs-2') ||
+            id.includes('node_modules/chartjs-plugin-zoom')
+          ) {
+            return 'chart-vendor';
+          }
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react-router') ||
+            id.includes('node_modules/scheduler/')
+          ) {
+            return 'react-vendor';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
 });

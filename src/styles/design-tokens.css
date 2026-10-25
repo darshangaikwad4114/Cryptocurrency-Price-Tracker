@@ -25,8 +25,9 @@
   --radius-full: 9999px;
 
   /* ----- Typography ----- */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-heading: 'Montserrat', var(--font-sans);
+  --font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    sans-serif;
+  --font-heading: 'Inter Variable', 'Inter', var(--font-sans);
   --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Consolas, monospace;
 
   --text-xs:   0.6875rem;  /* 11px */
@@ -56,8 +57,8 @@
   --color-bg-active: rgba(255, 255, 255, 0.08);
 
   --color-text-primary: #e6f1ff;
-  --color-text-secondary: #8892b0;
-  --color-text-tertiary: #5a6a85;
+  --color-text-secondary: #a8b5cc;
+  --color-text-tertiary: #94a3b8;
   --color-text-inverse: #0a192f;
 
   --color-accent: #64ffda;
@@ -71,8 +72,8 @@
   --color-bullish-text: #66bb6a;
   --color-bearish: #f44336;
   --color-bearish-bg: rgba(244, 67, 54, 0.12);
-  --color-bearish-text: #ef5350;
-  --color-neutral: #78909c;
+  --color-bearish-text: #ff7b72;
+  --color-neutral: #90a4ae;
   --color-neutral-bg: rgba(120, 144, 156, 0.12);
 
   --color-volume: #2196f3;
@@ -145,20 +146,21 @@
 
   --color-text-primary: #0f172a;
   --color-text-secondary: #475569;
-  --color-text-tertiary: #94a3b8;
+  --color-text-tertiary: #526176;
   --color-text-inverse: #ffffff;
 
-  --color-accent: #0891b2;
-  --color-accent-hover: #0e7490;
-  --color-accent-muted: rgba(8, 145, 178, 0.12);
-  --color-accent-subtle: rgba(8, 145, 178, 0.06);
+  --color-accent: #0f6b85;
+  --color-accent-hover: #0b5a70;
+  --color-accent-muted: rgba(15, 107, 133, 0.12);
+  --color-accent-subtle: rgba(15, 107, 133, 0.06);
 
   --color-bullish: #16a34a;
   --color-bullish-bg: rgba(22, 163, 74, 0.1);
-  --color-bullish-text: #15803d;
+  --color-bullish-text: #166534;
   --color-bearish: #dc2626;
   --color-bearish-bg: rgba(220, 38, 38, 0.1);
-  --color-bearish-text: #b91c1c;
+  --color-bearish-text: #991b1b;
+  --color-neutral: #526176;
 
   --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
   --border-default: 1px solid rgba(0, 0, 0, 0.1);

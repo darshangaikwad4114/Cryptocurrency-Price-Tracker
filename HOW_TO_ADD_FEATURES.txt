@@ -1,0 +1,82 @@
+================================================================================
+HOW TO ADD NEW FEATURES TO YOUR RUNNING APP
+================================================================================
+
+Your app is currently running at http://localhost:5173
+
+To see the new "Last Updated" component (pulsing green dot), follow these steps:
+
+--------------------------------------------------------------------------------
+STEP 1: Add Import (Line 11)
+--------------------------------------------------------------------------------
+
+OPEN: src/App.jsx
+
+FIND this line (around line 10):
+  import CoinDetail from './components/CoinDetail/CoinDetail';
+
+ADD THIS LINE RIGHT AFTER IT:
+  import LastUpdated from './components/LastUpdated';
+
+RESULT SHOULD LOOK LIKE:
+  import CoinDetail from './components/CoinDetail/CoinDetail';
+  import LastUpdated from './components/LastUpdated';
+  
+  // Lazy load components for better performance
+
+--------------------------------------------------------------------------------
+STEP 2: Add Component to Header (After Line 1023)
+--------------------------------------------------------------------------------
+
+SCROLL DOWN to around line 1023, find:
+        </nav>
+      </header>
+
+ADD THESE LINES AFTER </header>:
+      
+      <div style={{textAlign: 'center', padding: '0.5rem'}}>
+        <LastUpdated />
+      </div>
+
+RESULT SHOULD LOOK LIKE:
+        </nav>
+      </header>
+      
+      <div style={{textAlign: 'center', padding: '0.5rem'}}>
+        <LastUpdated />
+      </div>
+
+      <main className="main-content">
+
+--------------------------------------------------------------------------------
+STEP 3: Save and Watch
+--------------------------------------------------------------------------------
+
+1. Save the file (Ctrl+S)
+2. Your browser will automatically reload
+3. You'll see a pulsing green dot with "Live • Last updated: [time]"
+
+================================================================================
+WHAT YOU'LL SEE:
+================================================================================
+
+[Header with Navigation]
+
+● Live • Last updated: 02:45:30 PM    <-- NEW! Pulsing green dot
+
+[Your cryptocurrency grid - already working]
+
+[Footer]
+
+================================================================================
+READY FOR MORE FEATURES?
+================================================================================
+
+Once you see the pulsing dot, let me know and I'll add:
+- Version badge in footer
+- Error boundary wrapper
+- Portfolio tracker
+- Watchlist/favorites
+- And many more!
+
+================================================================================

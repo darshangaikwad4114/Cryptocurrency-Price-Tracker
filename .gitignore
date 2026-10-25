@@ -40,3 +40,6 @@ build
 # Misc
 .cache
 stats.html
+
+# Archived pre-3.0 source kept locally for reference
+_legacy/

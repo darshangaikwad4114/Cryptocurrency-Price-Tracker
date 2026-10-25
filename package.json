@@ -1,8 +1,8 @@
 {
   "name": "cryptocurrency-price-tracker",
   "private": true,
-  "description": "Cryptocurrency Price Tracker",
-  "version": "2.0.0",
+  "description": "A production-hardened cryptocurrency market tracker and portfolio dashboard.",
+  "version": "3.0.0",
   "type": "module",
   "author": {
     "name": "Darshan Gaikwad",
@@ -10,11 +10,20 @@
     "url": "https://darshan-gaikwad-portfolio.vercel.app/"
   },
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",  "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "dev": "concurrently -k -n api,web -c blue,green \"npm:dev:api\" \"npm:dev:client\"",
+    "dev:client": "vite",
+    "dev:api": "node --env-file-if-exists=.env --watch server/dev-api.mjs",
+    "build": "vite build && node scripts/generate-seo.mjs",
     "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "license": "MIT",
   "homepage": "https://github.com/darshangaikwad4114/Cryptocurrency-Price-Tracker#readme",
@@ -28,38 +37,43 @@
     "ethereum",
     "price-tracker",
     "react",
-    "crypto-dashboard"
+    "crypto-dashboard",
+    "portfolio"
   ],
   "dependencies": {
-    "axios": "^1.18.1",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@tanstack/react-query": "^5.104.5",
     "chart.js": "^4.5.1",
-    "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-zoom": "^2.2.0",
-    "date-fns": "^2.30.0",
-    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^14.3.1",
-    "@types/react": "^18.3.31",
-    "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react": "^4.7.0",
-    "eslint": "^8.57.1",
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "concurrently": "^10.0.6",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.26",
-    "jsdom": "^24.1.3",
-    "rollup-plugin-visualizer": "^5.14.0",
-    "terser": "^5.48.0",
-    "vite": "^4.5.14",
-    "vitest": "^1.6.1"
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "jsdom": "^30.1.3",
+    "prettier": "^3.9.10",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=7.0.0"
+    "node": ">=22.12.0",
+    "npm": ">=10.0.0"
   }
 }

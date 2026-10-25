@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+build-analysis.html
+package-lock.json
+.qoder-audit
+*.cjs
+*.bat
+*.backup
+SIMPLE_DEMO.html
+WHAT_YOU_GOT.txt
+EXACT_STEPS.txt
+HOW_TO_ADD_FEATURES.txt

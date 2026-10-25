@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Portfolio, watchlist, and alerts are rendered client-side from local storage.
+# They contain no crawlable user content.
